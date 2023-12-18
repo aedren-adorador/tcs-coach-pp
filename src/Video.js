@@ -3,21 +3,20 @@ import Webcam from "react-webcam";
 
 function Video() {
     const webcamRef = useRef(null);
+    
     const stop = () => {
         if (webcamRef.current && webcamRef.current.video.srcObject) {
         let stream = webcamRef.current.video.srcObject;
         const tracks = stream.getTracks();
-        tracks.forEach((track) => track.stop());
+        tracks[0].enabled = false
+        tracks.forEach(track => track.stop());
         webcamRef.current.video.srcObject = null;
+        
         }
     }
     const start = async () => {
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-            webcamRef.current.video.srcObject = stream;
-        } catch (error) {
-            console.error("Error starting webcam:", error);
-        }
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        webcamRef.current.video.srcObject = stream;
     };
 
     const [mirrorSetting, setMirrorSetting] = useState('');
@@ -44,7 +43,7 @@ function Video() {
 
     useEffect(() => {
         if (isWebcamOpen===false) {
-            stop()
+            stop();
             setIsWebcamOpenLabel("Open Camera")
         } else {
             start();
@@ -54,7 +53,6 @@ function Video() {
     
     return (
         <>
-            <h1>HOME PAGE!</h1>
             <div
             style={{
             margin: '0px',

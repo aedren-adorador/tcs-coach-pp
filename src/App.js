@@ -1,13 +1,21 @@
 import './App.css';
-import Video from './Video';
-
+import Video from './Video'
+import Login from './auth/Auth';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { ChakraProvider } from '@chakra-ui/react'
+import RegisterEmail from './auth/auth-subcomponents/create-account-auth/RegisterEmail';
 
 function App() {
   return (
-    <div className="App">
-      <h1>hello</h1>
-      <Video/>
-    </div>
+    <ChakraProvider>
+      <BrowserRouter>
+        <Routes>
+            <Route path="/" element={<Login/>}/>
+            <Route path="/register-email" element={<RegisterEmail/>}/>
+        </Routes>
+      </BrowserRouter>
+    </ChakraProvider>
+
   );
 }
 
