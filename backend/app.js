@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const app = express();
 const jwt = require('jsonwebtoken')
@@ -20,6 +21,10 @@ app.use((req, res, next) => {
   );
   next();
 });
+
+mongoose.connect("mongodb+srv://aedren-adorador:aedrenmongodb@aedrencluster1.763f7xf.mongodb.net/")
+  .then(() => {console.log('connected to mongodb!')})
+  .catch(() => {console.log('failed to connect')})
 
 // Nodemailer Config
 const transporter = nodemailer.createTransport({
@@ -66,4 +71,9 @@ app.get('/api/auth/verify',(req, res, next) => {
         }
     })
 })
+
+app.post('/api/auth/create-account', (req, res, next) => {
+  console.log(req.body, "NICE!")
+})
+
 module.exports = app;
