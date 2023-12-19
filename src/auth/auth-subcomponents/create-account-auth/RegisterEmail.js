@@ -5,22 +5,29 @@ import { Input, Button, FormControl, FormErrorMessage, Alert, AlertIcon } from "
 import { Formik, Form } from "formik";
 import { ArrowBackIcon } from '@chakra-ui/icons'
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function RegisterEmail() {
+    const navigate = useNavigate();
     const url = 'http://localhost:3001'
     const [revealed, setRevealed] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
+    const [isVerified, setIsVerified] = useState('');
 
     const handleSubmit = (e) => {
         const emailInput = e.email
+
         axios.post(`${url}/api/auth/send-verification-email`, {email: emailInput})
             .then(response => {
                 setIsSuccess(true);
                 setSuccessMessage(response.data.successMessage);
+                setTimeout(() => {
+                    navigate('/')
+                }, 2000);
             })
     }
+
     useEffect(() => {
         
     },[isSuccess, successMessage])

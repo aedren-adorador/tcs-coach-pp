@@ -43,7 +43,7 @@ async function sendEmail(emailAddressInput, token) {
       from: process.env.USER_EMAIL, // sender address
       to: emailAddressInput, // list of receivers
       subject: "[Action Required] The Coding School Application - Verify your account",
-      html: `<p style='font-size: 14px'>Dear Applicant</h1><br/><h1>Thank you for your interest in applying to The Coding School! To proceed with your account creation, kindly verify your email by clicking on this link: <a href=${verificationLink}><p>Confirm Here</p><a/></p>`
+      html: `<p style='font-size: 14px'>Dear Applicant</p><br/><p>Thank you for your interest in applying to The Coding School! To proceed with your account creation, kindly verify your email by clicking on this link: <a href=${verificationLink}><p>Confirm Here</p><a/></p>`
     })
 }
 
@@ -58,14 +58,12 @@ app.post('/api/auth/send-verification-email', (req, res, next) => {
 
 app.get('/api/auth/verify',(req, res, next) => {
     const obtainedToken = Object.keys(req.query)[0]
-    jwt.verify(obtainedToken, process.env.JWT_SECRET, (err, decoded) => {
+    jwt.verify(obtainedToken, process.env.JWT_SECRET, (err) => {
         if (err) {
             res.status(400).send('Invalid or expired verification link.');
         } else {
-            res.send('Email verified successfully!')
+            res.redirect('http://localhost:3000/create-password')
         }
     })
 })
-
-
 module.exports = app;
