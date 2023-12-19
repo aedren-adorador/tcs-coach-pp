@@ -15,7 +15,7 @@ function RegisterEmail() {
 
     const handleSubmit = (e) => {
         const emailInput = e.email
-        axios.post(`${url}/api/auth/verify-email`, {email: emailInput})
+        axios.post(`${url}/api/auth/send-verification-email`, {email: emailInput})
             .then(response => {
                 setIsSuccess(true);
                 setSuccessMessage(response.data.successMessage);
