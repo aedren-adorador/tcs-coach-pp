@@ -2,9 +2,12 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const app = express();
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
+const nodemailer = require('nodemailer');
+const bcrypt = require('bcrypt');
+const Applicant = require('./models/applicants');
 require('dotenv').config();
-const nodemailer = require('nodemailer')
+
 
 // Mandatory Requests
 app.use(bodyParser.json());
@@ -43,7 +46,7 @@ function generateVerificationToken(email) {
 }
 
 async function sendEmail(emailAddressInput, token) {
-    const verificationLink = `http://localhost:3001/api/auth/verify?${token}`
+    const verificationLink = `http://localhost:3001/api/auth/verify?token=${token}&email=${emailAddressInput}`
     await transporter.sendMail({
       from: process.env.USER_EMAIL, // sender address
       to: emailAddressInput, // list of receivers
@@ -62,18 +65,27 @@ app.post('/api/auth/send-verification-email', (req, res, next) => {
 })
 
 app.get('/api/auth/verify',(req, res, next) => {
-    const obtainedToken = Object.keys(req.query)[0]
+    const obtainedToken = req.query.token
+    const obtainedEmail = req.query.email
     jwt.verify(obtainedToken, process.env.JWT_SECRET, (err) => {
         if (err) {
             res.status(400).send('Invalid or expired verification link.');
         } else {
-            res.redirect('http://localhost:3000/create-password')
+            res.redirect(`http://localhost:3000/create-password?email=${encodeURIComponent(obtainedEmail)}`)
         }
     })
 })
 
 app.post('/api/auth/create-account', (req, res, next) => {
-  console.log(req.body, "NICE!")
+  bcrypt.hash(req.body.confirmPassword, 10).then(hash => {
+    const newApplicant = new Applicant({
+    emailM: req.body.email,
+    firstNameM: req.body.firstName,
+    lastNameM: req.body.lastName,
+    passwordM: hash
+  })
+  newApplicant.save()
+  })
 })
 
 module.exports = app;

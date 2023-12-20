@@ -13,7 +13,6 @@ function RegisterEmail() {
     const [revealed, setRevealed] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
-    const [isVerified, setIsVerified] = useState('');
 
     const handleSubmit = (e) => {
         const emailInput = e.email
