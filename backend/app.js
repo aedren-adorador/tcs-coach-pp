@@ -22,7 +22,7 @@ app.use((req, res, next) => {
   next();
 });
 
-mongoose.connect("mongodb+srv://aedren-adorador:aedrenmongodb@aedrencluster1.763f7xf.mongodb.net/")
+mongoose.connect(process.env.MONGODB_CONNECT)
   .then(() => {console.log('connected to mongodb!')})
   .catch(() => {console.log('failed to connect')})
 
