@@ -13,7 +13,7 @@ function RegisterEmail() {
     const [revealed, setRevealed] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
-
+    const [emailErrorMessage, setEmailErrorMessage] = useState('');
     const handleSubmit = (e) => {
         const emailInput = e.email
 
@@ -25,10 +25,14 @@ function RegisterEmail() {
                     navigate('/')
                 }, 2000);
             })
+            .catch(error => {
+                setEmailErrorMessage(error.response.data.errorMessage);
+            })
     }
-
     useEffect(() => {
-        
+    }, [emailErrorMessage])
+    
+    useEffect(() => {
     },[isSuccess, successMessage])
 
     useEffect(() => {
@@ -54,10 +58,18 @@ function RegisterEmail() {
                 >
                 {(formikProps) => (
                 <Form>   
-                    {isSuccess && <Alert status='success' mb='2'>
+                    {isSuccess && 
+                    <Alert status='success' mb='2'>
                         <AlertIcon />
                         {successMessage}
-                    </Alert>}
+                    </Alert>
+                    }
+                    {emailErrorMessage!=='' &&
+                    <Alert status='error' mb='2'>
+                        <AlertIcon />
+                        {emailErrorMessage}
+                    </Alert>
+                    }
                     <FormControl isInvalid={formikProps.errors.email}>
                             <FormErrorMessage mb='2'>{formikProps.errors.email}</FormErrorMessage>
                             <Input

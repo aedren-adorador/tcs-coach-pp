@@ -9,7 +9,7 @@ const Applicant = require('./models/applicants');
 require('dotenv').config();
 
 
-// Mandatory Requests
+// Mandatory Settings
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use((req, res, next) => {
@@ -41,7 +41,7 @@ const transporter = nodemailer.createTransport({
 });
 
 function generateVerificationToken(email) {
-  const expirationTime = Math.floor(Date.now() / 1000) + 10 * 60;
+  const expirationTime = Math.floor(Date.now() / 1000) + 45 * 60;
   return jwt.sign({ email, exp: expirationTime }, process.env.JWT_SECRET);
 }
 
@@ -57,11 +57,18 @@ async function sendEmail(emailAddressInput, token) {
 
 // Main Requests
 app.post('/api/auth/send-verification-email', (req, res, next) => {
-    const email = req.body.email
-    const token = {string: generateVerificationToken(email)}
-    
-    sendEmail(email, token.string)
-        .then(success => res.json({successMessage: 'Verification link sent to your email!'}))
+    Applicant.findOne({emailM: req.body.email})
+      .then(result => {
+        if (result===null) {
+          const email = req.body.email
+        const token = {string: generateVerificationToken(email)}
+        
+        sendEmail(email, token.string)
+            .then(success => res.json({successMessage: 'Verification link sent to your email!'}))
+        } else {
+          res.status(400).json({errorMessage: 'Email already taken!'})
+        }
+      })
 })
 
 app.get('/api/auth/verify',(req, res, next) => {
