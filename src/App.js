@@ -6,22 +6,31 @@ import RegisterEmail from './auth/auth-subcomponents/create-account-auth/Registe
 import VerifiedEmail from './auth/auth-subcomponents/create-account-auth/VerifiedEmail';
 import MainApplicantView from './main-view-applicant/MainApplicantView';
 import AuthPrivateRoute from './auth/auth-subcomponents/auth-private-route/AuthPrivateRoute';
-
+import { useState } from 'react';
 function App() {
-  const isAuthenticated = false;
+  
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const handleLoginSuccess = () => {
+    setIsAuthenticated(true);
+  }
+  
   return (
     <ChakraProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Login/>}/>
+          <Route path="/" element={<Login onLoginSuccess={handleLoginSuccess}/>}/>
           <Route path="/register-email" element={<RegisterEmail/>}/>
           <Route path="/create-password" element={<VerifiedEmail/>}/>
+          <Route
+          path='/applicant-home/:id'
+          element={
+            <AuthPrivateRoute
+            isAuthenticated={isAuthenticated}
+            component={MainApplicantView}
+            />
+          }
+          />
         </Routes>
-        <AuthPrivateRoute
-        path='/applicant-home'
-        isAuthenticated={isAuthenticated}
-        component={MainApplicantView}
-        />
       </BrowserRouter>
     </ChakraProvider>
 

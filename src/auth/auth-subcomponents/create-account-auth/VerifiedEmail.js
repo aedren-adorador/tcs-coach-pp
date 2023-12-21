@@ -11,6 +11,7 @@ function VerifiedEmail() {
     const [doPasswordsMatch, setDoPasswordsMatch] = useState(true);
     const [isCreatingAccount, setIsCreatingAccount] = useState(false);
     const [isAccountCreated, setIsAccountCreated] = useState(false);
+    const [passwordError, setPasswordError] = useState('');
     const urlParams = new URLSearchParams(window.location.search);
     const email = urlParams.get('email')
     const navigate = useNavigate();
@@ -18,18 +19,28 @@ function VerifiedEmail() {
 
         if (initialDetails.setPassword !== initialDetails.confirmPassword) {
             setDoPasswordsMatch(false);
-        } else {
-            setIsCreatingAccount(true)
-            setDoPasswordsMatch(true);
-            axios.post(`${url}/api/auth/create-account`, initialDetails)
-                .then(
-                    setTimeout(() => {
-                        setIsAccountCreated(true)
-                        setTimeout(() => {
-                            navigate('/')
-                        }, 2000)
-                    }, 2200)
-                )
+         } else {
+            setDoPasswordsMatch(true)
+            if(initialDetails.confirmPassword.length >= 8 &&
+                /[A-Z]/.test(initialDetails.confirmPassword) &&
+                /[a-z]/.test(initialDetails.confirmPassword) &&
+                /[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/.test(initialDetails.confirmPassword) &&
+                /[0-9]/.test(initialDetails.confirmPassword)) {
+                    setIsCreatingAccount(true)
+                    setDoPasswordsMatch(true);
+                    axios.post(`${url}/api/auth/create-account`, initialDetails)
+                        .then(
+                            setTimeout(() => {
+                                setIsAccountCreated(true)
+                                setTimeout(() => {
+                                    navigate('/')
+                                }, 2000)
+                            }, 2200)
+                        )
+            } else {
+                setPasswordError('Password must have 1 uppercase, 1 lowercase, 1 number, and 1 special character with a length of at least 8.')
+            }
+            
         }
     }
 
@@ -38,6 +49,9 @@ function VerifiedEmail() {
 
     useEffect(() => {
     }, [doPasswordsMatch])
+
+    useEffect(() => {
+    }, [passwordError])
 
     useEffect(() => {
         setRevealed(true);
@@ -98,6 +112,12 @@ function VerifiedEmail() {
                             <Alert status='error' mb='2'>
                             <AlertIcon />
                                 <AlertDescription>Passwords do not match. Please try again.</AlertDescription>
+                            </Alert>
+                            }
+                            {passwordError !== '' &&
+                            <Alert status='error' mb='2'>
+                            <AlertIcon />
+                                <AlertDescription>{passwordError}</AlertDescription>
                             </Alert>
                             }
                             {

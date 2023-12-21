@@ -1,27 +1,77 @@
 import { React } from "react";
-import { useEffect, useState } from "react";
-import EmailInput from "./auth-subcomponents/main-auth/EmailInput";
-import PasswordInput from "./auth-subcomponents/main-auth/PasswordInput";
-import CreateAccount from "./auth-subcomponents/main-auth/CreateAccountButton";
-import LoginButton from "./auth-subcomponents/main-auth/LogInButton";
+import { useState, useEffect } from "react";
+import { Formik, Form } from "formik";
+import { FormControl, FormErrorIcon, FormErrorMessage, Input, InputGroup, InputRightElement, Button } from "@chakra-ui/react";
 import './auth-styles/auth.styles.css'
+import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
 
-function Login() {
+function Login({onLoginSuccess}) {
+    const navigate = useNavigate();
     const [revealed, setRevealed] = useState(false);
+    const [show, setShow] = useState(false)
+    const handleClick = () => setShow(!show)
+
+    const handleSubmit = (loginInputs) => {
+        axios.post('http://localhost:3001/api/auth/login', loginInputs)
+            .then(result => {
+                if (result.data.success) {
+                    onLoginSuccess();
+                    navigate(`/applicant-home/${result.data.applicantID}`);
+                }
+            })
+    }
 
     useEffect(() => {
         setRevealed(true);
     }, []);
     return (   
         <>
-        <div className={`auth-big-container page-reveal ${revealed ? 'reveal' : ''}`}>
-            <div id='auth-email-and-password-container'>
-                <EmailInput/>
-                <PasswordInput/>
-                <CreateAccount/>
-                <LoginButton/>
-            </div>
-        </div>
+        <Formik
+        initialValues={{emailLogin:'', passwordLogin: ''}}
+        onSubmit={handleSubmit}
+        >
+        {(formikProps) => (
+            <Form>
+                <div className={`auth-big-container page-reveal ${revealed ? 'reveal' : ''}`}>
+                    <div id='auth-email-and-password-container'>
+                        <Input
+                        variant='filled'
+                        placeholder='Enter email'
+                        mb='2'
+                        size='lg'
+                        {...formikProps.getFieldProps('emailLogin')}
+                        />
+                        <InputGroup size='lg' mb='2'>
+                            <Input
+                                pr='4.5rem'
+                                type={show ? 'text' : 'password'}
+                                placeholder='Enter password'
+                                variant='filled'
+                                {...formikProps.getFieldProps('passwordLogin')}
+                            />
+                            <InputRightElement width='4.5rem'>
+                                <Button
+                                h='1.75rem'
+                                size='sm'
+                                onClick={handleClick}>
+                                {show ? 'Hide' : 'Show'}
+                                </Button>
+                            </InputRightElement>
+                        </InputGroup>
+                        <Link to='/register-email'>
+                            <Button variant='link' float='left' id='create-account-button' size='xs'>Create Account</Button>
+                        </Link>
+                        <Button
+                        colorScheme='blue'
+                        float='right'
+                        size='md'
+                        type='submit'>Log-in</Button>
+                    </div>
+                </div>
+            </Form>
+         )}
+        </Formik>
         </>
     )
 }

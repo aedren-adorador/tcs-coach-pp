@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 const bcrypt = require('bcrypt');
 const Applicant = require('./models/applicants');
+const { redirect } = require('react-router-dom');
 require('dotenv').config();
 
 
@@ -93,6 +94,30 @@ app.post('/api/auth/create-account', (req, res, next) => {
   })
   newApplicant.save()
   })
+})
+
+app.post('/api/auth/login', (req, res, next) => {
+  Applicant.findOne({emailM: req.body.emailLogin})
+    .then(result => {
+      bcrypt.compare(req.body.passwordLogin, result.passwordM)
+        .then(resultComp => {
+          if (resultComp) {
+            res.json({success: true, applicantID: result._id.toString()})
+          } else {
+            res.json({success: false, applicantID: null})
+            console.log("ERROR WRONG PASS")
+          }
+        })
+    })
+  
+})
+
+app.post('/api/get-applicant-info', (req, res, next) => {
+  console.log(req.body)
+  Applicant.findOne({_id: req.body.id})
+    .then(result => {
+      res.json(result);
+    })
 })
 
 module.exports = app;
