@@ -5,6 +5,7 @@ import { FormControl, FormErrorIcon, FormErrorMessage, Input, InputGroup, InputR
 import './auth-styles/auth.styles.css'
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 function Login({onLoginSuccess}) {
     const navigate = useNavigate();
@@ -17,16 +18,17 @@ function Login({onLoginSuccess}) {
             .then(result => {
                 if (result.data.success) {
                     onLoginSuccess();
+                    const applicant = jwtDecode(result.data.token)
+                    const applicantID = applicant.applicantID
                     localStorage.setItem('token', result.data.token)
-                    localStorage.setItem('applicantID', result.data.applicantID)
                     localStorage.setItem('isAuthenticated', true)
-                    navigate(`/applicant-home/${result.data.applicantID}`);
+                    navigate(`/applicant-home/${applicantID}`);
                 }
             })
     }
 
     useEffect(() => {
-        // if (localStorage.getItem('isLoggedIn'))
+        localStorage.removeItem('token')
         setRevealed(true);
     }, []);
     return (   

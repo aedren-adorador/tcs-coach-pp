@@ -100,10 +100,10 @@ app.post('/api/auth/login', (req, res, next) => {
   Applicant.findOne({emailM: req.body.emailLogin})
     .then(result => {
       bcrypt.compare(req.body.passwordLogin, result.passwordM)
-        .then(resultComp => {
-          if (resultComp) {
-            const token = jwt.sign({applicantID: result._id}, process.env.JWT_SECRET, {expiresIn: '10h'})
-            res.json({success: true, applicantID: result._id.toString(), token})
+        .then(comparisonResult => {
+          if (comparisonResult) {
+            const token = jwt.sign({applicantID: result._id}, process.env.JWT_SECRET, {expiresIn: '1hr'})
+            res.json({success: true, token: token})
           } else {
             res.json({success: false, applicantID: null})
             console.log("ERROR WRONG PASS")
@@ -114,7 +114,6 @@ app.post('/api/auth/login', (req, res, next) => {
 })
 
 app.post('/api/get-applicant-info', (req, res, next) => {
-  console.log(req.query)
   Applicant.findOne({_id: req.body.id})
     .then(result => {
       res.json(result);
