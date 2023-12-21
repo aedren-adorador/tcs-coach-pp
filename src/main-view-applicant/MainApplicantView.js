@@ -1,16 +1,21 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 function MainApplicantView() {
-    const applicantID = useParams().id
     const [applicantData, setApplicantData] = useState({})
+    const applicantID = useParams().id
+
     useEffect(() => {
-         axios.post('http://localhost:3001/api/get-applicant-info/', {id: applicantID})
+        const obtainedToken = localStorage.getItem('token')
+        const obtainedApplicantID = localStorage.getItem('applicantID')
+        console.log(obtainedApplicantID)
+        console.log(obtainedToken)
+        axios.post('http://localhost:3001/api/get-applicant-info/', {id: applicantID})
         .then(applicant => {
             setApplicantData(applicant.data)
         })
-    }, [])
+    },[])
     
     useEffect(() => {
     }, [applicantData])

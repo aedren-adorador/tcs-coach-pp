@@ -17,12 +17,16 @@ function Login({onLoginSuccess}) {
             .then(result => {
                 if (result.data.success) {
                     onLoginSuccess();
+                    localStorage.setItem('token', result.data.token)
+                    localStorage.setItem('applicantID', result.data.applicantID)
+                    localStorage.setItem('isAuthenticated', true)
                     navigate(`/applicant-home/${result.data.applicantID}`);
                 }
             })
     }
 
     useEffect(() => {
+        // if (localStorage.getItem('isLoggedIn'))
         setRevealed(true);
     }, []);
     return (   

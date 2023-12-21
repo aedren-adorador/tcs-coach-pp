@@ -62,9 +62,9 @@ app.post('/api/auth/send-verification-email', (req, res, next) => {
       .then(result => {
         if (result===null) {
           const email = req.body.email
-        const token = {string: generateVerificationToken(email)}
+          const token = {string: generateVerificationToken(email)}
         
-        sendEmail(email, token.string)
+          sendEmail(email, token.string)
             .then(success => res.json({successMessage: 'Verification link sent to your email!'}))
         } else {
           res.status(400).json({errorMessage: 'Email already taken!'})
@@ -102,7 +102,8 @@ app.post('/api/auth/login', (req, res, next) => {
       bcrypt.compare(req.body.passwordLogin, result.passwordM)
         .then(resultComp => {
           if (resultComp) {
-            res.json({success: true, applicantID: result._id.toString()})
+            const token = jwt.sign({applicantID: result._id}, process.env.JWT_SECRET, {expiresIn: '10h'})
+            res.json({success: true, applicantID: result._id.toString(), token})
           } else {
             res.json({success: false, applicantID: null})
             console.log("ERROR WRONG PASS")
@@ -113,7 +114,7 @@ app.post('/api/auth/login', (req, res, next) => {
 })
 
 app.post('/api/get-applicant-info', (req, res, next) => {
-  console.log(req.body)
+  console.log(req.query)
   Applicant.findOne({_id: req.body.id})
     .then(result => {
       res.json(result);
