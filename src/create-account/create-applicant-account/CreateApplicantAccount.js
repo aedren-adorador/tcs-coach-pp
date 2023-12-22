@@ -1,11 +1,11 @@
 import React from "react";
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { FormControl, FormErrorMessage, FormLabel, Input, Button, Card, CardBody, Alert, AlertIcon, AlertTitle, AlertDescription, FormHelperText} from "@chakra-ui/react";
+import { FormControl, Input, Button, Card, CardBody, Alert, AlertIcon, AlertDescription, FormHelperText} from "@chakra-ui/react";
 import { Formik, Form } from "formik";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-function VerifiedEmail() {
+function CreateApplicantAccount() {
     const url = 'http://localhost:3001'
     const [revealed, setRevealed] = useState(false);
     const [doPasswordsMatch, setDoPasswordsMatch] = useState(true);
@@ -148,4 +148,4 @@ function VerifiedEmail() {
     )
 }
 
-export default VerifiedEmail;
+export default CreateApplicantAccount;

@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 const bcrypt = require('bcrypt');
 const Applicant = require('./models/applicants');
-const { redirect } = require('react-router-dom');
+const Admin = require('./models/admins');
 require('dotenv').config();
 
 
@@ -58,7 +58,7 @@ async function sendEmail(emailAddressInput, token) {
 
 // Main Requests
 app.post('/api/auth/send-verification-email', (req, res, next) => {
-    Applicant.findOne({emailM: req.body.email})
+    Applicant.findOne({emailM: req.body.email.toLowerCase()})
       .then(result => {
         if (result===null) {
           const email = req.body.email
@@ -79,7 +79,7 @@ app.get('/api/auth/verify',(req, res, next) => {
         if (err) {
             res.status(400).send('Invalid or expired verification link.');
         } else {
-            res.redirect(`http://localhost:3000/create-password?email=${encodeURIComponent(obtainedEmail)}`)
+            res.redirect(`http://localhost:3000/create-applicant-account?email=${encodeURIComponent(obtainedEmail)}`)
         }
     })
 })
@@ -97,7 +97,7 @@ app.post('/api/auth/create-account', (req, res, next) => {
 })
 
 app.post('/api/auth/login', (req, res, next) => {
-  Applicant.findOne({emailM: req.body.emailLogin})
+  Applicant.findOne({emailM: req.body.emailLogin.toLowerCase()})
     .then(result => {
       bcrypt.compare(req.body.passwordLogin, result.passwordM)
         .then(comparisonResult => {
@@ -118,6 +118,18 @@ app.post('/api/get-applicant-info', (req, res, next) => {
     .then(result => {
       res.json(result);
     })
+})
+
+app.post('/api/create-account/admin', (req, res, next) => {
+  const newAdmin = new Admin({
+    emailM: req.body.emailAdmin,
+    firstNameM: req.body.firstNameAdmin,
+    lastNameM: req.body.lastNameAdmin,
+    passwordM: req.body.confirmPasswordAdmin,
+    admin: 'true'
+  })
+  newAdmin.save()
+  res.json({success: 'succeeded!'})
 })
 
 module.exports = app;

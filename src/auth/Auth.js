@@ -1,7 +1,7 @@
 import { React } from "react";
 import { useState, useEffect } from "react";
 import { Formik, Form } from "formik";
-import { FormControl, FormErrorIcon, FormErrorMessage, Input, InputGroup, InputRightElement, Button } from "@chakra-ui/react";
+import { Input, InputGroup, InputRightElement, Button } from "@chakra-ui/react";
 import './auth-styles/auth.styles.css'
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";

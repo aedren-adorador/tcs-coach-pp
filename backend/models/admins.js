@@ -1,13 +1,13 @@
 const mongoose = require('mongoose');
 
-const applicantSchema = mongoose.Schema({
+const adminSchema = mongoose.Schema({
     emailM: {type:String, required: true, unique: true},
     firstNameM: {type: String, required: true},
     lastNameM: {type: String, required: true},
     passwordM: {type: String, required: true},
-    admin: {type: String, required: true, default: 'false'}
+    admin: {type: Boolean}
 })
 
-const Applicant = mongoose.model('Applicant', applicantSchema);
+const Admin = mongoose.model('Admin', adminSchema);
 
-module.exports = Applicant;
+module.exports = Admin;

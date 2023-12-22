@@ -1,19 +1,20 @@
 import React from "react";
-import '../../auth-styles/auth.styles.css';
 import axios from "axios";
-import { Input, Button, FormControl, FormErrorMessage, Alert, AlertIcon } from "@chakra-ui/react";
+import '../create-account.styles.css'
+import { Input, Button, FormControl, FormErrorMessage, Alert, AlertIcon, useToast } from "@chakra-ui/react";
 import { Formik, Form } from "formik";
 import { ArrowBackIcon } from '@chakra-ui/icons'
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-function RegisterEmail() {
+function RegisterApplicantEmail() {
     const navigate = useNavigate();
     const url = 'http://localhost:3001'
     const [revealed, setRevealed] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
     const [emailErrorMessage, setEmailErrorMessage] = useState('');
+
     const handleSubmit = (e) => {
         const emailInput = e.email
 
@@ -29,6 +30,7 @@ function RegisterEmail() {
                 setEmailErrorMessage(error.response.data.errorMessage);
             })
     }
+    
     useEffect(() => {
     }, [emailErrorMessage])
     
@@ -59,13 +61,17 @@ function RegisterEmail() {
                 {(formikProps) => (
                 <Form>   
                     {isSuccess && 
-                    <Alert status='success' mb='2'>
+                    <Alert
+                    status='success'
+                    mb='2'>
                         <AlertIcon />
                         {successMessage}
                     </Alert>
                     }
                     {emailErrorMessage!=='' &&
-                    <Alert status='error' mb='2'>
+                    <Alert
+                    status='error'
+                    mb='2'>
                         <AlertIcon />
                         {emailErrorMessage}
                     </Alert>
@@ -105,4 +111,4 @@ function RegisterEmail() {
     )
 }
 
-export default RegisterEmail;
+export default RegisterApplicantEmail;
