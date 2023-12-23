@@ -1,5 +1,5 @@
 import './App.css';
-import Login from './auth/Auth';
+import Login from './auth/Login';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ChakraProvider } from '@chakra-ui/react'
 import RegisterApplicantEmail from './create-account/create-applicant-account/RegisterApplicantEmail';
@@ -9,6 +9,7 @@ import AuthPrivateRoute from './auth/auth-private-route/AuthPrivateRoute';
 import Testing from './Testing';
 import { useEffect, useState } from 'react';
 import CreateAdminAccount from './create-account/create-admin-account/CreateAdminAccount';
+import MainAdminView from './admin-views/MainAdminView';
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
     return localStorage.getItem('isAuthenticated') === 'true';
@@ -37,6 +38,15 @@ function App() {
             <AuthPrivateRoute
             isAuthenticated={isAuthenticated}
             component={MainApplicantView}
+            />
+          }
+          />
+          <Route
+          path='/admin-home/:id'
+          element={
+            <AuthPrivateRoute
+            isAuthenticated={isAuthenticated}
+            component={MainAdminView}
             />
           }
           />

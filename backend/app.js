@@ -9,7 +9,6 @@ const Applicant = require('./models/applicants');
 const Admin = require('./models/admins');
 require('dotenv').config();
 
-
 // Mandatory Settings
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
@@ -97,38 +96,67 @@ app.post('/api/auth/create-account', (req, res, next) => {
 })
 
 app.post('/api/auth/login', (req, res, next) => {
-  Applicant.findOne({emailM: req.body.emailLogin.toLowerCase()})
-    .then(result => {
-      bcrypt.compare(req.body.passwordLogin, result.passwordM)
-        .then(comparisonResult => {
-          if (comparisonResult) {
-            const token = jwt.sign({applicantID: result._id}, process.env.JWT_SECRET, {expiresIn: '1hr'})
-            res.json({success: true, token: token})
+  
+  Admin.findOne({emailM: req.body.emailLogin.toLowerCase()})
+    .then(isAdmin => {
+      if (isAdmin) {
+        bcrypt.compare(req.body.passwordLogin, isAdmin.passwordM)
+          .then(isPasswordCorrect => {
+            if (isPasswordCorrect) {
+              const token = jwt.sign({userID: isAdmin._id, admin: isAdmin.admin}, process.env.JWT_SECRET, {expiresIn: '1hr'})
+              res.json({success: true, token: token})
+            } else {
+              console.log("ERROR WRONG PASS")
+              res.json({success: false})
+            }
+          })
+      } else {
+         Applicant.findOne({emailM: req.body.emailLogin.toLowerCase()})
+        .then(isApplicant => {
+          if (isApplicant) {
+            bcrypt.compare(req.body.passwordLogin, isApplicant.passwordM)
+            .then(isPasswordCorrect => {
+              if (isPasswordCorrect) {
+                const token = jwt.sign({userID: isApplicant._id, admin: isApplicant.admin}, process.env.JWT_SECRET, {expiresIn: '1hr'})
+                res.json({success: true, token: token})
+              } else {
+                console.log("ERROR WRONG PASS")
+                res.json({success: false})
+              }
+            })
           } else {
-            res.json({success: false, applicantID: null})
-            console.log("ERROR WRONG PASS")
+            res.json({sucess: false})
           }
         })
+      }
     })
-  
 })
 
-app.post('/api/get-applicant-info', (req, res, next) => {
-  Applicant.findOne({_id: req.body.id})
-    .then(result => {
-      res.json(result);
+app.post('/api/get-user-info', (req, res, next) => {
+  Admin.findOne({_id: req.body.id})
+    .then(isAdmin => {
+      if (isAdmin) {
+        res.json(isAdmin)
+      } else {
+        Applicant.findOne({_id: req.body.id})
+          .then(applicant => {
+            res.json(applicant)
+          })
+      }
     })
 })
 
 app.post('/api/create-account/admin', (req, res, next) => {
-  const newAdmin = new Admin({
+  bcrypt.hash(req.body.confirmPasswordAdmin, 10).then(hash => {
+    const newAdmin = new Admin({
     emailM: req.body.emailAdmin,
     firstNameM: req.body.firstNameAdmin,
     lastNameM: req.body.lastNameAdmin,
-    passwordM: req.body.confirmPasswordAdmin,
+    passwordM: hash,
     admin: 'true'
   })
-  newAdmin.save()
+    newAdmin.save()
+  })
   res.json({success: 'succeeded!'})
 })
 
