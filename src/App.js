@@ -10,6 +10,7 @@ import Testing from './Testing';
 import { useEffect, useState } from 'react';
 import CreateAdminAccount from './create-account/create-admin-account/CreateAdminAccount';
 import MainAdminView from './admin-views/MainAdminView';
+import MyApplicationsSteps from './applicant-views/my-applications/MyApplicationsSteps'
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
     return localStorage.getItem('isAuthenticated') === 'true';
@@ -49,6 +50,10 @@ function App() {
             component={MainAdminView}
             />
           }
+          />
+          <Route
+          path='/application-progress'
+          element={<MyApplicationsSteps/>}
           />
         </Routes>
       </BrowserRouter>

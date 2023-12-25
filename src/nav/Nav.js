@@ -1,9 +1,9 @@
 import { Avatar, Box, Button, Flex, Text} from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import tcsLogo from '../tcs-logo.jpeg'
-import { AppstoreAddOutlined, AppstoreFilled, AppstoreOutlined, BulbFilled, BulbOutlined, EditOutlined, FormOutlined, LogoutOutlined, MessageFilled, MessageOutlined, ProfileFilled, ProfileOutlined, QuestionCircleFilled, QuestionCircleOutlined, QuestionOutlined } from "@ant-design/icons";
+import { AppstoreAddOutlined, AppstoreFilled, AppstoreOutlined, BulbFilled, BulbOutlined, EditOutlined, FormOutlined, LogoutOutlined, MessageFilled, MessageOutlined, ProfileFilled, ProfileOutlined, QuestionCircleFilled, QuestionCircleOutlined } from "@ant-design/icons";
 
-function Nav({logOut}) {
+function Nav({logOut, getActiveNavButton}) {
     const navButtons = ['My Applications', 'TCS Job Openings', 'Frequently Asked Qs', 'Learn About TCS', 'Contact Us']
     const navButtonSVGs = [
         <ProfileOutlined />, <AppstoreOutlined />, <QuestionCircleOutlined />, <BulbOutlined />, <MessageOutlined />
@@ -11,13 +11,14 @@ function Nav({logOut}) {
     const navClickedButtonSVGs = [
         <ProfileFilled />,<AppstoreFilled />, <QuestionCircleFilled />, <BulbFilled />, <MessageFilled />
     ]
-    const [clickedNavButton, setClickedNavButton] = useState('')
+    const [clickedNavButton, setClickedNavButton] = useState('My Applications')
     
     const handleNavButtonClick = (index) => {
         setClickedNavButton(navButtons[index])
     }
 
     useEffect(()=> {
+        getActiveNavButton(clickedNavButton)
     },[clickedNavButton])
     
     return(
@@ -47,6 +48,7 @@ function Nav({logOut}) {
                     </Button>
                 } else {
                     return <Button
+                    justifyContent='flex-start'
                     color='teal'
                     fontWeight='600'
                     width='240px'
