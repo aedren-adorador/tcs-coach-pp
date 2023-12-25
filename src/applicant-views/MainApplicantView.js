@@ -5,7 +5,7 @@ import { Grid, GridItem } from "@chakra-ui/react";
 import { jwtDecode } from "jwt-decode";
 import Header from "../nav/Header";
 import Nav from "../nav/Nav";
-import MyApplications from './my-applications/MyApplications'
+import MyApplication from './my-application/MyApplication'
 
 function MainApplicantView() {
 
@@ -67,7 +67,7 @@ function MainApplicantView() {
         </GridItem>
 
         <GridItem bg='#f2f7f9' area={'main'} padding='10px'>
-            {obtainedActiveNavButton === 'My Applications' && <MyApplications activeNavButton={toSendActiveNavButton}/>}
+            {obtainedActiveNavButton === 'My Application' && <MyApplication applicantData={applicantData}/>}
             {obtainedActiveNavButton === 'TCS Job Openings' && 'TCS Job Openings'}
             {obtainedActiveNavButton === 'Frequently Asked Qs' && 'Frequently Asked Qs'}
             {obtainedActiveNavButton === 'Learn About TCS' && 'Learn About TCS'}

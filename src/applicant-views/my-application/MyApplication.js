@@ -1,15 +1,13 @@
 import { Td, Table, TableCaption, TableContainer, Tr, Th, Tbody, Thead, Button, Badge} from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import MyApplicationsSteps from './MyApplicationsSteps'
 import { Link } from "react-router-dom";
 
-function MyApplications() {
+function MyApplication({applicantData}) {
+    console.log(applicantData)
     return (
         <>
-            <h1>HELLO My Applications</h1>
             <TableContainer>
             <Table variant='simple'>
-                <TableCaption>TCS Job Applications Dashboard</TableCaption>
+                <TableCaption>TCS Job Application Dashboard</TableCaption>
                 <Thead>
                 <Tr>
                     <Th>Application ID</Th>
@@ -26,7 +24,7 @@ function MyApplications() {
                         <Badge colorScheme='gray'>Not Submitted</Badge>
                     </Td>
                     <Td>
-                        <Link to='/application-progress'>
+                        <Link to={{ pathname: '/application-progress'}} state={{applicantData: applicantData}}>
                         <Button
                         variant='solid'
                         colorScheme="blue"
@@ -44,4 +42,4 @@ function MyApplications() {
     )
 }
 
-export default MyApplications;
+export default MyApplication;

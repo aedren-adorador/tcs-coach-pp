@@ -6,12 +6,13 @@ import RegisterApplicantEmail from './create-account/create-applicant-account/Re
 import CreateApplicantAccount from './create-account/create-applicant-account/CreateApplicantAccount';
 import MainApplicantView from './applicant-views/MainApplicantView';
 import AuthPrivateRoute from './auth/auth-private-route/AuthPrivateRoute';
-import Testing from './Testing';
 import { useEffect, useState } from 'react';
 import CreateAdminAccount from './create-account/create-admin-account/CreateAdminAccount';
 import MainAdminView from './admin-views/MainAdminView';
-import MyApplicationsSteps from './applicant-views/my-applications/MyApplicationsSteps'
+import MyApplicationStepper from './applicant-views/my-application/MyApplicationStepper';
+
 function App() {
+  
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
     return localStorage.getItem('isAuthenticated') === 'true';
   })
@@ -28,7 +29,6 @@ function App() {
     <ChakraProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/testing" element={<Testing/>}/>
           <Route path="/" element={<Login onLoginSuccess={handleLoginSuccess}/>}/>
           <Route path="/register-email" element={<RegisterApplicantEmail/>}/>
           <Route path="/create-applicant-account" element={<CreateApplicantAccount/>}/>
@@ -53,7 +53,7 @@ function App() {
           />
           <Route
           path='/application-progress'
-          element={<MyApplicationsSteps/>}
+          element={<MyApplicationStepper/>}
           />
         </Routes>
       </BrowserRouter>
