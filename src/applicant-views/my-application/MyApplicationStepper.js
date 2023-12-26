@@ -22,7 +22,7 @@ function MyApplicationStepper() {
     const previousPage = () => {
         navigate(-1);
     }
-
+// contri
     return (
         <> 
             <Box margin='5% 15% 5% 15%'>
