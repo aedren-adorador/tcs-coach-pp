@@ -1,12 +1,11 @@
-import { Button, Grid, GridItem, Header } from "@chakra-ui/react";
+import { Grid, GridItem } from "@chakra-ui/react";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Nav from "../nav/applicant/Nav";
 import NavAdmin from "../nav/admin/NavAdmin";
 import ReceivedApplications from "./received-applications/ReceivedApplications";
-import CreateJobOpening from "./create-job-opening/CreateJobOpening";
+import JobOpeningsAdmin from "./create-job-opening/CreateJobOpening";
 
 function MainAdminView() {
     const navigate = useNavigate();
@@ -68,7 +67,7 @@ function MainAdminView() {
 
             <GridItem bg='#f2f7f9' area={'main'} padding='10px'>
                 {obtainedActiveNavButton === 'Received Applications' && <ReceivedApplications/>}
-                {obtainedActiveNavButton === 'Create Job Opening' && <CreateJobOpening/>}
+                {obtainedActiveNavButton === 'TCS Job Openings' && <JobOpeningsAdmin/>}
 
             </GridItem>
             </Grid>

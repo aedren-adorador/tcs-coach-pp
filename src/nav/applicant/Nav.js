@@ -19,6 +19,7 @@ function Nav({logOut, getActiveNavButton}) {
     useEffect(()=> {
         getActiveNavButton(clickedNavButton)
     },[clickedNavButton])
+
     
     return(
         <>

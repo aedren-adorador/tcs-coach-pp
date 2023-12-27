@@ -1,16 +1,17 @@
 import { Box, Button} from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { CameraFilled, CameraOutlined, FileAddFilled, FileAddOutlined, FileDoneOutlined, FileTextFilled, FrownFilled, FrownOutlined, LogoutOutlined, NotificationFilled, NotificationOutlined, UserAddOutlined, UserOutlined } from "@ant-design/icons";
+import { AppstoreFilled, AppstoreOutlined, CameraFilled, CameraOutlined, FileAddFilled, FileAddOutlined, FileDoneOutlined, FileTextFilled, FrownFilled, FrownOutlined, LogoutOutlined, NotificationFilled, NotificationOutlined, UserAddOutlined, UserOutlined } from "@ant-design/icons";
 
 function NavAdmin({logOut, getActiveNavButton}) {
-    const navButtons = ['Received Applications', 'Received Interviews', 'Received Teaching Demos', 'Onboarded New Hires', 'Rejected Applicants', 'Create Job Opening']
+    const navButtons = ['Received Applications', 'Received Interviews', 'Received Teaching Demos', 'Onboarded New Hires', 'Rejected Applicants', 'TCS Job Openings']
     const navButtonSVGs = [
-        <FileDoneOutlined/>, <UserOutlined />, <CameraOutlined />, <NotificationOutlined />, <FrownOutlined />, <FileAddOutlined />
+        <FileDoneOutlined/>, <UserOutlined />, <CameraOutlined />, <NotificationOutlined />, <FrownOutlined />, <AppstoreOutlined />
+
     ]
     const navClickedButtonSVGs = [
-       <FileTextFilled/> ,<UserAddOutlined />, <CameraFilled />, <NotificationFilled />, <FrownFilled />, <FileAddFilled/>
+       <FileTextFilled/> ,<UserAddOutlined />, <CameraFilled />, <NotificationFilled />, <FrownFilled />, <AppstoreFilled/>
     ]
-    const [clickedNavButton, setClickedNavButton] = useState('Submitted Applications')
+    const [clickedNavButton, setClickedNavButton] = useState('TCS Job Openings')
     
     const handleNavButtonClick = (index) => {
         setClickedNavButton(navButtons[index])
