@@ -3,8 +3,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Grid, GridItem } from "@chakra-ui/react";
 import { jwtDecode } from "jwt-decode";
-import Header from "../nav/Header";
-import Nav from "../nav/Nav";
+import Header from "../nav/applicant/Header";
+import Nav from "../nav/applicant/Nav";
 import MyApplication from './my-application/MyApplication'
 
 function MainApplicantView() {

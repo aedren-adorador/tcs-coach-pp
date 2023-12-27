@@ -96,7 +96,6 @@ app.post('/api/auth/create-account', (req, res, next) => {
 })
 
 app.post('/api/auth/login', (req, res, next) => {
-  
   Admin.findOne({emailM: req.body.emailLogin.toLowerCase()})
     .then(isAdmin => {
       if (isAdmin) {

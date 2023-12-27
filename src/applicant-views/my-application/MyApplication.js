@@ -2,7 +2,6 @@ import { Td, Table, TableCaption, TableContainer, Tr, Th, Tbody, Thead, Button, 
 import { Link } from "react-router-dom";
 
 function MyApplication({applicantData}) {
-    console.log(applicantData)
     return (
         <>
             <TableContainer>
