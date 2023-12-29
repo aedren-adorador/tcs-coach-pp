@@ -1,17 +1,20 @@
-import { Box, Button} from "@chakra-ui/react";
+import { Box, Button, Divider, Flex, Image} from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { AppstoreFilled, AppstoreOutlined, CameraFilled, CameraOutlined, FileAddFilled, FileAddOutlined, FileDoneOutlined, FileTextFilled, FrownFilled, FrownOutlined, LogoutOutlined, NotificationFilled, NotificationOutlined, UserAddOutlined, UserOutlined } from "@ant-design/icons";
+import { FolderFilled, FolderOutlined, HomeFilled, HomeOutlined, IdcardFilled, IdcardOutlined, LogoutOutlined, UserAddOutlined, UserOutlined } from "@ant-design/icons";
+import tcsLogo from '../tcs-logo.png'
+import homeIcon from '../home-icon.png'
 
 function NavAdmin({logOut, getActiveNavButton}) {
-    const navButtons = ['Received Applications', 'Received Interviews', 'Received Teaching Demos', 'Onboarded New Hires', 'Rejected Applicants', 'TCS Job Openings']
+    const navButtons = ['Dashboard', 'Jobs', 'Applicants', 'Job Portal']
+    const iconSize = {fontSize: '25px', marginBottom:'8px'}
     const navButtonSVGs = [
-        <FileDoneOutlined/>, <UserOutlined />, <CameraOutlined />, <NotificationOutlined />, <FrownOutlined />, <AppstoreOutlined />
+        <HomeOutlined style={iconSize}/>, <IdcardOutlined style={iconSize}/>, <UserAddOutlined style={iconSize}/>, <FolderOutlined style={iconSize}/>
 
     ]
     const navClickedButtonSVGs = [
-       <FileTextFilled/> ,<UserAddOutlined />, <CameraFilled />, <NotificationFilled />, <FrownFilled />, <AppstoreFilled/>
+        <HomeFilled style={iconSize}/> ,<IdcardFilled style={iconSize}/>, <UserOutlined style={iconSize}/>, <FolderFilled style={iconSize}/>
     ]
-    const [clickedNavButton, setClickedNavButton] = useState('TCS Job Openings')
+    const [clickedNavButton, setClickedNavButton] = useState('Dashboard')
     
     const handleNavButtonClick = (index) => {
         setClickedNavButton(navButtons[index])
@@ -24,50 +27,52 @@ function NavAdmin({logOut, getActiveNavButton}) {
     return(
         <>
         <Box
-        padding='5px'
-        flex='1'
         direction='column'
-        maxW='200px'
-        minW='200px'
-        width='250px'
+        maxW='120px'
         height='100%'
+        textAlign='center'
         >
+            <Flex justify='center'><Image src={tcsLogo} alt="tcs-logo" maxW='100px'/></Flex>
             {navButtons.map((button, index) => {
                 if (button !== clickedNavButton) {
                     return<Button
-                    justifyContent='flex-start'
+                    borderRadius='0px'
                     fontWeight='500'
                     variant='ghost'
-                    colorScheme="black"
-                    width='240px'
+                    colorScheme="blackAlpha"
                     mb='1'
                     key={index}
+                    width='100%'
+                    height='80px'
+                    fontSize='12px'
                     onClick={() => handleNavButtonClick(index)}
+                    color='white'
                     >
-                       { navButtonSVGs[index]}&nbsp;&nbsp;{button}
+                       <Flex direction='column'>{navButtonSVGs[index]}{button}</Flex>
                     </Button>
                 } else {
                     return <Button
-                    justifyContent='flex-start'
-                    color='teal'
+                    borderRadius='0px'
                     fontWeight='600'
-                    width='240px'
                     mb='1'
+                    width='100%'
                     key={index}
+                    height='80px'
+                    fontSize='12px'
                     onClick={() => handleNavButtonClick(index)}
-                    >{ navClickedButtonSVGs[index]}&nbsp;{button}
+                    ><Flex direction='column'>{navClickedButtonSVGs[index]} {button}</Flex>
                     </Button>
                 }
             })}
-            <Button
-            justifyContent='flex-start'
+            {/* <Button
+            justifyContent='center'
             variant='ghost'
-            colorScheme="red"
-            width='240px'
+            color='white'
+            colorScheme="white"
             onClick={logOut}
             >
             {<LogoutOutlined />}&nbsp;&nbsp;Logout
-            </Button>
+            </Button> */}
         </Box>
         </>
     )

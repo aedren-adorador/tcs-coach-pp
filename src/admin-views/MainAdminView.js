@@ -54,20 +54,18 @@ function MainAdminView() {
                             "nav main"
                             "nav footer"`}
             gridTemplateRows={'50px 1fr'}
-            gridTemplateColumns={'250px 1fr'}
+            gridTemplateColumns={'120px 1fr'}
             h='100vh'
-            color='blackAlpha.'
             >
             <GridItem area={'header'}>
                 {/* <Header/> */}
             </GridItem>
-            <GridItem bg='white.300' area={'nav'} position='fixed'>
+            <GridItem bg='#0c3c55' area={'nav'} position='fixed' height='100%'>
                 <NavAdmin logOut={logOut} getActiveNavButton={getActiveNavButton}/>
             </GridItem>
 
             <GridItem bg='#f2f7f9' area={'main'} padding='10px'>
-                {obtainedActiveNavButton === 'Received Applications' && <ReceivedApplications/>}
-                {obtainedActiveNavButton === 'TCS Job Openings' && <JobOpeningsAdmin/>}
+                {obtainedActiveNavButton === 'Dashboard' && <ReceivedApplications/>}
 
             </GridItem>
             </Grid>
