@@ -4,9 +4,8 @@ import { jwtDecode } from "jwt-decode";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import NavAdmin from "../nav/admin/NavAdmin";
-import ReceivedApplications from "./received-applications/ReceivedApplications";
-import JobOpeningsAdmin from "./create-job-opening/CreateJobOpening";
-
+import ReceivedApplictions from './received-applications/ReceivedApplications'
+import Overview from "./Overview";
 function MainAdminView() {
     const navigate = useNavigate();
     const [adminData, setAdminData] = useState({});
@@ -65,7 +64,7 @@ function MainAdminView() {
             </GridItem>
 
             <GridItem bg='#f2f7f9' area={'main'} padding='10px'>
-                {obtainedActiveNavButton === 'Dashboard' && <ReceivedApplications/>}
+                {obtainedActiveNavButton === 'Dashboard' && <Overview/>}
 
             </GridItem>
             </Grid>
