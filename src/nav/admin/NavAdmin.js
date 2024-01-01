@@ -2,11 +2,10 @@ import { Box, Button, Divider, Flex, Image} from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { FolderFilled, FolderOutlined, HomeFilled, HomeOutlined, IdcardFilled, IdcardOutlined, LogoutOutlined, UserAddOutlined, UserOutlined } from "@ant-design/icons";
 import tcsLogo from '../tcs-logo.png'
-import homeIcon from '../home-icon.png'
 
 function NavAdmin({logOut, getActiveNavButton}) {
     const navButtons = ['Dashboard', 'Jobs', 'Applicants', 'Job Portal']
-    const iconSize = {fontSize: '25px', marginBottom:'8px'}
+    const iconSize = {fontSize: '20px', marginBottom:'8px'}
     const navButtonSVGs = [
         <HomeOutlined style={iconSize}/>, <IdcardOutlined style={iconSize}/>, <UserAddOutlined style={iconSize}/>, <FolderOutlined style={iconSize}/>
 
@@ -28,11 +27,11 @@ function NavAdmin({logOut, getActiveNavButton}) {
         <>
         <Box
         direction='column'
-        maxW='120px'
+        maxW='80px'
         height='100%'
         textAlign='center'
         >
-            <Flex justify='center'><Image src={tcsLogo} alt="tcs-logo" maxW='100px'/></Flex>
+            <Flex justify='center'><Image src={tcsLogo} alt="tcs-logo" maxW='70px'/></Flex>
             {navButtons.map((button, index) => {
                 if (button !== clickedNavButton) {
                     return<Button
@@ -44,7 +43,7 @@ function NavAdmin({logOut, getActiveNavButton}) {
                     key={index}
                     width='100%'
                     height='80px'
-                    fontSize='12px'
+                    fontSize='10px'
                     onClick={() => handleNavButtonClick(index)}
                     color='white'
                     >
@@ -58,7 +57,7 @@ function NavAdmin({logOut, getActiveNavButton}) {
                     width='100%'
                     key={index}
                     height='80px'
-                    fontSize='12px'
+                    fontSize='10px'
                     onClick={() => handleNavButtonClick(index)}
                     ><Flex direction='column'>{navClickedButtonSVGs[index]} {button}</Flex>
                     </Button>

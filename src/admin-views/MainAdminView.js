@@ -4,8 +4,7 @@ import { jwtDecode } from "jwt-decode";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import NavAdmin from "../nav/admin/NavAdmin";
-import ReceivedApplictions from './received-applications/ReceivedApplications'
-import Overview from "./Overview";
+import Dashboard from "./dashboard/Dashboard";
 function MainAdminView() {
     const navigate = useNavigate();
     const [adminData, setAdminData] = useState({});
@@ -53,7 +52,7 @@ function MainAdminView() {
                             "nav main"
                             "nav footer"`}
             gridTemplateRows={'50px 1fr'}
-            gridTemplateColumns={'120px 1fr'}
+            gridTemplateColumns={'80px 1fr'}
             h='100vh'
             >
             <GridItem area={'header'}>
@@ -64,7 +63,7 @@ function MainAdminView() {
             </GridItem>
 
             <GridItem bg='#f2f7f9' area={'main'} padding='10px'>
-                {obtainedActiveNavButton === 'Dashboard' && <Overview/>}
+                {obtainedActiveNavButton === 'Dashboard' && <Dashboard/>}
 
             </GridItem>
             </Grid>

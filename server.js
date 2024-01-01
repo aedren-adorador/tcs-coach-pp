@@ -2,6 +2,8 @@ const app = require("./backend/app");
 const debug = require("debug")("tcs-coach-pp-node");
 const http = require("http");
 
+let port; // Declare port variable here
+
 const normalizePort = val => {
   var port = parseInt(val, 10);
 
@@ -13,7 +15,7 @@ const normalizePort = val => {
   if (port >= 0) {
     // port number
     return port;
-  //
+  }
 
   return false;
 };
@@ -38,12 +40,15 @@ const onError = error => {
 };
 
 const onListening = () => {
-  // const addr = server.address();
   const bind = typeof port === "string" ? "pipe " + port : "port " + port;
   debug("Listening on " + bind);
 };
 
-const port = normalizePort(process.env.PORT || "3001");
+// Check if port is not already declared before assigning a value
+if (!port) {
+  port = normalizePort(process.env.PORT || "3001");
+}
+
 app.set("port", port);
 
 const server = http.createServer(app);
