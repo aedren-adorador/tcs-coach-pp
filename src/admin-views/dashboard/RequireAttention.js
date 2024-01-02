@@ -9,7 +9,7 @@ function RequireAttention() {
         <>
         
         <TableContainer
-        margin='0px 5% 0px 5%'
+        margin='0px 5% 5%'
         >
             <Text>Require Attention</Text>
             <Table
@@ -17,7 +17,6 @@ function RequireAttention() {
             backgroundColor='#e5ecf9'
             fontSize='12px'
             >
-                <TableCaption>Imperial to metric conversion factors</TableCaption>
                 <Thead>
                 <Tr>
                     {requireAttentionHeaders.map(header => {
@@ -122,6 +121,7 @@ function RequireAttention() {
                 </Tbody>
             </Table>
         </TableContainer>
+       
         </>
     )
 }
