@@ -19,13 +19,13 @@ function RequireAttention() {
             >
                 <Thead>
                 <Tr>
-                    {requireAttentionHeaders.map(header => {
-                        return <Th fontSize='10px'textAlign='center'>{header}</Th>
+                    {requireAttentionHeaders.map((header, index) => {
+                        return <Th fontSize='10px'textAlign='center' key={index}>{header}</Th>
                     })}
                 </Tr>
                 </Thead>
                 <Tbody>
-                <Tr>
+                <Tr key='1'>
                     <Td>
                         <Flex
                         align='center'
@@ -49,7 +49,7 @@ function RequireAttention() {
                     <Td textAlign='center'>40</Td>
                     <Td textAlign='center'>2</Td>
                 </Tr>
-                <Tr>
+                <Tr key='2'>
                     <Td>
                         <Flex
                         align='center'
@@ -72,7 +72,7 @@ function RequireAttention() {
                     <Td textAlign='center'>40</Td>
                     <Td textAlign='center'>2</Td>
                 </Tr>
-                <Tr>
+                <Tr key='3'>
                     <Td>
                         <Flex
                         align='center'
@@ -95,7 +95,7 @@ function RequireAttention() {
                     <Td textAlign='center'>40</Td>
                     <Td textAlign='center'>2</Td>
                 </Tr>
-                <Tr>
+                <Tr key='4'>
                     <Td>
                         <Flex
                         align='center'

@@ -159,4 +159,11 @@ app.post('/api/create-account/admin', (req, res, next) => {
   res.json({success: 'succeeded!'})
 })
 
+app.get('/api/get-applicants', (req, res, next) => {
+  Applicant.find()
+    .then(applicants => {
+      res.json({applicants: applicants})
+    })
+})
+
 module.exports = app;

@@ -1,12 +1,18 @@
-import React from "react";
-import { TableContainer, Table, Thead, Tr, Th, Td, Flex, Tbody, Input, InputLeftElement, InputGroup, Text, HStack, Box, Menu, MenuButton, Button, MenuList, MenuItem} from "@chakra-ui/react";
-import { PhoneIcon, Search2Icon, ChevronDownIcon } from "@chakra-ui/icons";
+import React, { useEffect } from "react";
+import { TableContainer, Table, Thead, Tr, Th, Td, Flex, Tbody, Input, InputLeftElement, InputGroup, Text, HStack, Menu, MenuButton, Button, MenuList, MenuItem} from "@chakra-ui/react";
+import { Search2Icon, ChevronDownIcon } from "@chakra-ui/icons";
+import axios from "axios";
 
 
-function AllApplicants() {
+function AllApplicants({applicants, updateChosenApplicantToReview, handleButtonClick}) {
     const allApplicantsTableHeaders = [
         'Applicant ID', 'Date Submitted', 'Name', 'Position Applied', 'Application Status', 'Offer Status'
     ]
+
+    const goToApplicantProgress = (id) => {
+      updateChosenApplicantToReview(id);
+      handleButtonClick('Review Application')
+    }
     return(
         <>
         <HStack
@@ -55,14 +61,8 @@ function AllApplicants() {
                         />
                     </InputGroup>
             </Flex>
-            
-            
-
         </HStack>
         
-        
-      
-
         <TableContainer
         border='solid 0.5px lightgray'
         borderRadius='20px'
@@ -74,43 +74,36 @@ function AllApplicants() {
             fontSize='12px'
             >
                 <Thead>
-                <Tr>
-                    {allApplicantsTableHeaders.map(header => {
-                        return <Th fontSize='10px'textAlign='center'>{header}</Th>
+                <Tr key='tbl-hdrs'>
+                    {allApplicantsTableHeaders.map((header, index) => {
+                        return <Th fontSize='10px'textAlign='center' key={index}>{header}</Th>
                     })}
                 </Tr>
                 </Thead>
                 <Tbody>
-                <Tr>
-                    <Td>
-                        <Flex
-                        align='center'
-                        >
-                            Python Coach
-
-                        </Flex>
-                    </Td>
-                    <Td textAlign='center'>3</Td>
-                    <Td textAlign='center'>123</Td>
-                    <Td textAlign='center'>40</Td>
-                    <Td textAlign='center'>33</Td>
-                    <Td textAlign='center'>7</Td>
-                </Tr>
-                <Tr>
-                    <Td>
-                        <Flex
-                        align='center'
-                        >
-                            Data Analytics Coach
-                        </Flex>
-                    </Td>
-                    <Td textAlign='center'>3</Td>
-                    <Td textAlign='center'>123</Td>
-                    <Td textAlign='center'>40</Td>
-                    <Td textAlign='center'>33</Td>
-                    <Td textAlign='center'>7</Td>
-                </Tr>
-               
+                {applicants.map((applicant, index) => {
+                    return <Tr
+                    onClick={()=>goToApplicantProgress(applicant._id)}
+                    _hover={{
+                        backgroundColor: "#f2f1f1",
+                        color: 'teal'
+                    }}
+                    >
+                        <Td>
+                            <Flex
+                            align='center'
+                            >
+                                {applicant.firstNameM} {applicant.lastNameM}
+                            </Flex>
+                        </Td>
+                        <Td textAlign='center'>3</Td>
+                        <Td textAlign='center'>123</Td>
+                        <Td textAlign='center'>40</Td>
+                        <Td textAlign='center'>33</Td>
+                        <Td textAlign='center'>7</Td>
+                    </Tr>
+                })}
+    
                 </Tbody>
             </Table>
         </TableContainer>
