@@ -4,6 +4,7 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, Grid, GridItem, Button, VSt
 import { ChevronRightIcon } from "@chakra-ui/icons";
 import ReviewApplication from "./applicants-sub-components/ReviewApplication";
 import axios from "axios";
+import ReviewSubmissionsStepper from "./applicants-sub-components/ReviewSubmissionsStepper";
 
 function Applicants() {
     const [applicantsResult, setApplicantsResult] = useState([]);
@@ -20,12 +21,17 @@ function Applicants() {
     const [clickedButton, setClickedButton] = useState('All Applicants');
     
     const handleButtonClick = (index) => {
+        if (index===0) {
+            setChosenApplicantToReview('');
+        }
         setClickedButton(applicantsButtons[index])
     }
 
     const updateChosenApplicantToReview = (id) => {
         setChosenApplicantToReview(id);
+        setClickedButton('Review Application')
     }
+
 
     useEffect(() => {
         getApplicants()
@@ -63,9 +69,6 @@ function Applicants() {
                 </BreadcrumbItem>:
                 ''
                 }
-
-
-               
             </Breadcrumb>
 
            <Grid 
@@ -119,13 +122,15 @@ function Applicants() {
                     </VStack>
                 </GridItem>
                 <GridItem pl='2' area={'main'}>
-                    {clickedButton === 'All Applicants' && <AllApplicants
+                    {clickedButton === 'All Applicants' ?
+                    <AllApplicants
                     applicants={applicantsResult}
                     updateChosenApplicantToReview={updateChosenApplicantToReview}
                     handleButtonClick={handleButtonClick}
-                    />}
+                    />:
+                    <ReviewSubmissionsStepper clickedButton={clickedButton}/>
+                    }
 
-                    {clickedButton === 'Review Application' &&  <ReviewApplication/>}
                 </GridItem>
             </Grid>
         </>

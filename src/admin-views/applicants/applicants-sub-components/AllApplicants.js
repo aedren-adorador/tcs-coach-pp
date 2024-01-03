@@ -11,7 +11,6 @@ function AllApplicants({applicants, updateChosenApplicantToReview, handleButtonC
 
     const goToApplicantProgress = (id) => {
       updateChosenApplicantToReview(id);
-      handleButtonClick('Review Application')
     }
     return(
         <>
