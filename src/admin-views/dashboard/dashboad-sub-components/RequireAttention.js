@@ -1,6 +1,6 @@
 import React from "react";
 import { TableContainer, Table, TableCaption, Thead, Tr, Th, Tbody, Td, Tfoot, Text, Image, Flex} from "@chakra-ui/react";
-import suitcaseIcon from '../admin-view-imgs/suitcase.png'
+import suitcaseIcon from '../../admin-view-imgs/suitcase.png'
 function RequireAttention() {
     const requireAttentionHeaders = [
         'Position', 'Positions Left', 'Applications', 'Interviewed', 'Rejected', 'Withdrawn', 'Pending Feedback', 'Offered'
@@ -11,10 +11,10 @@ function RequireAttention() {
         <TableContainer
         margin='0px 5% 5%'
         >
-            <Text>Require Attention</Text>
+            <Text color='#071C50' fontWeight='600' fontSize='14px'>Require Attention</Text>
             <Table
             variant='simple'
-            backgroundColor='#e5ecf9'
+            backgroundColor='#F3F8FF'
             fontSize='12px'
             >
                 <Thead>

@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import NavAdmin from "../nav/admin/NavAdmin";
 import Dashboard from "./dashboard/Dashboard";
+import Applicants from "./applicants/Applicants";
 function MainAdminView() {
     const navigate = useNavigate();
     const [adminData, setAdminData] = useState({});
@@ -48,23 +49,22 @@ function MainAdminView() {
     return(
         <>
              <Grid
-            templateAreas={`"nav main"
+            templateAreas={`"nav header"
                             "nav main"
                             "nav footer"`}
-            gridTemplateRows={'50px 1fr'}
+            gridTemplateRows={'45px 1fr'}
             gridTemplateColumns={'80px 1fr'}
             h='100vh'
             >
-            <GridItem area={'header'}>
-                {/* <Header/> */}
+            <GridItem area={'header'} borderBottom='solid 0.5px lightgray'>
             </GridItem>
             <GridItem bg='#0c3c55' area={'nav'} position='fixed' height='100%'>
                 <NavAdmin logOut={logOut} getActiveNavButton={getActiveNavButton}/>
             </GridItem>
 
-            <GridItem bg='#f2f7f9' area={'main'} padding='10px'>
+            <GridItem bg='white' area={'main'} padding='10px'>
                 {obtainedActiveNavButton === 'Dashboard' && <Dashboard/>}
-
+                {obtainedActiveNavButton === 'Applicants' && <Applicants/>}
             </GridItem>
             </Grid>
         </>

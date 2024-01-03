@@ -1,9 +1,9 @@
 import { HStack, Card, CardBody, Box, Image, Text } from "@chakra-ui/react";
 import React from "react";
-import reviewApplication from '../admin-view-imgs/review-application.png'
-import interviewFeedback from '../admin-view-imgs/interview-feedback.png'
-import teachingDemoFeedback from '../admin-view-imgs/teaching-demo-feedback.png'
-import preEmploymentRequirements from '../admin-view-imgs/pre-employment-requirements.png'
+import reviewApplication from '../../admin-view-imgs/review-application.png'
+import interviewFeedback from '../../admin-view-imgs/interview-feedback.png'
+import teachingDemoFeedback from '../../admin-view-imgs/teaching-demo-feedback.png'
+import preEmploymentRequirements from '../../admin-view-imgs/pre-employment-requirements.png'
 
 function Overview() {
   const boxesOverview = [
@@ -15,7 +15,7 @@ function Overview() {
 
   return (
     <>
-      <Text margin='20px 0px 0px 5%'>Overview</Text>
+      <Text margin='20px 0px 0px 5%' color='#071C50' fontWeight='600' fontSize='14px'>Overview</Text>
       <HStack maxW="100%" display="flex" justify="space-between" margin="30px 5% 50px 5%">
         {boxesOverview.map((box, index) => (
           <Card
@@ -25,10 +25,10 @@ function Overview() {
           maxW="300px"
           position="relative"
           shadow='none'
-          backgroundColor='#e5ecf9'
+          backgroundColor='#F3F8FF'
           >
             <Box
-            backgroundColor='#e5ecf9'
+            backgroundColor='#F3F8FF'
             border="solid 1px"
             width="90px"
             height="90px"

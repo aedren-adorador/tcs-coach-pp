@@ -62,7 +62,7 @@ function MainApplicantView() {
         <GridItem area={'header'}>
             <Header userData={applicantData}/>
         </GridItem>
-        <GridItem bg='white.300' area={'nav'} position='fixed'>
+        <GridItem bg='white.300' area={'nav'} position='fixed'> 
             <Nav logOut={logOut} getActiveNavButton={getActiveNavButton}/>
         </GridItem>
 

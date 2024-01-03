@@ -1,6 +1,6 @@
 import React from "react";
-import Overview from "./Overview";
-import RequireAttention from "./RequireAttention";
+import Overview from "./dashboad-sub-components/Overview";
+import RequireAttention from "./dashboad-sub-components/RequireAttention";
 
 
 function Dashboard() {
