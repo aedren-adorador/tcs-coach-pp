@@ -153,7 +153,6 @@ function ReviewApplication() {
                 display='inline-block'
                 >Katipunan, Quezon City</Text>
             </Box>
-
         </VStack>
         </GridItem>
 
@@ -161,7 +160,145 @@ function ReviewApplication() {
         <GridItem
         area={'column2'}
         >
-            Header
+        <VStack
+        spacing={4}
+        align='flex-start'
+        >
+            <Box>
+                <Text
+                fontSize='15px'
+                color='blue.400'
+                fontWeight='500'
+                >Position Applied To
+                </Text>
+                <Text
+                fontSize='20px'
+                color='blue.400'
+                fontWeight='1000'
+                >DATA ANALYTICS COACH</Text>
+            </Box>
+
+            <Box>
+                <Text
+                fontSize='15px'
+                color='gray.400'
+                fontWeight='500'
+                >Resume Attachment
+                </Text>
+                <Text
+                fontSize='15px'
+                color='blue.400'
+                fontWeight='400'
+                display='inline-block'
+                textDecoration='underline'
+                >Fabian_Resume.pdf(click to view)</Text>
+            </Box>
+
+            <Box>
+                <Text
+                fontSize='15px'
+                color='gray.400'
+                fontWeight='500'
+                >Coaching/Tutoring Experience
+                </Text>
+                <Text
+                fontSize='15px'
+                color='black'
+                fontWeight='400'
+                display='inline-block'
+                >High School Tutor Experience</Text>
+            </Box>
+
+             <Box>
+                <Text
+                fontSize='15px'
+                color='gray.400'
+                fontWeight='500'
+                >Areas of Expertise
+                </Text>
+                <Text
+                fontSize='15px'
+                color='black'
+                fontWeight='400'
+                display='inline-block'
+                >Data Analytics, Project Management</Text>
+            </Box>
+
+             <Box>
+                <Text
+                fontSize='15px'
+                color='gray.400'
+                fontWeight='500'
+                >Where did you hear about this job opening?
+                </Text>
+                <Text
+                fontSize='15px'
+                color='black'
+                fontWeight='400'
+                display='inline-block'
+                >LinkedIn</Text>
+            </Box>
+
+            <Box>
+                <Text
+                fontSize='15px'
+                color='gray.400'
+                fontWeight='500'
+                >Availability
+                </Text>
+                <Text
+                fontSize='15px'
+                color='black'
+                fontWeight='400'
+                display='inline-block'
+                >Saturday</Text>
+            </Box>
+
+            <Box>
+                <Text
+                fontSize='15px'
+                color='gray.400'
+                fontWeight='500'
+                >Internet Speed
+                </Text>
+                <Text
+                fontSize='15px'
+                color='black'
+                fontWeight='400'
+                display='inline-block'
+                >15 mbps</Text>
+            </Box>
+
+            <Box>
+                <Text
+                fontSize='15px'
+                color='gray.400'
+                fontWeight='500'
+                >Referred by
+                </Text>
+                <Text
+                fontSize='15px'
+                color='black'
+                fontWeight='400'
+                display='inline-block'
+                >Aedren Adorador</Text>
+            </Box>
+
+            <Box>
+                <Text
+                fontSize='15px'
+                color='gray.400'
+                fontWeight='500'
+                >If yes, where do you live?
+                </Text>
+                <Text
+                fontSize='15px'
+                color='black'
+                fontWeight='400'
+                display='inline-block'
+                >Katipunan, Quezon City</Text>
+            </Box>
+        </VStack>
         </GridItem>
         </Grid>
         </>

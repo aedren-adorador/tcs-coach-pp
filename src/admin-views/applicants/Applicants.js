@@ -2,14 +2,13 @@ import React, { useEffect, useState } from "react";
 import AllApplicants from "./applicants-sub-components/AllApplicants";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, Grid, GridItem, Button, VStack} from "@chakra-ui/react";
 import { ChevronRightIcon } from "@chakra-ui/icons";
-import ReviewApplication from "./applicants-sub-components/ReviewApplication";
 import axios from "axios";
 import ReviewSubmissionsStepper from "./applicants-sub-components/ReviewSubmissionsStepper";
 
 function Applicants() {
     const [applicantsResult, setApplicantsResult] = useState([]);
     const [chosenApplicantToReview, setChosenApplicantToReview] = useState('');
-
+    const [clickedButton, setClickedButton] = useState('All Applicants');
 
     const getApplicants = async () => {
         const response = await axios.get('http://localhost:3001/api/get-applicants');
@@ -18,7 +17,6 @@ function Applicants() {
     const applicantsButtons = [
         'All Applicants', 'Review Application', 'Interview Feedback', 'Teaching Demo Feedback', 'Onboarding Requirements', 'Finish Hiring'
     ]
-    const [clickedButton, setClickedButton] = useState('All Applicants');
     
     const handleButtonClick = (index) => {
         if (index===0) {
@@ -128,7 +126,9 @@ function Applicants() {
                     updateChosenApplicantToReview={updateChosenApplicantToReview}
                     handleButtonClick={handleButtonClick}
                     />:
-                    <ReviewSubmissionsStepper clickedButton={clickedButton}/>
+                    <ReviewSubmissionsStepper
+                    clickedButton={clickedButton}
+                    />
                     }
 
                 </GridItem>

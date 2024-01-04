@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Step, StepDescription, StepIcon, StepIndicator, StepNumber, StepSeparator, StepStatus, StepTitle, Stepper, useSteps, Box } from '@chakra-ui/react'
 import ReviewApplication from "./ReviewApplication";
+import InterviewFeedback from "./InterviewFeedback";
+import TeachingDemoFeedback from "./TeachingDemoFeedback";
+import OnboardingRequirements from "./OnboardingRequirements";
 
-function ReviewSubmissionsStepper({clickedButton}) {
+function ReviewSubmissionsStepper({clickedButton}) {    
     const steps = [
     { title: 'Step 1', description: 'Review Application' },
     { title: 'Step 2', description: 'Interview Feedback' },
@@ -11,10 +14,14 @@ function ReviewSubmissionsStepper({clickedButton}) {
     { title: 'Step 5', description: 'Finish Hiring' },
     ]
 
-    const { activeStep } = useSteps({
+    const { activeStep, setActiveStep } = useSteps({
         index: 0,
         count: steps.length,
     })
+
+    useEffect(()=> {
+       setActiveStep(steps.findIndex(step => step.description === clickedButton))
+    },[clickedButton])
 
     return(
         <>
@@ -51,6 +58,9 @@ function ReviewSubmissionsStepper({clickedButton}) {
         ))}
         </Stepper>
         {clickedButton === 'Review Application' && <ReviewApplication/>}
+        {clickedButton === 'Interview Feedback' && <InterviewFeedback/>}
+        {clickedButton === 'Teaching Demo Feedback' && <TeachingDemoFeedback/>}
+        {clickedButton === 'Onboarding Requirements' && <OnboardingRequirements/>}
         </>
     )
 }
