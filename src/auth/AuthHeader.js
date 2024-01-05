@@ -1,6 +1,6 @@
 import React from "react";
 import { Flex, Image } from "@chakra-ui/react";
-import tcsLogo from '../nav/tcs-logo.png'
+import tcsLogo from '../tcs-logo.png'
 
 function AuthHeader() {
     return(

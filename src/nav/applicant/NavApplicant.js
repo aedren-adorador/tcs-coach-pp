@@ -1,19 +1,20 @@
-import { Box, Button, Divider, Flex, Image} from "@chakra-ui/react";
+import { Box, Button, Flex, Image} from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { FolderFilled, FolderOutlined, HomeFilled, HomeOutlined, IdcardFilled, IdcardOutlined, LogoutOutlined, UserAddOutlined, UserOutlined } from "@ant-design/icons";
 import tcsLogo from '../../tcs-logo.png'
+import { IdcardOutlined, IdcardFilled, FolderOutlined, FolderFilled, QuestionCircleOutlined, QuestionCircleFilled } from "@ant-design/icons";
 
-function NavAdmin({logOut, getActiveNavButton}) {
-    const navButtons = ['Dashboard', 'Jobs', 'Applicants', 'Job Portal']
+
+function NavApplicant({logOut, getActiveNavButton}) {
+    const navButtons = ['My Application', 'Job Portal', 'FAQs']
     const iconSize = {fontSize: '20px', marginBottom:'8px'}
     const navButtonSVGs = [
-        <HomeOutlined style={iconSize}/>, <IdcardOutlined style={iconSize}/>, <UserAddOutlined style={iconSize}/>, <FolderOutlined style={iconSize}/>
+        <IdcardOutlined style={iconSize}/>, <FolderOutlined style={iconSize}/>, <QuestionCircleOutlined style={iconSize}/>
 
     ]
     const navClickedButtonSVGs = [
-        <HomeFilled style={iconSize}/> ,<IdcardFilled style={iconSize}/>, <UserOutlined style={iconSize}/>, <FolderFilled style={iconSize}/>
+        <IdcardFilled style={iconSize}/>, <FolderFilled style={iconSize}/>, <QuestionCircleFilled style={iconSize}/>
     ]
-    const [clickedNavButton, setClickedNavButton] = useState('Dashboard')
+    const [clickedNavButton, setClickedNavButton] = useState('Job Portal')
     
     const handleNavButtonClick = (index) => {
         setClickedNavButton(navButtons[index])
@@ -68,4 +69,4 @@ function NavAdmin({logOut, getActiveNavButton}) {
     )
 }
 
-export default NavAdmin;
+export default NavApplicant;

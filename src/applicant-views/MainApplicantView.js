@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { Grid, GridItem } from "@chakra-ui/react";
+import { Box, Button, Grid, GridItem } from "@chakra-ui/react";
 import { jwtDecode } from "jwt-decode";
-import Header from "../nav/applicant/Header";
-import Nav from "../nav/applicant/Nav";
-import MyApplication from './my-application/MyApplication'
+import NavApplicant from "../nav/applicant/NavApplicant";
+import JobPortal from "./job-portal/JobPortal";
 
 function MainApplicantView() {
 
@@ -50,30 +49,55 @@ function MainApplicantView() {
 
     return(
         <>  
-        <Grid
-        templateAreas={`"nav header"
-                        "nav main"
-                        "nav footer"`}
-        gridTemplateRows={'50px 1fr'}
-        gridTemplateColumns={'250px 1fr'}
-        h='100vh'
-        color='blackAlpha.'
-        >
-        <GridItem area={'header'}>
-            <Header userData={applicantData}/>
-        </GridItem>
-        <GridItem bg='white.300' area={'nav'} position='fixed'> 
-            <Nav logOut={logOut} getActiveNavButton={getActiveNavButton}/>
-        </GridItem>
+       <Grid
+            templateAreas={`"nav header"
+                            "nav main"
+                            "nav footer"`}
+            gridTemplateRows={'45px 1fr'}
+            gridTemplateColumns={'80px 1fr'}
+            h='100vh'
+            >
+            <GridItem
+            area={'header'}
+            backgroundColor='white'
+            borderBottom='solid 0.5px lightgray'
+            width="100%"
+            position='fixed'
+            zIndex='1'
+            >
+                <Box>
+                    <Button
+                    size='xs'
+                    colorScheme='red'
+                    margin='10px'
+                    float='right'
+                    onClick={logOut}
+                    >Logout</Button>
+                </Box>
+            </GridItem>
 
-        <GridItem bg='#f2f7f9' area={'main'} padding='10px'>
-            {obtainedActiveNavButton === 'My Application' && <MyApplication applicantData={applicantData}/>}
-            {obtainedActiveNavButton === 'TCS Job Openings' && 'TCS Job Openings'}
-            {obtainedActiveNavButton === 'Frequently Asked Qs' && 'Frequently Asked Qs'}
-            {obtainedActiveNavButton === 'Learn About TCS' && 'Learn About TCS'}
-            {obtainedActiveNavButton === 'Contact Us' && 'Contact Us'}
-        </GridItem>
-        </Grid>
+            <GridItem
+            bg='#0c3c55'
+            area={'nav'}
+            height='100%'
+            position='fixed'
+            zIndex='2'
+            >
+                <NavApplicant
+                logOut={logOut}
+                getActiveNavButton={getActiveNavButton}
+                />
+            </GridItem>
+
+            <GridItem
+            bg='#F2F2F2'
+            area={'main'}
+            padding='10px'
+            >
+                {obtainedActiveNavButton === 'Job Portal' && <JobPortal/>}
+                {/* {obtainedActiveNavButton === 'Applicants' && <Applicants/>} */}
+            </GridItem>
+            </Grid>
         </>
     )
 }

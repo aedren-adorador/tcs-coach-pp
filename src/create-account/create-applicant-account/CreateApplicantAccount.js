@@ -1,9 +1,11 @@
 import React from "react";
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { FormControl, Input, Button, Card, CardBody, Alert, AlertIcon, AlertDescription, FormHelperText} from "@chakra-ui/react";
+import { FormControl, Input, Button, Card, CardBody, Alert, AlertIcon, AlertDescription, FormHelperText, Text, Flex, Box} from "@chakra-ui/react";
 import { Formik, Form } from "formik";
 import { useNavigate } from "react-router-dom";
+import AuthHeader from "../../auth/AuthHeader";
+import AuthFooter from "../../auth/AuthFooter";
 
 function CreateApplicantAccount() {
     const url = 'http://localhost:3001'
@@ -59,6 +61,7 @@ function CreateApplicantAccount() {
 
     return (
         <>
+            <AuthHeader/>
              <div className={`auth-big-container page-reveal ${revealed ? 'reveal' : ''}`}>
                 <Formik
                 initialValues={{email: email, firstName:'', lastName:'', setPassword: '', confirmPassword: ''}}
@@ -66,7 +69,11 @@ function CreateApplicantAccount() {
                 >
                 {(formikProps) => (
                     <Form>
-                        <Card maxW='md'>
+                        <Card
+                        maxW='500px'
+                        border='solid 0.2px black'
+                        padding='20px 50px 50px 50px'
+                        >
                             <CardBody>
                             {isAccountCreated ?
                             <Alert status='success' mb='5'>
@@ -75,34 +82,71 @@ function CreateApplicantAccount() {
                             </Alert>
                             :
                             <FormControl isRequired>
-                            <Alert status='success' mb='5'>
+                            <Alert status='success' mb='5' fontSize='12px'>
                                 <AlertIcon />
                                 Verification Success! Your email address ({email}) is now verified.
                             </Alert>
-                            <FormHelperText mb='1'>Finish up your TCS Applicant account details below.</FormHelperText>
+                            <Text
+                            textAlign='center'
+                            fontSize='14px'
+                            fontWeight='1000'
+                            mb='20px'
+                            >Create Account</Text>
+                            <Flex
+                            justify='space-evenly'
+                            gap={3}
+                            >
+                                <Box
+                                width='100%'
+                                >
+                                    <Text
+                                    fontSize='12px'
+                                    >First Name</Text>
+                                    <Input
+                                    size='sm'
+                                    variant='outline'
+                                    border='solid 0.2px black'
+                                    mb='2'
+                                    {...formikProps.getFieldProps('firstName')}
+                                    />
+                                </Box>
+                                <Box
+                                width='100%'
+                                >
+                                    <Text
+                                    fontSize='12px'
+                                    >Last Name</Text>
+                                    <Input
+                                    size='sm'
+                                    variant='outline'
+                                    border='solid 0.2px black'
+                                    mb='2'
+                                    {...formikProps.getFieldProps('lastName')}
+                                    />
+
+                                </Box>
+                                
+                            </Flex>
+                            
+                            <Text
+                            fontSize='12px'
+                            >Password</Text>
                             <Input
-                            variant='filled'
-                            placeholder='First Name'
-                            mb='2'
-                            {...formikProps.getFieldProps('firstName')}
-                            />
-                            <Input
-                            variant='filled'
-                            placeholder='Last Name'
-                            mb='2'
-                            {...formikProps.getFieldProps('lastName')}
-                            />
-                            <Input
-                            variant='filled'
-                            placeholder='Set password'
+                            border='solid 0.2px black'
+                            variant='outline'
+                            size='sm'
                             type='password'
                             mb='2'
                             isInvalid={!doPasswordsMatch}
                             {...formikProps.getFieldProps('setPassword')}
                             />
+                            <Text
+                            fontSize='12px'
+                            >Confirm password</Text>
                             <Input
-                            variant='filled'
-                            placeholder='Confirm password'
+                            border='solid 0.2px black'
+                            variant='outline'
+                            size='sm'
                             type='password'
                             mb='2'
                             isInvalid={!doPasswordsMatch}
@@ -126,15 +170,24 @@ function CreateApplicantAccount() {
                                 isLoading
                                 loadingText='Creating Account'
                                 colorScheme='blue'
+                                border='solid 0.2px'
                                 variant='solid'
-                                float='right'
+                                borderRadius='0px'
+                                width='100%'
+                                size='sm'
+                                type='submit'
+                                fontWeight='1000'
                                 ></Button> :
                                 <Button
-                                colorScheme='blue'
-                                float='right'
+                                mt='10px'
+                                backgroundColor='#E5ECF9'
+                                border='solid 0.2px'
+                                borderRadius='0px'
+                                width='100%'
+                                size='sm'
                                 type='submit'
-                                >Create Account
-                                </Button>
+                                fontWeight='1000'
+                                >Create Account</Button>
                             }
                             </FormControl>
                             }
@@ -144,6 +197,7 @@ function CreateApplicantAccount() {
                 )}
                 </Formik>
              </div>
+            <AuthFooter/>
         </>
     )
 }

@@ -73,7 +73,10 @@ function Login({onLoginSuccess}) {
                         >Sign In</Text>
                         <FormControl isInvalid={isInvalidCredentials}>
                         {isInvalidCredentials && 
-                        <FormErrorMessage mb='1'>Invalid email and/or password. Please try again.</FormErrorMessage>}
+                        <FormErrorMessage
+                        mb='1'
+                        fontSize='12px'
+                        >Invalid email and/or password. Please try again.</FormErrorMessage>}
                         <Text
                         fontSize='12px'
                         >Email Address</Text>

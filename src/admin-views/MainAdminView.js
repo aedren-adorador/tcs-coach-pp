@@ -48,7 +48,7 @@ function MainAdminView() {
 
     return(
         <>
-             <Grid
+            <Grid
             templateAreas={`"nav header"
                             "nav main"
                             "nav footer"`}
