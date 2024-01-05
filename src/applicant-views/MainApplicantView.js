@@ -92,7 +92,7 @@ function MainApplicantView() {
             <GridItem
             bg='#F2F2F2'
             area={'main'}
-            padding='10px'
+            padding='0px'
             >
                 {obtainedActiveNavButton === 'Job Portal' && <JobPortal/>}
                 {/* {obtainedActiveNavButton === 'Applicants' && <Applicants/>} */}

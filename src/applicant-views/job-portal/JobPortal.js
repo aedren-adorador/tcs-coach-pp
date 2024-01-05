@@ -25,11 +25,14 @@ function JobPortal() {
 
     return(
         <>
+        <Box
+        width='100%'
+        backgroundColor='#F2F2F2'
+        >
         <InputGroup
         maxW='650px'
         margin='10px 0px 0px 20px'
-        >
-            
+        >  
             <Input
             type='tel'
             border='solid 0.2px black'
@@ -55,11 +58,13 @@ function JobPortal() {
         <Flex
         mt='20px'
         ml='20px'
+        mb='10px'
         maxW='650px'
         gap={5}
         >
             {jobFilters.map((filterSetting, index) => (
             <Select
+            bg='white'
             key={index}
            fontSize='12px'
            fontWeight='1000'
@@ -73,6 +78,7 @@ function JobPortal() {
             </Select>
             ))}
         </Flex>
+        </Box>
         {!clickedJob ?
         <Grid
         margin='20px 10% 0px 10%'
@@ -83,6 +89,8 @@ function JobPortal() {
             colSpan={2}
             bg='white'
             minW='500px'
+            overflowY='scroll'
+            maxHeight={`calc(100vh - 200px)`} 
             >
 
                 {sampleJobs.map((job, index) => (
@@ -140,13 +148,15 @@ function JobPortal() {
         </Grid> :
         
         <Grid
-        margin='20px 5% 0px 5%'
+        margin='20px 10% 0px 10%'
         templateColumns='repeat(2, 1fr)'
         gap={10}
         >
             <GridItem
             bg='white'
             minW='500px'
+            overflowY='scroll'
+            maxHeight={`calc(100vh - 200px)`}
             >
 
                 {sampleJobs.map((job, index) => (
@@ -184,6 +194,8 @@ function JobPortal() {
             <GridItem
             minW='500px'
             bg='white'
+            overflowY='scroll'
+            maxHeight={`calc(100vh - 200px)`}
             >
             <Box
             margin='20px 0px 20px 0px'
@@ -196,6 +208,7 @@ function JobPortal() {
                 fontWeight='1000'
                 >{sampleJobs[clickedJob-1]}</Text>
                 <Button
+                zIndex='0'
                 mt='10px'
                 size='sm'
                 borderRadius='0px'
