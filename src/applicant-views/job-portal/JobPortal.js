@@ -1,16 +1,26 @@
-import React from "react";
-import { Text, InputGroup, Input, InputRightAddon, Flex, Button, Select, Grid, GridItem, Box, Image} from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
+import { Text, InputGroup, Input, InputRightAddon, Flex, Button, Select, Grid, GridItem, Box, Image, VStack} from "@chakra-ui/react";
 import { Search2Icon } from "@chakra-ui/icons";
-import { AppstoreOutlined, ClockCircleOutlined } from "@ant-design/icons";
+import { AppstoreOutlined, ClockCircleOutlined, FileExcelOutlined, FileImageOutlined, FileOutlined, HomeOutlined, PicCenterOutlined } from "@ant-design/icons";
 import tcsDarkLogo  from '../../tcs-dark-logo.png'
 function JobPortal() {
     const jobFilters = [
         'Categories', 'Posting Dates', 'Job Types', 'More'
     ]
-
     const sampleJobs = [
         'Data Analytics Coach', 'Web Development Coach', 'Learning Intern', 'Roblox Coach', 'Basic Python Coach'
     ]
+    const [clickedJob, setClickedJob] = useState(null);
+
+
+    const clickJob = (index) => {
+        console.log(index)
+        setClickedJob(index)
+    }
+
+    useEffect(() => {
+        console.log(clickedJob)
+    }, [clickedJob])
 
 
     return(
@@ -50,6 +60,7 @@ function JobPortal() {
         >
             {jobFilters.map((filterSetting, index) => (
             <Select
+            key={index}
            fontSize='12px'
            fontWeight='1000'
            placeholder={filterSetting}  
@@ -62,6 +73,7 @@ function JobPortal() {
             </Select>
             ))}
         </Flex>
+        {!clickedJob ?
         <Grid
         margin='20px 10% 0px 10%'
         templateColumns='repeat(3, 1fr)'
@@ -73,12 +85,13 @@ function JobPortal() {
             minW='500px'
             >
 
-                {sampleJobs.map(job => (
+                {sampleJobs.map((job, index) => (
                     <Box
-
+                    key={index}
                     padding='20px'
                     borderBottom='solid 0.2px lightgray'
                     _hover={{backgroundColor:'#E5ECF9', border: 'solid #0C3C55'}}
+                    onClick={() => clickJob(index+1)}
                     >
                         <Text
                         textDecoration='underline'
@@ -115,6 +128,7 @@ function JobPortal() {
             width='100px'
             ></Image>
             <Text
+            textAlign='justify'
             fontSize='12px'
             mt='20px'
             >
@@ -123,9 +137,140 @@ function JobPortal() {
 
             </GridItem>
 
+        </Grid> :
+        
+        <Grid
+        margin='20px 5% 0px 5%'
+        templateColumns='repeat(2, 1fr)'
+        gap={10}
+        >
+            <GridItem
+            bg='white'
+            minW='500px'
+            >
+
+                {sampleJobs.map((job, index) => (
+                    <Box
+                    key={index}
+                    padding='20px'
+                    borderBottom='solid 0.2px lightgray'
+                    _hover={{backgroundColor:'#E5ECF9', border: 'solid #0C3C55'}}
+                    onClick={() => clickJob(index+1)}
+                    >
+                        <Text
+                        textDecoration='underline'
+                        fontWeight='1000'
+                        >{job}</Text>
+                        <Text
+                        margin='5px 0px 5px 0px'
+                        fontSize='12px'
+                        >
+                            <AppstoreOutlined/>
+                            &nbsp;
+                            Job ID: TCS101010101010
+                        </Text>
+                        <Text
+                        fontSize='12px'
+                        >
+                            <ClockCircleOutlined/>
+                            &nbsp;
+                            Posted Today
+                        </Text>
+                    </Box>
+                ))}
+                
+            </GridItem>
+
+            <GridItem
+            minW='500px'
+            bg='white'
+            >
+            <Box
+            margin='20px 0px 20px 0px'
+            padding='0px 20px 40px 20px'
+            fontSize='12px'
+            borderBottom='solid 0.2px lightgray'
+            >
+                <Text
+                fontSize='20px'
+                fontWeight='1000'
+                >{sampleJobs[clickedJob-1]}</Text>
+                <Button
+                mt='10px'
+                size='sm'
+                borderRadius='0px'
+                fontWeight='1000'
+                width='100px'
+                boxShadow='5px 5px 5px lightgray'
+                >
+                    Apply
+                </Button>
+            </Box>
+
+            <Box
+            margin='20px 0px 20px 0px'
+            padding='0px 20px 40px 20px'
+            fontSize='12px'
+            >
+               
+                    <Flex align='center'>
+                        <HomeOutlined/>
+                        <Text>&nbsp;Online</Text>
+                    </Flex>
+
+                    <Flex align='center'>
+                        <FileOutlined/>
+                        <Text>&nbsp;Job ID: TCS1010101010</Text>
+                    </Flex>
+
+                    <Flex align='center'>
+                        <ClockCircleOutlined/>
+                    <Text>&nbsp;Posted today</Text>
+                    </Flex>
+
+                    <Text
+                    mt='20px'
+                    fontWeight='1000'
+                    >Job Location</Text>
+                    <Text>Online</Text>
+
+                    <Text
+                    mt='20px'
+                    fontWeight='1000'
+                    >Job Description</Text>
+                    <Text>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tempor massa quis urna vestibulum cursus. Donec placerat nisi at nulla accumsan finibus non sed metus.
+                    </Text>
+
+                    <Text
+                    mt='20px'
+                    fontWeight='1000'
+                    >Responsibilities</Text>
+                    <Text>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tempor massa quis urna vestibulum cursus. Donec placerat nisi at nulla accumsan finibus non sed metus.
+                    </Text>
+
+                    <Text
+                    mt='20px'
+                    fontWeight='1000'
+                    >Qualifications</Text>
+                    <Text>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tempor massa quis urna vestibulum cursus. Donec placerat nisi at nulla accumsan finibus non sed metus.
+                    </Text>
+
+                    <Text
+                    mt='20px'
+                    fontWeight='1000'
+                    >Job Segmentation</Text>
+                    <Text>
+                        Recent Grads/Entry Level
+                    </Text>
+            </Box>
+
+            </GridItem>
+
         </Grid>
-
-
+        }
         </>
     )
 }
