@@ -1,6 +1,6 @@
 import { Button, Grid, Text, GridItem, Card, Flex, CardBody, Box, Textarea} from "@chakra-ui/react";
 import { StarOutlined, StarFilled } from "@ant-design/icons";
-import React from "react";
+import React, { useState } from "react";
 
 function TeachingDemoFeedback() {
     const teachingDemoCriteria = [
@@ -9,6 +9,21 @@ function TeachingDemoFeedback() {
         'Expertise in Subject Area',
         'Professionalism'
     ]
+
+    const [teachingDemoCriteriaScores, setTeachingDemoCriteriaScores] = useState({
+        'English Proficiency': 0, 
+        'Communication Skills': 0,
+        'Expertise in Subject Area': 0,
+        'Professionalism':0,
+    })
+    
+    const handleRating = (starIndex, criterion) => {
+        setTeachingDemoCriteriaScores(prevState => ({
+            ...prevState,
+            [criterion]: starIndex
+        }))
+    }
+
     const perfectScore =5;
     return(
         <>
@@ -87,9 +102,23 @@ function TeachingDemoFeedback() {
                     <Text>{criterion}</Text>
                 </Box>
                 <Flex>
-                    {Array.from({length: perfectScore}, (x, i) => {
-                        return <StarOutlined style={{fontSize: '30px', marginLeft:'10px'}}/>
-                    })}
+                    {Array.from({length: perfectScore}, (_, starIndex) => (
+                        <>
+                       {starIndex + 1 <= teachingDemoCriteriaScores[criterion] ? (
+                            <StarFilled
+                            style={{ fontSize: '30px', marginLeft: '10px',color:'gold' }}
+                            
+                            onClick={() => handleRating(starIndex + 1, criterion)}
+                            />
+                        ) : (
+                            <StarOutlined
+                            style={{ fontSize: '30px', marginLeft: '10px'}}
+                            onClick={() => handleRating(starIndex + 1, criterion)}
+                            />
+                        )}
+                       </>
+    
+                    ))}
                 </Flex>
                 <Textarea
                     placeholder='Add comment'

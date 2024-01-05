@@ -1,4 +1,4 @@
-import { Grid, GridItem } from "@chakra-ui/react";
+import { Box, Button, Grid, GridItem, Text } from "@chakra-ui/react";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import React, { useEffect, useState } from "react";
@@ -56,13 +56,43 @@ function MainAdminView() {
             gridTemplateColumns={'80px 1fr'}
             h='100vh'
             >
-            <GridItem area={'header'} borderBottom='solid 0.5px lightgray'>
-            </GridItem>
-            <GridItem bg='#0c3c55' area={'nav'} position='fixed' height='100%'>
-                <NavAdmin logOut={logOut} getActiveNavButton={getActiveNavButton}/>
+            <GridItem
+            area={'header'}
+            backgroundColor='white'
+            borderBottom='solid 0.5px lightgray'
+            width="100%"
+            position='fixed'
+            zIndex='1'
+            >
+                <Box>
+                    <Button
+                    size='xs'
+                    colorScheme='red'
+                    margin='10px'
+                    float='right'
+                    onClick={logOut}
+                    >Logout</Button>
+                </Box>
             </GridItem>
 
-            <GridItem bg='white' area={'main'} padding='10px'>
+            <GridItem
+            bg='#0c3c55'
+            area={'nav'}
+            height='100%'
+            position='fixed'
+            zIndex='2'
+            >
+                <NavAdmin
+                logOut={logOut}
+                getActiveNavButton={getActiveNavButton}
+                />
+            </GridItem>
+
+            <GridItem
+            bg='white'
+            area={'main'}
+            padding='10px'
+            >
                 {obtainedActiveNavButton === 'Dashboard' && <Dashboard/>}
                 {obtainedActiveNavButton === 'Applicants' && <Applicants/>}
             </GridItem>

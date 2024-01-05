@@ -7,11 +7,15 @@ function RequireAttention() {
     ]
     return(
         <>
-        
         <TableContainer
         margin='0px 5% 5%'
         >
-            <Text color='#071C50' fontWeight='600' fontSize='14px'>Require Attention</Text>
+            <Text
+            color='#071C50'
+            fontWeight='600'
+            fontSize='14px'
+            >Require Attention</Text>
+
             <Table
             variant='simple'
             backgroundColor='#F3F8FF'
@@ -25,7 +29,9 @@ function RequireAttention() {
                 </Tr>
                 </Thead>
                 <Tbody>
-                <Tr key='1'>
+                <Tr
+                key='1'
+                >
                     <Td>
                         <Flex
                         align='center'

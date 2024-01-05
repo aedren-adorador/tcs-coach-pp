@@ -63,7 +63,10 @@ function Applicants() {
 
                 {chosenApplicantToReview !== '' ?
                  <BreadcrumbItem>
-                    <BreadcrumbLink href='#' fontWeight='200'>Applicant ID: {chosenApplicantToReview}</BreadcrumbLink>
+                    <BreadcrumbLink
+                    href=''
+                    fontWeight='200'
+                    >Applicant ID: {chosenApplicantToReview}</BreadcrumbLink>
                 </BreadcrumbItem>:
                 ''
                 }

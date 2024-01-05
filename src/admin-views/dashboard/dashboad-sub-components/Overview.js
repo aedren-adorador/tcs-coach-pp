@@ -15,8 +15,19 @@ function Overview() {
 
   return (
     <>
-      <Text margin='20px 0px 0px 5%' color='#071C50' fontWeight='600' fontSize='14px'>Overview</Text>
-      <HStack maxW="100%" display="flex" justify="space-between" margin="30px 5% 50px 5%">
+      <Text
+      margin='20px 0px 0px 5%'
+      color='#071C50'
+      fontWeight='600'
+      fontSize='14px'
+      >Overview</Text>
+
+      <HStack
+      maxW="100%"
+      display="flex"
+      justify="space-between"
+      margin="30px 5% 50px 5%"
+      >
         {boxesOverview.map((box, index) => (
           <Card
           key={index}
