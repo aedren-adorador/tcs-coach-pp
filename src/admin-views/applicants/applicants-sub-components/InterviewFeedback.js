@@ -1,5 +1,6 @@
-import { Box, Button, Card, CardBody, Flex, Grid, GridItem, Text, VStack } from "@chakra-ui/react";
+import { Box, Button, Card, CardBody, Flex, Grid, GridItem, Text, Textarea, VStack } from "@chakra-ui/react";
 import React from "react";
+import { StarOutlined, StarFilled } from "@ant-design/icons";
 
 function InterviewFeedback() {
     const interviewQuestions = [
@@ -16,6 +17,8 @@ function InterviewFeedback() {
         'Expertise in Subject Area',
         'Professionalism'
     ]
+
+    const perfectScore = 5;
 
     return(
         <>
@@ -104,14 +107,21 @@ function InterviewFeedback() {
             templateColumns='repeat(4, 1fr)'
             mb='10px'
             >
-                <Text>{criterion}</Text>
-                <Text>/5</Text>
+
+               <Box>
+                    <Text>{criterion}</Text>
+                </Box>
+                <Flex>
+                    {Array.from({length: perfectScore}, (x, i) => {
+                        return <StarOutlined style={{fontSize: '30px', marginLeft:'10px'}}/>
+                    })}
+                </Flex>
+                <Textarea
+                    placeholder='Add comment'
+                    size='xs'/>
                 <Button
                 size='sm'
                 >Save</Button>
-                <Button
-                size='sm'
-                >Edit</Button>
             </Grid>
         })}
         </>

@@ -1,4 +1,5 @@
-import { Button, Grid, Text, GridItem, Card, Flex, CardBody} from "@chakra-ui/react";
+import { Button, Grid, Text, GridItem, Card, Flex, CardBody, Box, Textarea} from "@chakra-ui/react";
+import { StarOutlined, StarFilled } from "@ant-design/icons";
 import React from "react";
 
 function TeachingDemoFeedback() {
@@ -8,6 +9,7 @@ function TeachingDemoFeedback() {
         'Expertise in Subject Area',
         'Professionalism'
     ]
+    const perfectScore =5;
     return(
         <>
          <Text
@@ -81,14 +83,20 @@ function TeachingDemoFeedback() {
             templateColumns='repeat(4, 1fr)'
             mb='10px'
             >
-                <Text>{criterion}</Text>
-                <Text>/5</Text>
+                <Box>
+                    <Text>{criterion}</Text>
+                </Box>
+                <Flex>
+                    {Array.from({length: perfectScore}, (x, i) => {
+                        return <StarOutlined style={{fontSize: '30px', marginLeft:'10px'}}/>
+                    })}
+                </Flex>
+                <Textarea
+                    placeholder='Add comment'
+                    size='xs'/>
                 <Button
                 size='sm'
                 >Save</Button>
-                <Button
-                size='sm'
-                >Edit</Button>
             </Grid>
         })}
 
