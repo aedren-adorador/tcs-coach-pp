@@ -6,8 +6,9 @@ import './auth-styles/auth.styles.css'
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import tcsLogo from '../nav/tcs-logo.png'
 import { LinkedinFilled, FacebookFilled } from "@ant-design/icons";
+import AuthHeader from "./AuthHeader";
+import AuthFooter from "./AuthFooter";
 
 function Login({onLoginSuccess}) {
     const navigate = useNavigate();
@@ -50,18 +51,7 @@ function Login({onLoginSuccess}) {
     }, []);
     return (   
         <>
-        <Flex
-        position='fixed'
-        width='100%'
-        height='80px'
-        backgroundColor='#0C3C55'
-        >
-            <Image
-            src={tcsLogo}
-            ml='2%'
-            height='100%'
-            ></Image>
-        </Flex>
+        <AuthHeader/>
         <Formik
         margin='100px'
         initialValues={{emailLogin:'', passwordLogin: ''}}
@@ -172,31 +162,7 @@ function Login({onLoginSuccess}) {
             </Form>
          )}
         </Formik>
-
-        <Flex
-        bottom='0'
-        position='fixed'
-        width='100%'
-        height='80px'
-        backgroundColor='#0C3C55'
-        color='white'
-        fontSize='10px'
-        align='center'
-        justify='center'
-        gap={3}
-        >
-           <Text xs='xs'>© 2024 The Coding School</Text>
-           <Text xs='xs'>|</Text>
-           <Text xs='xs'>Site Map</Text>
-            <Text xs='xs'>|</Text>
-           <Text xs='xs'>Careers</Text>
-           <FacebookFilled
-           style={{fontSize:'35px', marginLeft: '20px'}}
-           />
-            <LinkedinFilled
-            style={{fontSize:'35px', marginLeft: '20px'}}
-            />
-        </Flex>
+        <AuthFooter/>
         </>
     )
 }

@@ -1,11 +1,13 @@
 import React from "react";
 import axios from "axios";
 import '../create-account.styles.css'
-import { Input, Button, FormControl, FormErrorMessage, Alert, AlertIcon, useToast } from "@chakra-ui/react";
+import { Input, Button, FormControl, FormErrorMessage, Alert, AlertIcon, useToast, Box, Text } from "@chakra-ui/react";
 import { Formik, Form } from "formik";
 import { ArrowBackIcon } from '@chakra-ui/icons'
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import AuthHeader from "../../auth/AuthHeader";
+import AuthFooter from "../../auth/AuthFooter";
 
 function RegisterApplicantEmail() {
     const navigate = useNavigate();
@@ -43,8 +45,20 @@ function RegisterApplicantEmail() {
 
     return(
         <>
-        <div className={`auth-big-container page-reveal ${revealed ? 'reveal' : ''}`}>
-            <div id="auth-register-email-container">
+        <AuthHeader/>
+        <Box className={`auth-big-container page-reveal ${revealed ? 'reveal' : ''}`}>
+           
+            <Box
+            border='solid 0.2px'
+            borderRadius='5px'
+            padding='20px 50px 50px 50px'
+            >
+            <Box id="auth-register-email-container">
+                 <Text
+                 mb='20px'
+                 textAlign='center'
+                 fontWeight='1000'
+                 >Verify Email</Text>
                 <Formik
                 initialValues={{email: ''}}
                 onSubmit={handleSubmit}
@@ -77,27 +91,42 @@ function RegisterApplicantEmail() {
                     </Alert>
                     }
                     <FormControl isInvalid={formikProps.errors.email}>
-                            <FormErrorMessage mb='2'>{formikProps.errors.email}</FormErrorMessage>
-                            <Input
-                            variant='filled'
-                            placeholder='Enter email'
+                            <Text
+                            fontSize='12px'
+                            >Enter Email</Text>
+                            <FormErrorMessage
                             mb='2'
-                            size='lg'
-                            style={{ height: '70px'}}
+                            fontSize='12px'
+                            >{formikProps.errors.email}</FormErrorMessage>
+                            <Input
+                            variant='outline'
+                            mb='2'
+                            size='md'
+                            fontSize='14px'
+                            border='solid 0.5px black'
+
                             {...formikProps.getFieldProps('email')}
                             />
                             <Button
-                            float='right'
-                            colorScheme='green'
-                            size='lg'
+                            mt='10px'
+                            backgroundColor='#E5ECF9'
+                            border='solid 0.2px'
+                            borderRadius='0px'
+                            width='100%'
+                            size='sm'
                             type='submit'
+                            fontWeight='1000'
+                            
                             >Verify Email</Button>
                             <Link to='/'>
                                 <Button
-                                float='left'
+                                mt='20px'
                                 colorScheme='blackAlpha'
-                                size='sm'
-                                variant='ghost'>
+                                size='xs'
+                                variant='link'
+                                fontSize='10px'
+                                fontWeight='300'
+                                >
                                     <ArrowBackIcon/>&nbsp;Go Back
                                 </Button>
                             </Link>
@@ -105,8 +134,10 @@ function RegisterApplicantEmail() {
                 </Form> 
                 )}
                 </Formik>
-            </div>
-        </div>
+            </Box>
+            </Box>
+        </Box>
+        <AuthFooter/>
         </>
     )
 }
