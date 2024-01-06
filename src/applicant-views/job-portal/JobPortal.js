@@ -169,7 +169,7 @@ function JobPortal({isAdmin}) {
             <GridItem
             border={isAdmin ? 'solid 0.2px' : ''}
             minW='300px'
-            height='250px'
+            height='300px'
             bg='white'
             padding='30px'
             >
@@ -182,7 +182,7 @@ function JobPortal({isAdmin}) {
             fontSize='12px'
             mt='20px'
             >
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tempor massa quis urna vestibulum cursus. Donec placerat nisi at nulla accumsan finibus non sed metus.
+                The Coding School is a community that encourages students to participate in activities related to programming, web development, robotics, and engineering. We aim to help and inspire the next generation of technology users and creators develop critical thinking, problem-solving skills and a boost in STEM disciplines through our programs. 
             </Text>
 
             </GridItem>

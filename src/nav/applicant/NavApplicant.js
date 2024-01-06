@@ -4,7 +4,7 @@ import tcsLogo from '../../tcs-logo.png'
 import { IdcardOutlined, IdcardFilled, FolderOutlined, FolderFilled, QuestionCircleOutlined, QuestionCircleFilled } from "@ant-design/icons";
 
 
-function NavApplicant({logOut, getActiveNavButton}) {
+function NavApplicant({persistentButton, getActiveNavButton}) {
     const navButtons = ['My Application', 'Job Portal', 'FAQs']
     const iconSize = {fontSize: '20px', marginBottom:'8px'}
     const navButtonSVGs = [
@@ -14,7 +14,7 @@ function NavApplicant({logOut, getActiveNavButton}) {
     const navClickedButtonSVGs = [
         <IdcardFilled style={iconSize}/>, <FolderFilled style={iconSize}/>, <QuestionCircleFilled style={iconSize}/>
     ]
-    const [clickedNavButton, setClickedNavButton] = useState('Job Portal')
+    const [clickedNavButton, setClickedNavButton] = useState(persistentButton || 'Job Portal')
     
     const handleNavButtonClick = (index) => {
         setClickedNavButton(navButtons[index])

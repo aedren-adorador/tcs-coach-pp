@@ -5,15 +5,20 @@ import { Box, Button, Grid, GridItem } from "@chakra-ui/react";
 import { jwtDecode } from "jwt-decode";
 import NavApplicant from "../nav/applicant/NavApplicant";
 import JobPortal from "./job-portal/JobPortal";
+import MyApplicationStepper from "./my-application/MyApplicationStepper";
+import MyApplication from "./my-application/MyApplication";
 
 function MainApplicantView() {
 
     const navigate = useNavigate();
     const [applicantData, setApplicantData] = useState({});
-    const [obtainedActiveNavButton, setObtainedActiveNavButton] = useState('');
+    const [obtainedActiveNavButton, setObtainedActiveNavButton] = useState(
+        localStorage.getItem("activeNavButton") || "Job Portal"
+    );
     const [toSendActiveNavButton, setToSendActiveNavButton] = useState('');
     
     const logOut = () => {
+        localStorage.removeItem('activeNavButton')
         localStorage.removeItem('applicantID')
         localStorage.removeItem('isAuthenticated')
         localStorage.removeItem('token')
@@ -24,6 +29,8 @@ function MainApplicantView() {
     }
     
     useEffect(() => {
+        setObtainedActiveNavButton(localStorage.getItem("activeNavButton"))
+        setToSendActiveNavButton(obtainedActiveNavButton)
         const obtainedToken = localStorage.getItem('token');
         const decodedToken = jwtDecode(obtainedToken);
         const obtainedExpiry = decodedToken.exp
@@ -46,6 +53,10 @@ function MainApplicantView() {
     useEffect(() => {
         setToSendActiveNavButton(obtainedActiveNavButton)
     }, [obtainedActiveNavButton])
+
+    useEffect(() => {
+    localStorage.setItem("activeNavButton", obtainedActiveNavButton);
+    }, [obtainedActiveNavButton]);
 
     return(
         <>  
@@ -86,16 +97,17 @@ function MainApplicantView() {
                 <NavApplicant
                 logOut={logOut}
                 getActiveNavButton={getActiveNavButton}
+                persistentButton={obtainedActiveNavButton}
                 />
             </GridItem>
 
             <GridItem
-            bg='#F2F2F2'
+            bg={obtainedActiveNavButton === 'My Application' ? 'white' : '#F2F2F2'}
             area={'main'}
             padding='0px'
             >
                 {obtainedActiveNavButton === 'Job Portal' && <JobPortal/>}
-                {/* {obtainedActiveNavButton === 'My Application' && <MyApplicationStepper/>} */}
+                {obtainedActiveNavButton === 'My Application' && <MyApplication applicantData={applicantData}/>}
             </GridItem>
             </Grid>
         </>

@@ -53,15 +53,6 @@ function App() {
           }
           />
           <Route
-          path='/admin-job-portal/:id'
-          element={
-            <AuthPrivateRoute
-            isAuthenticated={isAuthenticated}
-            component={JobPortal}
-            />
-          }
-          />
-          <Route
           path='/application-progress'
           element={<MyApplicationStepper/>}
           />

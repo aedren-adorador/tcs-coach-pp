@@ -16,6 +16,7 @@ function MainAdminView() {
     const [toSendActiveNavButton, setToSendActiveNavButton] = useState('');
     
     const logOut = () => {
+        localStorage.removeItem('activeNavButton')
         localStorage.removeItem('applicantID')
         localStorage.removeItem('isAuthenticated')
         localStorage.removeItem('token')

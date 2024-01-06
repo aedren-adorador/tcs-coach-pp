@@ -1,32 +1,100 @@
-import { Td, Table, TableCaption, TableContainer, Tr, Th, Tbody, Thead, Button, Badge} from "@chakra-ui/react";
+import { CiCircleOutlined } from "@ant-design/icons";
+import { WarningIcon } from "@chakra-ui/icons";
+import { Td, Table, TableCaption, TableContainer, Tr, Th, Tbody, Thead, Button, Badge, Text, Image, Flex} from "@chakra-ui/react";
 import { Link } from "react-router-dom";
+import suitcase from '../../admin-views/admin-view-imgs/suitcase.png'
 
 function MyApplication({applicantData}) {
     return (
-        <>
-            <TableContainer>
-            <Table variant='simple'>
-                <TableCaption>TCS Job Application Dashboard</TableCaption>
+        <> 
+            <TableContainer
+            minW='900px'
+            margin='20px 5% 20px 5%'
+            >
+            <Text
+            fontWeight='1000'
+            >My Application</Text>
+            <Table
+            size='sm'
+            variant='simple'
+            backgroundColor='#F3F8FF'
+            layout='fixed'
+            >
                 <Thead>
                 <Tr>
-                    <Th>Application ID</Th>
-                    <Th>Position Applied to</Th>
-                    <Th>Status</Th>
+                    <Th width='150px'></Th>
+                    <Th>Position Applied To</Th>
+                    <Th>Application Date</Th>
+                    <Th>Application Status</Th>
+                </Tr>
+                </Thead>
+                <Tbody>
+                <Tr>
+                    <Td textAlign='center'>
+                        <Flex
+                        justify='center'
+                        align='center'
+                        >
+                            <Image
+                            src={suitcase}
+                            width='60px'
+                            
+                            ></Image>
+                        </Flex>
+                        
+                    </Td>
+                    <Td>ReactJS Web Development Coach</Td>
+                    <Td>
+                        Jan 6, 2023
+                    </Td>
+                    <Td>
+                        Not Yet Submitted
+                    </Td>
+                </Tr>
+                </Tbody>
+            </Table>
+            </TableContainer>
+
+
+
+            <TableContainer
+            minW='900px'
+            margin='20px 5% 20px 5%'
+            >
+            <Text
+            fontWeight='1000'
+            >Pending Task</Text>
+            <Table
+            size='sm'
+            layout='fixed'
+            variant='simple'
+            backgroundColor='#F3F8FF'
+            >
+                <Thead>
+                <Tr>
+                    <Th width='150px'></Th>
+                    <Th>Task Name</Th>
+                    <Th>Deadline</Th>
                     <Th>Action</Th>
                 </Tr>
                 </Thead>
                 <Tbody>
                 <Tr>
-                    <Td>260602</Td>
-                    <Td>ReactJS Web Development Coach</Td>
+                    <Td textAlign='center'>
+                        <WarningIcon
+                        style={{fontSize: '45px', color:'red'}}
+                        
+                        />
+                    </Td>
+                    <Td>Submit Application</Td>
                     <Td>
-                        <Badge colorScheme='gray'>Not Submitted</Badge>
+                        Jan 13, 2023
                     </Td>
                     <Td>
                         <Link to={{ pathname: '/application-progress'}} state={{applicantData: applicantData}}>
                         <Button
                         variant='solid'
-                        colorScheme="blue"
+                        colorScheme="green"
                         size='sm'
                         >
                             Resume Application

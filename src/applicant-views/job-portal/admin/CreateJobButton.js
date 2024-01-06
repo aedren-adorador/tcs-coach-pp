@@ -9,9 +9,12 @@ function CreateJobButton({fetchJobsList}) {
     
     const handleCreateJobSubmit = (job) => {
       axios.post('http://localhost:3001/api/create-job', job)
-        .then(response => {
-          fetchJobsList();
-          onClose();
+        .then(() => {
+          fetchJobsList()
+            .then(() => {
+              console.log('added!')
+              onClose()
+            })
         })
     }
 
