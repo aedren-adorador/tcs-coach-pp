@@ -23,7 +23,7 @@ app.use((req, res, next) => {
   );
   res.setHeader(
     "Access-Control-Allow-Methods",
-    "GET, POST, PATCH, DELETE, OPTIONS"
+    "GET, POST, PATCH, DELETE, OPTIONS, PUT"
   );
   next();
 });
@@ -197,5 +197,23 @@ app.delete('/api/delete-job/:id', (req, res, next) => {
           res.json({updatedJobs: updatedJobs})
         ])
     )
+})
+
+app.get('/api/get-job-to-update/:id', (req, res, next) => {
+  Job.findOne({_id:req.params.id})
+    .then(result => res.json({jobToUpdate: result}))
+})
+
+app.put('/api/update-job', (req, res, next) => {
+  const updatedJob = {
+    jobTitleM: req.body.jobTitle,
+    jobLocationM: req.body.jobLocation,
+    jobDescriptionM: req.body.jobDescription,
+    jobResponsibilitiesM: req.body.jobResponsibilities,
+    jobQualificationsM: req.body.jobQualifications,
+    jobSegmentationM: req.body.jobSegmentation
+  }
+  Job.updateOne({_id: req.body.jobId}, updatedJob)
+    .then(result => res.json({success: 'updated!'}))
 })
 module.exports = app;

@@ -5,6 +5,7 @@ import { AppstoreOutlined, ClockCircleOutlined, DeleteOutlined, FileOutlined, Ho
 import tcsDarkLogo  from '../../tcs-dark-logo.png'
 import CreateJobButton from "./admin/CreateJobButton";
 import axios from "axios";
+import EditDetailsButton from "./admin/EditDetailsButton";
 function JobPortal({isAdmin}) {
 
     const jobFilters = [
@@ -263,17 +264,25 @@ function JobPortal({isAdmin}) {
                     ''}
                 </Flex>
                
-                <Button
-                zIndex='0'
-                mt='10px'
-                size='sm'
-                borderRadius='0px'
-                fontWeight='1000'
-                width='100px'
-                boxShadow='5px 5px 5px lightgray'
-                >
-                    {isAdmin ? 'Edit Details' : 'Apply'}
-                </Button>
+               
+                    {isAdmin ?
+                    <EditDetailsButton
+                    id={jobsList[clickedJob-1]._id}
+                    fetchJobsList={fetchJobsList}
+                    />:
+                     <Button
+                    zIndex='0'
+                    mt='10px'
+                    size='sm'
+                    borderRadius='0px'
+                    fontWeight='1000'
+                    width='100px'
+                    boxShadow='5px 5px 5px lightgray'
+                    >
+                    Apply
+                    </Button>
+                    }
+                
             </Box>
 
             <Box
