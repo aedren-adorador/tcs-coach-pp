@@ -10,7 +10,9 @@ import JobPortal from "../applicant-views/job-portal/JobPortal";
 function MainAdminView() {
     const navigate = useNavigate();
     const [adminData, setAdminData] = useState({});
-    const [obtainedActiveNavButton, setObtainedActiveNavButton] = useState('');
+    const [obtainedActiveNavButton, setObtainedActiveNavButton] = useState(
+        localStorage.getItem("activeNavButton") || "Dashboard"
+    );
     const [toSendActiveNavButton, setToSendActiveNavButton] = useState('');
     
     const logOut = () => {
@@ -24,6 +26,8 @@ function MainAdminView() {
     }
     
     useEffect(() => {
+        setObtainedActiveNavButton(localStorage.getItem("activeNavButton"))
+        setToSendActiveNavButton(obtainedActiveNavButton)
         const obtainedToken = localStorage.getItem('token');
         const decodedToken = jwtDecode(obtainedToken);
         const obtainedExpiry = decodedToken.exp
@@ -46,6 +50,10 @@ function MainAdminView() {
     useEffect(() => {
         setToSendActiveNavButton(obtainedActiveNavButton)
     }, [obtainedActiveNavButton])
+
+    useEffect(() => {
+    localStorage.setItem("activeNavButton", obtainedActiveNavButton);
+    }, [obtainedActiveNavButton]);
 
     return(
         <>
@@ -86,6 +94,7 @@ function MainAdminView() {
                 <NavAdmin
                 logOut={logOut}
                 getActiveNavButton={getActiveNavButton}
+                persistentButton={obtainedActiveNavButton}
                 />
             </GridItem>
 

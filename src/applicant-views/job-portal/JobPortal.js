@@ -32,7 +32,17 @@ function JobPortal({isAdmin}) {
                 fetchJobsList();
                 setClickedJob(prevIndex => prevIndex-1 < 1 ? 0 : prevIndex-1);
             })
-    } 
+    }
+
+    const handleSearch = (e) => {
+        if (e.target.value) {
+            setClickedJob(null)
+            setJobsList(prevJobsList => prevJobsList.filter(job => job.jobTitleM.toLowerCase().includes(e.target.value.toLowerCase())))
+        } else {
+            fetchJobsList();
+        }
+    
+    }
 
     useEffect(() => {
         fetchJobsList()
@@ -62,6 +72,7 @@ function JobPortal({isAdmin}) {
             borderRadius='0px'
             borderLeftRadius='5px'
             height='50px'
+            onKeyDown={handleSearch}
             />
            
                 <Button
@@ -106,6 +117,7 @@ function JobPortal({isAdmin}) {
             ))}
         </Flex>
         </Box>
+
         {!clickedJob ?
         <Grid
         margin='20px 10% 0px 10%'
@@ -126,7 +138,6 @@ function JobPortal({isAdmin}) {
                     key={index}
                     padding='20px'
                     borderBottom='solid 0.2px lightgray'
-                    _hover={{backgroundColor:'#E5ECF9', border: 'solid #0C3C55'}}
                     onClick={() => clickJob(index+1)}
                     >
                         <Text
@@ -193,10 +204,10 @@ function JobPortal({isAdmin}) {
 
                 {jobsList.map((job, index) => (
                     <Box
+                    backgroundColor={index === clickedJob-1 ? '#E5ECF9' : ''}
                     key={index}
                     padding='20px'
-                    borderBottom='solid 0.2px lightgray'
-                    _hover={{backgroundColor:'#E5ECF9', border: 'solid #0C3C55'}}
+                    borderBottom={index === clickedJob-1 ? '' :'solid 0.1px lightgray'}
                     onClick={() => clickJob(index+1)}
                     >
                         <Text
@@ -282,7 +293,6 @@ function JobPortal({isAdmin}) {
                     Apply
                     </Button>
                     }
-                
             </Box>
 
             <Box

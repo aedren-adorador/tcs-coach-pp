@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { FolderFilled, FolderOutlined, HomeFilled, HomeOutlined, IdcardFilled, IdcardOutlined, LogoutOutlined, UserAddOutlined, UserOutlined } from "@ant-design/icons";
 import tcsLogo from '../../tcs-logo.png'
 
-function NavAdmin({logOut, getActiveNavButton}) {
+function NavAdmin({persistentButton, getActiveNavButton}) {
     const navButtons = ['Dashboard', 'Applicants', 'Job Portal']
     const iconSize = {fontSize: '20px', marginBottom:'8px'}
     const navButtonSVGs = [
@@ -13,7 +13,7 @@ function NavAdmin({logOut, getActiveNavButton}) {
     const navClickedButtonSVGs = [
         <HomeFilled style={iconSize}/> , <UserOutlined style={iconSize}/>, <FolderFilled style={iconSize}/>
     ]
-    const [clickedNavButton, setClickedNavButton] = useState('Dashboard')
+    const [clickedNavButton, setClickedNavButton] = useState(persistentButton || 'Dashboard')
     
     const handleNavButtonClick = (index) => {
         setClickedNavButton(navButtons[index])

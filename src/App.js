@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react';
 import CreateAdminAccount from './create-account/create-admin-account/CreateAdminAccount';
 import MainAdminView from './admin-views/MainAdminView';
 import MyApplicationStepper from './applicant-views/my-application/MyApplicationStepper';
+import JobPortal from './applicant-views/job-portal/JobPortal';
 
 function App() {
   
@@ -48,6 +49,15 @@ function App() {
             <AuthPrivateRoute
             isAuthenticated={isAuthenticated}
             component={MainAdminView}
+            />
+          }
+          />
+          <Route
+          path='/admin-job-portal/:id'
+          element={
+            <AuthPrivateRoute
+            isAuthenticated={isAuthenticated}
+            component={JobPortal}
             />
           }
           />
