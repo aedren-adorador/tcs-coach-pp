@@ -4,13 +4,18 @@ import { Td, Table, TableCaption, TableContainer, Tr, Th, Tbody, Thead, Button, 
 import { Link } from "react-router-dom";
 import suitcase from '../../admin-views/admin-view-imgs/suitcase.png'
 
-function MyApplication({applicantData}) {
+function MyApplication({applicantData, setObtainedActiveNavButton}) {
     return (
         <> 
             <TableContainer
             minW='900px'
             margin='20px 5% 20px 5%'
             >
+            <Text
+            fontSize='sm'
+            fontWeight='300'
+            mb='20px'
+            >Hello, {applicantData.firstNameM}.</Text>
             <Text
             fontWeight='1000'
             >My Application</Text>
@@ -29,6 +34,7 @@ function MyApplication({applicantData}) {
                 </Tr>
                 </Thead>
                 <Tbody>
+                {applicantData.positionAppliedToM !== null ?
                 <Tr>
                     <Td textAlign='center'>
                         <Flex
@@ -41,16 +47,40 @@ function MyApplication({applicantData}) {
                             
                             ></Image>
                         </Flex>
-                        
                     </Td>
-                    <Td>ReactJS Web Development Coach</Td>
+                    <Td>{applicantData.positionAppliedToM}</Td>
                     <Td>
-                        Jan 6, 2023
+                        {applicantData.dateSubmittedApplicationM}
                     </Td>
                     <Td>
-                        Not Yet Submitted
+                        Under Review
+                    </Td>
+                </Tr> :
+                <Tr>
+                    <Td textAlign='center'>
+                        <Flex
+                        justify='center'
+                        align='center'
+                        >
+                            <Image
+                            src={suitcase}
+                            width='60px'
+                            
+                            ></Image>
+                        </Flex>
+                    </Td>
+                    <Td>
+                        No Application Yet
+                    </Td>
+                    <Td>
+                        —
+                    </Td>
+                    <Td>
+                        —
                     </Td>
                 </Tr>
+                }
+                
                 </Tbody>
             </Table>
             </TableContainer>
@@ -63,7 +93,7 @@ function MyApplication({applicantData}) {
             >
             <Text
             fontWeight='1000'
-            >Pending Task</Text>
+            >Pending Tasks</Text>
             <Table
             size='sm'
             layout='fixed'
@@ -91,7 +121,9 @@ function MyApplication({applicantData}) {
                         Jan 13, 2023
                     </Td>
                     <Td>
-                        <Link to={{ pathname: '/application-progress'}} state={{applicantData: applicantData}}>
+                        {applicantData.positionAppliedToM === null &&
+                        <Badge colorScheme="green" fontWeight='300' padding='2'>Apply to Job Portal</Badge>}
+                        {/* <Link to={{ pathname: '/application-progress'}} state={{applicantData: applicantData}}>
                         <Button
                         variant='solid'
                         colorScheme="green"
@@ -99,7 +131,7 @@ function MyApplication({applicantData}) {
                         >
                             Resume Application
                         </Button>
-                        </Link>
+                        </Link> */}
                     </Td>
                 </Tr>
                 </Tbody>

@@ -6,7 +6,8 @@ import tcsDarkLogo  from '../../tcs-dark-logo.png'
 import CreateJobButton from "./admin/CreateJobButton";
 import axios from "axios";
 import EditDetailsButton from "./admin/EditDetailsButton";
-function JobPortal({isAdmin}) {
+import { Link } from "react-router-dom";
+function JobPortal({isAdmin, applicantData}) {
 
     const jobFilters = [
         'Categories', 'Posting Dates', 'Job Types', 'More'
@@ -41,7 +42,6 @@ function JobPortal({isAdmin}) {
         } else {
             fetchJobsList();
         }
-    
     }
 
     useEffect(() => {
@@ -281,17 +281,22 @@ function JobPortal({isAdmin}) {
                     id={jobsList[clickedJob-1]._id}
                     fetchJobsList={fetchJobsList}
                     />:
-                     <Button
-                    zIndex='0'
-                    mt='10px'
-                    size='sm'
-                    borderRadius='0px'
-                    fontWeight='1000'
-                    width='100px'
-                    boxShadow='5px 5px 5px lightgray'
+                    <Link
+                     to={{ pathname: `/application-progress/${applicantData._id}/${jobsList[clickedJob-1].jobTitleM}`}}
+                     state={{applicantData: applicantData, jobData: jobsList[clickedJob-1]}}
                     >
-                    Apply
-                    </Button>
+                        <Button
+                        zIndex='0'
+                        mt='10px'
+                        size='sm'
+                        borderRadius='0px'
+                        fontWeight='1000'
+                        width='100px'
+                        boxShadow='5px 5px 5px lightgray'
+                        >
+                        Apply
+                        </Button>
+                    </Link>
                     }
             </Box>
 

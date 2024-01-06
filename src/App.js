@@ -9,7 +9,7 @@ import AuthPrivateRoute from './auth/auth-private-route/AuthPrivateRoute';
 import { useEffect, useState } from 'react';
 import CreateAdminAccount from './create-account/create-admin-account/CreateAdminAccount';
 import MainAdminView from './admin-views/MainAdminView';
-import MyApplicationStepper from './applicant-views/my-application/MyApplicationStepper';
+import MyApplicationStepper from './applicant-views/my-application/applicant-steps/MyApplicationStepper';
 import JobPortal from './applicant-views/job-portal/JobPortal';
 
 function App() {
@@ -52,9 +52,15 @@ function App() {
             />
           }
           />
+
           <Route
-          path='/application-progress'
-          element={<MyApplicationStepper/>}
+          path='/application-progress/:id/:position'
+          element={
+            <AuthPrivateRoute
+            isAuthenticated={isAuthenticated}
+            component={MyApplicationStepper}
+            />
+          }
           />
         </Routes>
       </BrowserRouter>

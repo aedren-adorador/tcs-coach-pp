@@ -30,7 +30,6 @@ function Applicants() {
         setClickedButton('Review Application')
     }
 
-
     useEffect(() => {
         getApplicants()
     },[])

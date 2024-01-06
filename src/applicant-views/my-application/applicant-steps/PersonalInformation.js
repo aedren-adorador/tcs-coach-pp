@@ -18,34 +18,26 @@ function PersonalInformation({applicantData}) {
     }, [value])
     return(
         <>
-        <Text color='gray'>Email</Text>
+        <Text color='gray'>First Name</Text>
+        <Text mb='4'>{applicantData.firstNameM}</Text>
+
+        <Text color='gray'>Last Name</Text>
+        <Text mb='4'>{applicantData.lastNameM}</Text>
+
+        <Text color='gray'>Email Address</Text>
         <Text mb='4'>{applicantData.emailM}</Text>
 
-        <Text color='gray'>Name</Text>
-        <Text mb='4'>{applicantData.firstNameM + ' ' + applicantData.lastNameM}</Text>
+        <Text color='gray'>Birthday</Text>
+        <DatePicker onChange={onChange} size='large' style={{border: 'solid 0.2px black', borderRadius: '2px', marginBottom: '15px', width:'300px'}}/>
         
         <Text color='gray'>Contact Number</Text>
+        <Input
+        size='sm'
+        border='solid 0.2px black'
+        width='300px'
+        ></Input>
 
-        <RadioGroup onChange={setValue} value={value}>
-        <Stack direction='row'>
-            <Radio value='1' size='sm'>Philippine Number</Radio>
-            <Radio value='2' size='sm'>International Number</Radio>
-        </Stack>
-        </RadioGroup>
-        {contactNumberInput === '1' ?
-         <InputGroup size='md'>
-            <InputLeftAddon>
-            +63
-            </InputLeftAddon>
-            <Input mb='4' size='md' type='text' placeholder='Insert phone number' maxW='280px' borderColor='black.50'/>
-        </InputGroup> :
-         <InputGroup>
-            <Input mb='4' size='md' type='text' placeholder='Insert phone number' maxW='340px' borderColor='black.50'/>
-        </InputGroup> 
-        }
        
-        <Text color='gray'>Birthday</Text>
-        <DatePicker onChange={onChange} size='large' style={{border: 'solid', borderWidth:'1px'}}/>
         </>
     )
 }

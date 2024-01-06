@@ -18,11 +18,18 @@ function PersonalInformation({applicantData}) {
         <>
         {
         educationGroup.map((_, index) =>
-        <Card key={index} mt='3'>
+        <Card
+        key={index}
+        mt='3'
+        maxW='800px'
+        border='solid 0.2px black'
+        >
         <Heading size='md' fontWeight='500' margin='20px 0px 0px 20px'>Education {index}</Heading>
         <CardBody>
             <Button
-            size='sm'
+            fontSize='12px'
+            color='gray'
+            size='xs'
             float='right'
             variant='ghost'
             fontWeight='500'
@@ -35,11 +42,11 @@ function PersonalInformation({applicantData}) {
                 Delete Education</Button>
             <Stack spacing='3'>
             <Box>
-                <Text color='gray'>University/Institution</Text>
+                <Text fontSize='xs' color='gray'>University/Institution</Text>
                 <Input
                 maxW='350px'
                 size='sm'
-                borderColor='black.500'
+                border='solid 0.2px black'
                 value={educationGroup[index].university}
                 onChange={(e) => {
                     const updatedEducationGroup = [...educationGroup]
@@ -49,13 +56,13 @@ function PersonalInformation({applicantData}) {
                 ></Input>
             </Box>
             <Box>
-                <Text size='xs' color='gray'>
+                <Text fontSize='xs' color='gray'>
                 Degree Program
                 </Text>
                 <Input
                 maxW='350px'
                 size='sm'
-                borderColor='black.500'
+                border='solid 0.2px black'
                 value={educationGroup[index].degreeProgram}
                 onChange={(e) => {
                     const updatedEducationGroup = [...educationGroup]
@@ -65,14 +72,14 @@ function PersonalInformation({applicantData}) {
                 ></Input>
             </Box>
             <Box>
-                <Box size='xs' color='gray'>
+                <Box fontSize='xs' color='gray'>
                 Date finished / Projected Finish date
                 </Box>
                 <Input
                 maxW='350px'
                 size='sm'
-                placeholder='MM/YYYY'
-                borderColor='black.500'
+                placeholder='format: MM/YYYY'
+                border='solid 0.2px black'
                 onChange={(e) => {
                     const updatedEducationGroup = [...educationGroup]
                     updatedEducationGroup[index].finishDate = e.target.value;
@@ -85,9 +92,12 @@ function PersonalInformation({applicantData}) {
         </Card>
         
          )}
-         <Flex justify='center' mt='4'>
+         <Flex justify='end' mt='4'>
           <Button
             variant='solid'
+            bg='#FFFDD0'
+            borderRadius='0px'
+            border='solid 0.2px black'
             colorScheme="yellow"
             fontWeight='500'
             size='sm'

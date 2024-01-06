@@ -5,7 +5,6 @@ import { Box, Button, Grid, GridItem } from "@chakra-ui/react";
 import { jwtDecode } from "jwt-decode";
 import NavApplicant from "../nav/applicant/NavApplicant";
 import JobPortal from "./job-portal/JobPortal";
-import MyApplicationStepper from "./my-application/MyApplicationStepper";
 import MyApplication from "./my-application/MyApplication";
 
 function MainApplicantView() {
@@ -52,11 +51,8 @@ function MainApplicantView() {
 
     useEffect(() => {
         setToSendActiveNavButton(obtainedActiveNavButton)
+        localStorage.setItem("activeNavButton", obtainedActiveNavButton);
     }, [obtainedActiveNavButton])
-
-    useEffect(() => {
-    localStorage.setItem("activeNavButton", obtainedActiveNavButton);
-    }, [obtainedActiveNavButton]);
 
     return(
         <>  
@@ -106,8 +102,11 @@ function MainApplicantView() {
             area={'main'}
             padding='0px'
             >
-                {obtainedActiveNavButton === 'Job Portal' && <JobPortal/>}
-                {obtainedActiveNavButton === 'My Application' && <MyApplication applicantData={applicantData}/>}
+                {obtainedActiveNavButton === 'Job Portal' && <JobPortal applicantData={applicantData}/>}
+                {obtainedActiveNavButton === 'My Application' &&
+                <MyApplication
+                applicantData={applicantData}
+                />}
             </GridItem>
             </Grid>
         </>
