@@ -1,36 +1,57 @@
-import React, { useEffect, useState } from "react";
-import { Text, InputGroup, Input, InputRightAddon, Flex, Button, Select, Grid, GridItem, Box, Image, VStack} from "@chakra-ui/react";
+import React, { useCallback, useEffect, useState } from "react";
+import { Text, InputGroup, Input, Modal, ModalOverlay, FormControl, ModalContent, ModalBody, ModalCloseButton, ModalHeader, FormLabel, ModalFooter, Flex, Button, Select, Grid, GridItem, Box, Image} from "@chakra-ui/react";
 import { Search2Icon } from "@chakra-ui/icons";
-import { AppstoreOutlined, ClockCircleOutlined, FileExcelOutlined, FileImageOutlined, FileOutlined, HomeOutlined, PicCenterOutlined } from "@ant-design/icons";
+import { AppstoreOutlined, ClockCircleOutlined, DeleteOutlined, FileOutlined, HomeOutlined } from "@ant-design/icons";
 import tcsDarkLogo  from '../../tcs-dark-logo.png'
-function JobPortal() {
+import CreateJobButton from "./admin/CreateJobButton";
+import axios from "axios";
+function JobPortal({isAdmin}) {
+
     const jobFilters = [
         'Categories', 'Posting Dates', 'Job Types', 'More'
     ]
-    const sampleJobs = [
-        'Data Analytics Coach', 'Web Development Coach', 'Learning Intern', 'Roblox Coach', 'Basic Python Coach'
-    ]
+
+    const [jobsList, setJobsList] = useState([]);
+
     const [clickedJob, setClickedJob] = useState(null);
 
-
     const clickJob = (index) => {
-        console.log(index)
         setClickedJob(index)
     }
 
-    useEffect(() => {
-        console.log(clickedJob)
-    }, [clickedJob])
+    const fetchJobsList = async () => {
+        const response = await axios.get('http://localhost:3001/api/fetch-jobs-list')
+        console.log(response.data.jobs)
+        setJobsList(response.data.jobs)
+    }
 
+    const deleteJob = (jobID) => {
+        axios.delete(`http://localhost:3001/api/delete-job/${jobID}`)
+            .then(() => {
+                fetchJobsList();
+                setClickedJob(prevIndex => prevIndex-1 < 1 ? 0 : prevIndex-1);
+            })
+    } 
+
+    useEffect(() => {
+        fetchJobsList()
+    }, [])
+
+    useEffect(() => {
+        console.log(jobsList)
+    }, [jobsList])
+
+    useEffect(() => {
+    }, [clickedJob])
 
     return(
         <>
         <Box
         width='100%'
-        backgroundColor='#F2F2F2'
+        backgroundColor={isAdmin ? 'white' : '#f2f2f2'}
         >
         <InputGroup
-        maxW='650px'
+        maxW='750px'
         margin='10px 0px 0px 20px'
         >  
             <Input
@@ -54,7 +75,12 @@ function JobPortal() {
                     fontSize='25px'
                     />
                 </Button>
+
+            {isAdmin ?
+            <CreateJobButton fetchJobsList={fetchJobsList}/>:
+            ''}
         </InputGroup>
+         
         <Flex
         mt='20px'
         ml='20px'
@@ -86,6 +112,7 @@ function JobPortal() {
         gap={10}
         >
             <GridItem
+            border={isAdmin ? 'solid 0.2px' : ''}
             colSpan={2}
             bg='white'
             minW='500px'
@@ -93,7 +120,7 @@ function JobPortal() {
             maxHeight={`calc(100vh - 200px)`} 
             >
 
-                {sampleJobs.map((job, index) => (
+                {jobsList.map((job, index) => (
                     <Box
                     key={index}
                     padding='20px'
@@ -104,21 +131,23 @@ function JobPortal() {
                         <Text
                         textDecoration='underline'
                         fontWeight='1000'
-                        >{job}</Text>
+                        >{job.jobTitleM}</Text>
                         <Text
                         margin='5px 0px 5px 0px'
                         fontSize='12px'
                         >
                             <AppstoreOutlined/>
                             &nbsp;
-                            Job ID: TCS101010101010
+                            Job ID: {job._id}
                         </Text>
                         <Text
                         fontSize='12px'
                         >
                             <ClockCircleOutlined/>
                             &nbsp;
-                            Posted Today
+                            Posted {
+                              new Date(job.jobCreatedAt).toDateString()
+                            }
                         </Text>
                     </Box>
                 ))}
@@ -126,6 +155,7 @@ function JobPortal() {
             </GridItem>
 
             <GridItem
+            border={isAdmin ? 'solid 0.2px' : ''}
             minW='300px'
             height='250px'
             bg='white'
@@ -153,13 +183,14 @@ function JobPortal() {
         gap={10}
         >
             <GridItem
+            border={isAdmin ? 'solid 0.2px' : ''}
             bg='white'
             minW='500px'
             overflowY='scroll'
             maxHeight={`calc(100vh - 200px)`}
             >
 
-                {sampleJobs.map((job, index) => (
+                {jobsList.map((job, index) => (
                     <Box
                     key={index}
                     padding='20px'
@@ -170,21 +201,23 @@ function JobPortal() {
                         <Text
                         textDecoration='underline'
                         fontWeight='1000'
-                        >{job}</Text>
+                        >{job.jobTitleM}</Text>
                         <Text
                         margin='5px 0px 5px 0px'
                         fontSize='12px'
                         >
                             <AppstoreOutlined/>
                             &nbsp;
-                            Job ID: TCS101010101010
+                            Job ID: {job._id}
                         </Text>
                         <Text
                         fontSize='12px'
                         >
                             <ClockCircleOutlined/>
                             &nbsp;
-                            Posted Today
+                            Posted {
+                              new Date(job.jobCreatedAt).toDateString()
+                            }
                         </Text>
                     </Box>
                 ))}
@@ -192,6 +225,7 @@ function JobPortal() {
             </GridItem>
 
             <GridItem
+            border={isAdmin ? 'solid 0.2px' : ''}
             minW='500px'
             bg='white'
             overflowY='scroll'
@@ -202,11 +236,33 @@ function JobPortal() {
             padding='0px 20px 40px 20px'
             fontSize='12px'
             borderBottom='solid 0.2px lightgray'
-            >
-                <Text
-                fontSize='20px'
-                fontWeight='1000'
-                >{sampleJobs[clickedJob-1]}</Text>
+            >   
+                <Flex
+                align='center'
+                justify='space-between'
+                >
+                     <Text
+                    fontSize='20px'
+                    fontWeight='1000'
+                    >{jobsList[clickedJob-1].jobTitleM}</Text>
+                    
+                    {isAdmin ?
+                    <Button
+                    zIndex='0'
+                    size='xs'
+                    fontWeight='1000'
+                    width='100px'
+                    variant='ghost'
+                    colorScheme='red'
+                    color='red'
+                    onClick={() => deleteJob(jobsList[clickedJob-1]._id)}
+                    >
+                        <DeleteOutlined/>
+                        &nbsp;Delete Job
+                    </Button>:
+                    ''}
+                </Flex>
+               
                 <Button
                 zIndex='0'
                 mt='10px'
@@ -216,7 +272,7 @@ function JobPortal() {
                 width='100px'
                 boxShadow='5px 5px 5px lightgray'
                 >
-                    Apply
+                    {isAdmin ? 'Edit Details' : 'Apply'}
                 </Button>
             </Box>
 
@@ -228,31 +284,30 @@ function JobPortal() {
                
                     <Flex align='center'>
                         <HomeOutlined/>
-                        <Text>&nbsp;Online</Text>
+                        <Text>&nbsp;{jobsList[clickedJob-1].jobLocationM}</Text>
                     </Flex>
 
                     <Flex align='center'>
                         <FileOutlined/>
-                        <Text>&nbsp;Job ID: TCS1010101010</Text>
+                        <Text>&nbsp;Job ID: {jobsList[clickedJob-1]._id}</Text>
                     </Flex>
 
                     <Flex align='center'>
                         <ClockCircleOutlined/>
-                    <Text>&nbsp;Posted today</Text>
+                    <Text>&nbsp;Posted  {new Date(jobsList[clickedJob-1].jobCreatedAt).toDateString() } </Text>
                     </Flex>
-
                     <Text
                     mt='20px'
                     fontWeight='1000'
                     >Job Location</Text>
-                    <Text>Online</Text>
+                    <Text>{jobsList[clickedJob-1].jobLocationM}</Text>
 
                     <Text
                     mt='20px'
                     fontWeight='1000'
                     >Job Description</Text>
                     <Text>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tempor massa quis urna vestibulum cursus. Donec placerat nisi at nulla accumsan finibus non sed metus.
+                        {jobsList[clickedJob-1].jobDescriptionM}
                     </Text>
 
                     <Text
@@ -260,7 +315,7 @@ function JobPortal() {
                     fontWeight='1000'
                     >Responsibilities</Text>
                     <Text>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tempor massa quis urna vestibulum cursus. Donec placerat nisi at nulla accumsan finibus non sed metus.
+                        {jobsList[clickedJob-1].jobResponsibilitiesM}
                     </Text>
 
                     <Text
@@ -268,7 +323,7 @@ function JobPortal() {
                     fontWeight='1000'
                     >Qualifications</Text>
                     <Text>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tempor massa quis urna vestibulum cursus. Donec placerat nisi at nulla accumsan finibus non sed metus.
+                        {jobsList[clickedJob-1].jobQualificationsM}
                     </Text>
 
                     <Text
@@ -276,7 +331,7 @@ function JobPortal() {
                     fontWeight='1000'
                     >Job Segmentation</Text>
                     <Text>
-                        Recent Grads/Entry Level
+                        {jobsList[clickedJob-1].jobSegmentationM}
                     </Text>
             </Box>
 

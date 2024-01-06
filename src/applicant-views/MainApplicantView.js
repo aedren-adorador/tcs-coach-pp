@@ -95,7 +95,7 @@ function MainApplicantView() {
             padding='0px'
             >
                 {obtainedActiveNavButton === 'Job Portal' && <JobPortal/>}
-                {/* {obtainedActiveNavButton === 'Applicants' && <Applicants/>} */}
+                {/* {obtainedActiveNavButton === 'My Application' && <MyApplicationStepper/>} */}
             </GridItem>
             </Grid>
         </>

@@ -7,6 +7,9 @@ const nodemailer = require('nodemailer');
 const bcrypt = require('bcrypt');
 const Applicant = require('./models/applicants');
 const Admin = require('./models/admins');
+const Job = require('./models/jobs');
+const ObjectId = require('mongodb').ObjectId;
+
 require('dotenv').config();
 
 // Mandatory Settings
@@ -166,4 +169,33 @@ app.get('/api/get-applicants', (req, res, next) => {
     })
 })
 
+app.post('/api/create-job', (req, res, next) => {
+  console.log(req.body)
+  const newJob = new Job({
+    jobTitleM: req.body.jobTitle,
+    jobLocationM: req.body.jobLocation,
+    jobDescriptionM: req.body.jobDescription,
+    jobResponsibilitiesM: req.body.jobResponsibilities,
+    jobQualificationsM: req.body.jobQualifications,
+    jobSegmentationM: req.body.jobSegmentation
+  })
+  newJob.save()
+    .then(res.json({result: newJob}))
+})
+
+
+app.get('/api/fetch-jobs-list', (req, res, next) => {
+  Job.find()
+    .then(jobsList => res.json({jobs: jobsList}))
+})
+
+app.delete('/api/delete-job/:id', (req, res, next) => {
+  Job.deleteOne({_id: req.params.id})
+    .then(
+      Job.find()
+        .then(updatedJobs => [
+          res.json({updatedJobs: updatedJobs})
+        ])
+    )
+})
 module.exports = app;

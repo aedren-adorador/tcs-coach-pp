@@ -4,14 +4,14 @@ import { FolderFilled, FolderOutlined, HomeFilled, HomeOutlined, IdcardFilled, I
 import tcsLogo from '../../tcs-logo.png'
 
 function NavAdmin({logOut, getActiveNavButton}) {
-    const navButtons = ['Dashboard', 'Jobs', 'Applicants', 'Job Portal']
+    const navButtons = ['Dashboard', 'Applicants', 'Job Portal']
     const iconSize = {fontSize: '20px', marginBottom:'8px'}
     const navButtonSVGs = [
-        <HomeOutlined style={iconSize}/>, <IdcardOutlined style={iconSize}/>, <UserAddOutlined style={iconSize}/>, <FolderOutlined style={iconSize}/>
+        <HomeOutlined style={iconSize}/>,  <UserAddOutlined style={iconSize}/>, <FolderOutlined style={iconSize}/>
 
     ]
     const navClickedButtonSVGs = [
-        <HomeFilled style={iconSize}/> ,<IdcardFilled style={iconSize}/>, <UserOutlined style={iconSize}/>, <FolderFilled style={iconSize}/>
+        <HomeFilled style={iconSize}/> , <UserOutlined style={iconSize}/>, <FolderFilled style={iconSize}/>
     ]
     const [clickedNavButton, setClickedNavButton] = useState('Dashboard')
     

@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import NavAdmin from "../nav/admin/NavAdmin";
 import Dashboard from "./dashboard/Dashboard";
 import Applicants from "./applicants/Applicants";
+import JobPortal from "../applicant-views/job-portal/JobPortal";
 function MainAdminView() {
     const navigate = useNavigate();
     const [adminData, setAdminData] = useState({});
@@ -89,12 +90,13 @@ function MainAdminView() {
             </GridItem>
 
             <GridItem
-            bg='white'
+            bg='#white'
             area={'main'}
             padding='10px'
             >
                 {obtainedActiveNavButton === 'Dashboard' && <Dashboard/>}
                 {obtainedActiveNavButton === 'Applicants' && <Applicants/>}
+                {obtainedActiveNavButton === 'Job Portal' && <JobPortal isAdmin={true}/>}
             </GridItem>
             </Grid>
         </>
