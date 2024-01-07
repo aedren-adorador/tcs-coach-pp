@@ -74,7 +74,7 @@ function MyApplicationStepper() {
                     });
                 setJobApplicationDetails(modifiedJobApplicationDetails)
             })
-    }, [])
+    }, [verifyDetails])
 
     return (
         <> 
@@ -152,7 +152,7 @@ function MyApplicationStepper() {
                 </Stepper>
                 <Box margin='10px 0px 10px 0px'>
                     {activeStep === 0 && <PersonalInformation applicantData={applicantData} getFieldProps={formikProps.getFieldProps} jobApplicationDetails={jobApplicationDetails}/>}
-                    {activeStep === 1 && <Education applicantData={applicantData} setFieldValue={formikProps.setFieldValue} jobApplicationDetails={jobApplicationDetails}/>}
+                    {activeStep === 1 && <Education applicantData={applicantData} setFieldValue={formikProps.setFieldValue}  jobApplicationDetails={jobApplicationDetails}/>}
                 </Box>
                 <Flex
                 justify='center'

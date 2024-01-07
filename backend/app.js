@@ -220,6 +220,7 @@ app.put('/api/update-job', (req, res, next) => {
 
 
 app.post('/api/save-job-application-progress', (req, res, next) => {
+  console.log(req.body.education, 'RECEIVED')
   JobApplication.findOne({applicantIDForeignKeyM:req.body.applicantIDForeignKey, jobIDForeignKeyM: req.body.jobIDForeignKey})
     .then(record => {
       if(record) {
@@ -248,7 +249,7 @@ app.post('/api/save-job-application-progress', (req, res, next) => {
           finalVerdictM: req.body.finalVerdict
         }
         JobApplication.updateOne({applicantIDForeignKeyM:req.body.applicantIDForeignKey, jobIDForeignKeyM: req.body.jobIDForeignKey}, updatedJobApplication)
-          .then(result => console.log('here!!!!!!!', result))
+          .then(result => console.log('here!', result))
       } else {
 
       }

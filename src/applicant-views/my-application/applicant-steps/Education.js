@@ -4,21 +4,16 @@ import { getValue } from "@testing-library/user-event/dist/utils";
 import React, { useEffect, useState } from "react";
 
 
-function PersonalInformation({applicantData, setFieldValue, jobApplicationDetails}) {
-    const [educationGroup, setEducationGroup] = useState([{university: '', degreeProgram: '', finishDate: ''}]);
+function PersonalInformation({applicantData, jobApplicationDetails, setFieldValue}) {
+    const [educationGroup, setEducationGroup] = useState(jobApplicationDetails.education);
     const addEducation = () => {
         setEducationGroup([...educationGroup, { university: '', degreeProgram: '', finishDate: '' }])
     }
     
     useEffect(() => {
+        console.log("WOAH", educationGroup)
         setFieldValue('education', educationGroup)
-    }, [educationGroup])
-
-    useEffect(() => {
-        if (jobApplicationDetails.education) {
-            setEducationGroup(jobApplicationDetails.education)
-        }
-    }, [])
+    }, [educationGroup, setFieldValue])
     
     return(
         <>
@@ -30,6 +25,7 @@ function PersonalInformation({applicantData, setFieldValue, jobApplicationDetail
         maxW='600px'
         border='solid 0.2px black'
         >
+        
         <Heading size='md' fontWeight='500' margin='20px 0px 0px 20px'>Education {index+1}</Heading>
         <CardBody>
             <Button
