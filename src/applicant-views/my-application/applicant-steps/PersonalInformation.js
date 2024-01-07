@@ -1,18 +1,15 @@
 import { Input, Text, InputGroup, InputLeftAddon, RadioGroup, Stack, Radio } from "@chakra-ui/react";
-import { DatePicker } from "antd";
+import { DatePicker, Flex } from "antd";
 import React, { useEffect, useState } from "react";
-import { Formik, Form } from "formik";
+import { Formik, Form, useFormikContext } from "formik";
 import { FormControl } from "@chakra-ui/react";
 
 
-function PersonalInformation({applicantData}) {
+function PersonalInformation({applicantData, getFieldProps}) {
     const [value, setValue] = useState('1')
     const [contactNumberInput, setContactNumberInput] = useState('1');
-    const onChange = (value, dateString) => {
-    console.log('Selected Time: ', value);
-    console.log('Formatted Selected Time: ', dateString);
-    };
-   
+
+
     useEffect(() => {
         setContactNumberInput(value);
     }, [value])
@@ -28,10 +25,17 @@ function PersonalInformation({applicantData}) {
         <Text mb='4'>{applicantData.emailM}</Text>
 
         <Text color='gray'>Birthday</Text>
-        <DatePicker onChange={onChange} size='large' style={{border: 'solid 0.2px black', borderRadius: '2px', marginBottom: '15px', width:'300px'}}/>
+         <Input
+         {...getFieldProps('birthday')}
+        size='sm'
+        border='solid 0.2px black'
+        width='300px'
+        placeholder='YYYY-MM-DD'
+        ></Input>
         
         <Text color='gray'>Contact Number</Text>
         <Input
+         {...getFieldProps('contactNumber')}
         size='sm'
         border='solid 0.2px black'
         width='300px'

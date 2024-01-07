@@ -23,7 +23,7 @@ function JobPortal({isAdmin, applicantData}) {
 
     const fetchJobsList = async () => {
         const response = await axios.get('http://localhost:3001/api/fetch-jobs-list')
-        console.log(response.data.jobs)
+        // console.log(response.data.jobs)
         setJobsList(response.data.jobs)
     }
 
@@ -49,7 +49,7 @@ function JobPortal({isAdmin, applicantData}) {
     }, [])
 
     useEffect(() => {
-        console.log(jobsList)
+        // console.log(jobsList)
     }, [jobsList])
 
     useEffect(() => {

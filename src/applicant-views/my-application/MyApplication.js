@@ -34,7 +34,7 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                 </Tr>
                 </Thead>
                 <Tbody>
-                {applicantData.positionAppliedToM !== null ?
+                {applicantData.applied !== false ?
                 <Tr>
                     <Td textAlign='center'>
                         <Flex
@@ -118,20 +118,11 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                     </Td>
                     <Td>Submit Application</Td>
                     <Td>
-                        Jan 13, 2023
+                         {applicantData.applied === false && '—'}
                     </Td>
                     <Td>
-                        {applicantData.positionAppliedToM === null &&
+                        {applicantData.applied === false &&
                         <Badge colorScheme="green" fontWeight='300' padding='2'>Apply to Job Portal</Badge>}
-                        {/* <Link to={{ pathname: '/application-progress'}} state={{applicantData: applicantData}}>
-                        <Button
-                        variant='solid'
-                        colorScheme="green"
-                        size='sm'
-                        >
-                            Resume Application
-                        </Button>
-                        </Link> */}
                     </Td>
                 </Tr>
                 </Tbody>

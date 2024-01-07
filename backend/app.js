@@ -8,6 +8,7 @@ const bcrypt = require('bcrypt');
 const Applicant = require('./models/applicants');
 const Admin = require('./models/admins');
 const Job = require('./models/jobs');
+const JobApplication = require('./models/jobApplications');
 const ObjectId = require('mongodb').ObjectId;
 
 require('dotenv').config();
@@ -215,5 +216,54 @@ app.put('/api/update-job', (req, res, next) => {
   }
   Job.updateOne({_id: req.body.jobId}, updatedJob)
     .then(result => res.json({success: 'updated!'}))
+})
+
+
+app.post('/api/save-job-application-progress', (req, res, next) => {
+  JobApplication.findOne({applicantIDForeignKeyM:req.body.applicantIDForeignKey, jobIDForeignKeyM: req.body.jobIDForeignKey})
+    .then(record => {
+      if(record) {
+        const updatedJobApplication = {
+          applicantIDForeignKeyM : req.body.applicantIDForeignKey,
+          jobIDForeignKeyM : req.body.jobIDForeignKey,
+          contactNumberM: req.body.contactNumber,
+          birthdayM: req.body.birthday,
+          educationM: req.body.education,
+          linkedInM: req.body.linkedIn,
+          f2fM: req.body.f2f,
+          address: req.body.address,
+          coachingExperienceM: req.body.coachingExperience,
+          areasOfExpertiseM: req.body.areasOfExpertise,
+          sourceOfInfoM: req.body.sourceOfInfo,
+          availabilityM: req.body.availability,
+          internetSpeedM: req.body.internetSpeedM,
+          referredByM: req.body.referredBy,
+          positionAppliedToM: req.body.positionAppliedTo,
+
+          currentStepM: req.body.currentStep,
+          dateSubmittedApplicationM: req.body.dateSubmittedApplication,
+          dateSubmittedInterviewM: req.body.dateSubmittedInterview,
+          dateSubmittedTeachingDemoM: req.body.dateSubmittedTeachingDemo,
+          dateSubmittedOnboardingRequirementsM: req.body.dateSubmittedOnboardingRequirements,
+          finalVerdictM: req.body.finalVerdict
+        }
+        JobApplication.updateOne({applicantIDForeignKeyM:req.body.applicantIDForeignKey, jobIDForeignKeyM: req.body.jobIDForeignKey}, updatedJobApplication)
+          .then(result => console.log('here!!!!!!!', result))
+      } else {
+
+      }
+    })
+})
+
+app.post('/api/verify-application-if-continue-or-new', (req, res, next) => {
+  JobApplication.findOne({applicantIDForeignKeyM: req.body.applicantData._id, jobIDForeignKeyM: req.body.jobData._id})
+    .then(record => {
+      if (record) {
+        res.json({jobApplicationSavedDetails: record})
+      } else {
+        console.log('error match!')
+      }
+    })
+    
 })
 module.exports = app;

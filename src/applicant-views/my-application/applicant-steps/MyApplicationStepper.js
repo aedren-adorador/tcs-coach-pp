@@ -4,12 +4,40 @@ import { ArrowLeftOutlined } from "@ant-design/icons";
 import { useLocation, useNavigate } from "react-router-dom";
 import PersonalInformation from "./PersonalInformation";
 import Education from './Education'
+import { Formik, Form, useFormikContext } from "formik";
+import axios from "axios";
 
 function MyApplicationStepper() {
     const navigate = useNavigate();
     const state = useLocation();
     const applicantData = state.state.applicantData
     const jobData = state.state.jobData
+
+    const verifyDetails = {applicantData, jobData}
+
+    const [jobApplicationDetails, setJobApplicationDetails] = useState({
+        applicantIDForeignKey : applicantData._id,
+        jobIDForeignKey: jobData._id,
+        birthday: null,
+        education: [],
+        linkedIn: null,
+        f2f: null,
+        address: null,
+        coachingExperience: null,
+        areasOfExpertise: null,
+        sourceOfInfo: null,
+        availability: [],
+        internetSpeed: null,
+        referredBy: null,
+        positionAppliedTo: jobData.jobTitleM,
+
+        currentStep: null,
+        dateSubmittedApplication: null,
+        dateSubmittedInterview: null,
+        dateSubmittedTeachingDemo: null,
+        dateSubmittedOnboardingRequirements: null,
+        finalVerdict: null,
+    })
     
     const steps = [
     { title: 'Step 1', description: 'Personal Info' },
@@ -18,16 +46,69 @@ function MyApplicationStepper() {
     { title: 'Step 4', description: 'Questions' },
     { title: 'Step 5', description: 'Summary' },
     ]
+
     const { activeStep, setActiveStep } = useSteps({
-    index: 1,
+    index: 0,
     count: steps.length,
     })
     
     const previousPage = () => {
         navigate(-1);
     }
+
+    const handleApplicationSubmit = (applicationDetails) => {
+        axios.post('http://localhost:3001/api/save-job-application-progress', applicationDetails)
+            .then(() => console.log('DONE saving!'))
+    }
+
+    useEffect(() => {
+    }, [jobApplicationDetails])
+
+    useEffect(() => {
+        axios.post('http://localhost:3001/api/verify-application-if-continue-or-new', verifyDetails)
+            .then(result => {
+                const modifiedJobApplicationDetails = {};
+                    Object.keys(result.data.jobApplicationSavedDetails).forEach((key) => {
+                    const newKey = key.endsWith('M') ? key.slice(0, -1) : key;
+                    modifiedJobApplicationDetails[newKey] = result.data.jobApplicationSavedDetails[key];
+                    });
+                setJobApplicationDetails(modifiedJobApplicationDetails)
+            })
+    }, [])
+
     return (
         <> 
+            <Formik
+            initialValues={{
+                applicantIDForeignKey: jobApplicationDetails.applicantIDForeignKey,
+                jobIDForeignKey: jobApplicationDetails.jobIDForeignKey,
+                contactNumber: jobApplicationDetails.contactNumber,
+                birthday: jobApplicationDetails.birthday ? jobApplicationDetails.birthday.slice(0, 10) : jobApplicationDetails.birthday,
+                education: jobApplicationDetails.education,
+                linkedIn: jobApplicationDetails.linkedIn,
+                f2f: jobApplicationDetails.f2f,
+                address: jobApplicationDetails.address,
+                coachingExperience: jobApplicationDetails.coachingExperience,
+                areasOfExpertise: jobApplicationDetails.areasOfExpertise,
+                sourceOfInfo: jobApplicationDetails.sourceOfInfo,
+                availability: jobApplicationDetails.availability,
+                internetSpeed: jobApplicationDetails.internetSpeed,
+                referredBy: jobApplicationDetails.referredBy,
+                positionAppliedTo: jobApplicationDetails.positionAppliedTo,
+
+                currentStep: jobApplicationDetails.currentStep,
+                dateSubmittedApplication: jobApplicationDetails.dateSubmittedApplication,
+                dateSubmittedInterview: jobApplicationDetails.dateSubmittedInterview,
+                dateSubmittedTeachingDemo: jobApplicationDetails.dateSubmittedTeachingDemo,
+                dateSubmittedOnboardingRequirements: jobApplicationDetails.dateSubmittedOnboardingRequirements,
+                finalVerdict: jobApplicationDetails.finalVerdict
+            }}
+            onSubmit={handleApplicationSubmit}
+            enableReinitialize
+            >
+            {(formikProps) => (
+                
+            <Form>
             <Box margin='5% 15% 5% 15%'>
                 <Button
                 mb='3'
@@ -38,7 +119,7 @@ function MyApplicationStepper() {
                 onClick={previousPage}
                 >
                     <ArrowLeftOutlined /> 
-                    &nbsp;Back to Home Screen
+                    &nbsp;Back to Job Portal
                 </Button>
                 <Flex
                 textAlign='center'
@@ -70,21 +151,20 @@ function MyApplicationStepper() {
                 ))}
                 </Stepper>
                 <Box margin='10px 0px 10px 0px'>
-                    {activeStep === 1 && <PersonalInformation applicantData={applicantData}/>}
-                    {activeStep === 2 && <Education applicantData={applicantData}/>}
-                     
+                    {activeStep === 0 && <PersonalInformation applicantData={applicantData} getFieldProps={formikProps.getFieldProps} jobApplicationDetails={jobApplicationDetails}/>}
+                    {activeStep === 1 && <Education applicantData={applicantData} setFieldValue={formikProps.setFieldValue} jobApplicationDetails={jobApplicationDetails}/>}
                 </Box>
                 <Flex
                 justify='center'
                 >
-                    {activeStep === 1 ? '' :
+                    {activeStep === 0 ? '' :
                     <Button
                     size='md'
                     bg='#0C3C55'
                     borderRadius='0px'
                     variant='solid'
                     colorScheme="blue"
-                    onClick={() => setActiveStep(activeStep-1 < 1 ? 1 : activeStep-1)}
+                    onClick={() => setActiveStep(activeStep-1 < 0 ? 0 : activeStep-1)}
                     mr='10'>Back</Button>
                     }
                     <Button
@@ -94,10 +174,13 @@ function MyApplicationStepper() {
                     variant='solid'
                     colorScheme="blue"
                     onClick={() => setActiveStep(activeStep+1 > steps.length ? steps.length : activeStep+1)}
+                    type='submit'
                     >Save and Continue</Button>
                 </Flex>
-                
             </Box>
+            </Form>
+            )}
+            </Formik>
         </>
     )
 }

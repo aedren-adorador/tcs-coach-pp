@@ -4,15 +4,21 @@ import { getValue } from "@testing-library/user-event/dist/utils";
 import React, { useEffect, useState } from "react";
 
 
-function PersonalInformation({applicantData}) {
+function PersonalInformation({applicantData, setFieldValue, jobApplicationDetails}) {
     const [educationGroup, setEducationGroup] = useState([{university: '', degreeProgram: '', finishDate: ''}]);
     const addEducation = () => {
         setEducationGroup([...educationGroup, { university: '', degreeProgram: '', finishDate: '' }])
     }
     
     useEffect(() => {
-        console.log(educationGroup)
+        setFieldValue('education', educationGroup)
     }, [educationGroup])
+
+    useEffect(() => {
+        if (jobApplicationDetails.education) {
+            setEducationGroup(jobApplicationDetails.education)
+        }
+    }, [])
     
     return(
         <>
@@ -21,10 +27,10 @@ function PersonalInformation({applicantData}) {
         <Card
         key={index}
         mt='3'
-        maxW='800px'
+        maxW='600px'
         border='solid 0.2px black'
         >
-        <Heading size='md' fontWeight='500' margin='20px 0px 0px 20px'>Education {index}</Heading>
+        <Heading size='md' fontWeight='500' margin='20px 0px 0px 20px'>Education {index+1}</Heading>
         <CardBody>
             <Button
             fontSize='12px'
@@ -92,7 +98,7 @@ function PersonalInformation({applicantData}) {
         </Card>
         
          )}
-         <Flex justify='end' mt='4'>
+         <Flex justify='end' mt='4' maxW='600px'>
           <Button
             variant='solid'
             bg='#FFFDD0'
@@ -101,7 +107,7 @@ function PersonalInformation({applicantData}) {
             colorScheme="yellow"
             fontWeight='500'
             size='sm'
-            float='right'
+            mb='20px'
             onClick={addEducation}
             >+ Add Education</Button>
         </Flex>
