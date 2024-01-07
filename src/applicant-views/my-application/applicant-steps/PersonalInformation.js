@@ -1,18 +1,8 @@
-import { Input, Text, InputGroup, InputLeftAddon, RadioGroup, Stack, Radio } from "@chakra-ui/react";
-import { DatePicker, Flex } from "antd";
-import React, { useEffect, useState } from "react";
-import { Formik, Form, useFormikContext } from "formik";
-import { FormControl } from "@chakra-ui/react";
+import { Input, Text} from "@chakra-ui/react";
+import React from "react";
 
 
 function PersonalInformation({applicantData, getFieldProps}) {
-    const [value, setValue] = useState('1')
-    const [contactNumberInput, setContactNumberInput] = useState('1');
-
-
-    useEffect(() => {
-        setContactNumberInput(value);
-    }, [value])
     return(
         <>
         <Text color='gray'>First Name</Text>

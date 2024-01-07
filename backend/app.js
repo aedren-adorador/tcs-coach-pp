@@ -9,9 +9,20 @@ const Applicant = require('./models/applicants');
 const Admin = require('./models/admins');
 const Job = require('./models/jobs');
 const JobApplication = require('./models/jobApplications');
-const ObjectId = require('mongodb').ObjectId;
-
+const multer = require('multer');
 require('dotenv').config();
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './resumes')
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now()
+    cb(null, uniqueSuffix+file.originalname)
+  }
+})
+
+const upload = multer({ storage: storage })
 
 // Mandatory Settings
 app.use(bodyParser.json());
@@ -220,7 +231,7 @@ app.put('/api/update-job', (req, res, next) => {
 
 
 app.post('/api/save-job-application-progress', (req, res, next) => {
-  console.log(req.body.education, 'RECEIVED')
+  console.log(req.body.education)
   JobApplication.findOne({applicantIDForeignKeyM:req.body.applicantIDForeignKey, jobIDForeignKeyM: req.body.jobIDForeignKey})
     .then(record => {
       if(record) {
@@ -249,22 +260,29 @@ app.post('/api/save-job-application-progress', (req, res, next) => {
           finalVerdictM: req.body.finalVerdict
         }
         JobApplication.updateOne({applicantIDForeignKeyM:req.body.applicantIDForeignKey, jobIDForeignKeyM: req.body.jobIDForeignKey}, updatedJobApplication)
-          .then(result => console.log('here!', result))
+          .then(result => console.log('updated!', result))
       } else {
 
       }
     })
 })
 
-app.post('/api/verify-application-if-continue-or-new', (req, res, next) => {
-  JobApplication.findOne({applicantIDForeignKeyM: req.body.applicantData._id, jobIDForeignKeyM: req.body.jobData._id})
-    .then(record => {
+app.get('/api/verify-application-if-continue-or-new/:details', (req, res, next) => {
+   const details = JSON.parse(req.params.details);
+   JobApplication.findOne({applicantIDForeignKeyM: details.applicantData._id, jobIDForeignKeyM: details.jobData._id})
+   .then(record => {
       if (record) {
         res.json({jobApplicationSavedDetails: record})
       } else {
-        console.log('error match!')
+        const newJobApplication = new JobApplication({
+          applicantIDForeignKeyM: details.applicantData._id,
+          jobIDForeignKeyM: details.jobData._id
+        })
+        newJobApplication.save()
+          .then(record => {
+            res.json({jobApplicationSavedDetails: record})
+          })
       }
     })
-    
 })
 module.exports = app;

@@ -4,17 +4,23 @@ import { getValue } from "@testing-library/user-event/dist/utils";
 import React, { useEffect, useState } from "react";
 
 
-function PersonalInformation({applicantData, jobApplicationDetails, setFieldValue}) {
+function Education({jobApplicationDetails, setFieldValue, setJobApplicationDetails}) {
     const [educationGroup, setEducationGroup] = useState(jobApplicationDetails.education);
     const addEducation = () => {
         setEducationGroup([...educationGroup, { university: '', degreeProgram: '', finishDate: '' }])
     }
-    
+
     useEffect(() => {
-        console.log("WOAH", educationGroup)
+        console.log("TRIGGEREDDD", educationGroup)
+        console.log('FROM PARENT', jobApplicationDetails)
         setFieldValue('education', educationGroup)
-    }, [educationGroup, setFieldValue])
-    
+        setJobApplicationDetails(prevState => ({
+            ...prevState,
+            education: educationGroup
+        }))
+        
+    }, [educationGroup])
+
     return(
         <>
         {
@@ -78,6 +84,7 @@ function PersonalInformation({applicantData, jobApplicationDetails, setFieldValu
                 Date finished / Projected Finish date
                 </Box>
                 <Input
+                value={educationGroup[index].finishDate}
                 maxW='350px'
                 size='sm'
                 placeholder='format: MM/YYYY'
@@ -112,4 +119,4 @@ function PersonalInformation({applicantData, jobApplicationDetails, setFieldValu
 }
 
 
-export default PersonalInformation;
+export default Education;

@@ -4,8 +4,9 @@ import { ArrowLeftOutlined } from "@ant-design/icons";
 import { useLocation, useNavigate } from "react-router-dom";
 import PersonalInformation from "./PersonalInformation";
 import Education from './Education'
-import { Formik, Form, useFormikContext } from "formik";
+import { Formik, Form } from "formik";
 import axios from "axios";
+import WorkExperience from "./WorkExperience";
 
 function MyApplicationStepper() {
     const navigate = useNavigate();
@@ -13,30 +14,29 @@ function MyApplicationStepper() {
     const applicantData = state.state.applicantData
     const jobData = state.state.jobData
 
-    const verifyDetails = {applicantData, jobData}
-
     const [jobApplicationDetails, setJobApplicationDetails] = useState({
         applicantIDForeignKey : applicantData._id,
         jobIDForeignKey: jobData._id,
-        birthday: null,
+        birthday: '',
         education: [],
-        linkedIn: null,
-        f2f: null,
-        address: null,
-        coachingExperience: null,
-        areasOfExpertise: null,
-        sourceOfInfo: null,
+        resume: '',
+        linkedIn: '',
+        f2f: '',
+        address: '',
+        coachingExperience: '',
+        areasOfExpertise: '',
+        sourceOfInfo: '',
         availability: [],
-        internetSpeed: null,
-        referredBy: null,
+        internetSpeed: '',
+        referredBy: '',
         positionAppliedTo: jobData.jobTitleM,
 
-        currentStep: null,
-        dateSubmittedApplication: null,
-        dateSubmittedInterview: null,
-        dateSubmittedTeachingDemo: null,
-        dateSubmittedOnboardingRequirements: null,
-        finalVerdict: null,
+        currentStep: '',
+        dateSubmittedApplication: '',
+        dateSubmittedInterview: '',
+        dateSubmittedTeachingDemo: '',
+        dateSubmittedOnboardingRequirements: '',
+        finalVerdict: '',
     })
     
     const steps = [
@@ -62,11 +62,13 @@ function MyApplicationStepper() {
     }
 
     useEffect(() => {
+        // console.log('WOOSH CHANGED!',jobApplicationDetails)
     }, [jobApplicationDetails])
 
     useEffect(() => {
-        axios.post('http://localhost:3001/api/verify-application-if-continue-or-new', verifyDetails)
-            .then(result => {
+        const verifyDetails = { applicantData, jobData }
+        axios.get(`http://localhost:3001/api/verify-application-if-continue-or-new/${encodeURIComponent(JSON.stringify(verifyDetails))}`)
+             .then(result => {
                 const modifiedJobApplicationDetails = {};
                     Object.keys(result.data.jobApplicationSavedDetails).forEach((key) => {
                     const newKey = key.endsWith('M') ? key.slice(0, -1) : key;
@@ -74,7 +76,7 @@ function MyApplicationStepper() {
                     });
                 setJobApplicationDetails(modifiedJobApplicationDetails)
             })
-    }, [verifyDetails])
+    }, [applicantData, jobData])
 
     return (
         <> 
@@ -85,6 +87,7 @@ function MyApplicationStepper() {
                 contactNumber: jobApplicationDetails.contactNumber,
                 birthday: jobApplicationDetails.birthday ? jobApplicationDetails.birthday.slice(0, 10) : jobApplicationDetails.birthday,
                 education: jobApplicationDetails.education,
+                resume: jobApplicationDetails.resume,
                 linkedIn: jobApplicationDetails.linkedIn,
                 f2f: jobApplicationDetails.f2f,
                 address: jobApplicationDetails.address,
@@ -147,12 +150,13 @@ function MyApplicationStepper() {
 
                     <StepSeparator/>
                     </Step>
-                    
+
                 ))}
                 </Stepper>
                 <Box margin='10px 0px 10px 0px'>
                     {activeStep === 0 && <PersonalInformation applicantData={applicantData} getFieldProps={formikProps.getFieldProps} jobApplicationDetails={jobApplicationDetails}/>}
-                    {activeStep === 1 && <Education applicantData={applicantData} setFieldValue={formikProps.setFieldValue}  jobApplicationDetails={jobApplicationDetails}/>}
+                    {activeStep === 1 && <Education setFieldValue={formikProps.setFieldValue} setJobApplicationDetails={setJobApplicationDetails}  jobApplicationDetails={jobApplicationDetails}/>}
+                    {activeStep === 2 && <WorkExperience applicantData={applicantData} getFieldProps={formikProps.getFieldProps}/>}
                 </Box>
                 <Flex
                 justify='center'
