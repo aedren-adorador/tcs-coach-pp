@@ -1,7 +1,7 @@
 import './App.css';
 import Login from './auth/Login';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { ChakraProvider } from '@chakra-ui/react'
+import { ChakraProvider, extendTheme } from '@chakra-ui/react'
 import RegisterApplicantEmail from './create-account/create-applicant-account/RegisterApplicantEmail';
 import CreateApplicantAccount from './create-account/create-applicant-account/CreateApplicantAccount';
 import MainApplicantView from './applicant-views/MainApplicantView';
@@ -25,9 +25,16 @@ function App() {
     console.log('localstorage:', localStorage.getItem('isAuthenticated'))
     console.log(isAuthenticated)
   }, [isAuthenticated])
-  
+
+  const theme = extendTheme({
+  colors: {
+    tcs: {
+      main: "#0C3C55",
+    },
+  },
+})
   return (
-    <ChakraProvider>
+    <ChakraProvider theme={theme}>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Login onLoginSuccess={handleLoginSuccess}/>}/>

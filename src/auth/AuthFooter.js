@@ -10,7 +10,7 @@ function AuthFooter() {
         position='fixed'
         width='100%'
         height='80px'
-        backgroundColor='#0C3C55'
+        backgroundColor='tcs.main'
         color='white'
         fontSize='10px'
         align='center'

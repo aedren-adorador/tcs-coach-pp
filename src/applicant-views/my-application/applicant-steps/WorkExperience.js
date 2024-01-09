@@ -13,7 +13,10 @@ function WorkExperience({applicantData, getFieldProps, jobData}) {
         resumeField.append('id', applicantData._id)
         resumeField.append('jobID', jobData._id)
         axios.post('http://localhost:3001/api/upload-resume', resumeField)
-            .then(result => setResumeLink(result.data.resumeLink))
+            .then(result => {
+                setResumeLink(result.data.resumeLink)
+                setIsFileAttached(true)
+            })
     }
 
     const [isFileAttached, setIsFileAttached] = useState(false);
@@ -86,7 +89,7 @@ function WorkExperience({applicantData, getFieldProps, jobData}) {
         {...getFieldProps('linkedIn')}
         size='sm'
         border='solid 0.2px black'
-        width='300px'
+        width='400px'
         mb='20px'
         ></Input>
         </>

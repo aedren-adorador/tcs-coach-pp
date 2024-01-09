@@ -296,10 +296,9 @@ app.get('/api/verify-application-if-continue-or-new/:details', (req, res, next) 
 
 
 app.post('/api/upload-resume', upload.single('resume'), (req, res, next)  => {
-  Resume.findOne({applicantIDForeignKeyM: req.body.id})
+  Resume.findOne({applicantIDForeignKeyM: req.body.id, jobIDForeignKeyM: req.body.jobID})
     .then(record => {
       if (record) {
-        console.log(record)
         const filePath = 'resumes/'+record.resumeFileNameM
         fs.unlink(filePath, (err) => {
           if (err) {
@@ -308,10 +307,10 @@ app.post('/api/upload-resume', upload.single('resume'), (req, res, next)  => {
           }
         });
         const toUpdate = { resumeFileNameM: req.file.filename }
-        Resume.updateOne({applicantIDForeignKeyM: req.body.id}, toUpdate)
+        Resume.updateOne({applicantIDForeignKeyM: req.body.id, jobIDForeignKeyM: req.body.jobID}, toUpdate)
           .then(result => {
             console.log("Updated Resume for " + req.body.firstName + ' ' + req.body.lastName)
-            Resume.findOne({applicantIDForeignKeyM: req.body.id})
+            Resume.findOne({applicantIDForeignKeyM: req.body.id, jobIDForeignKeyM: req.body.jobID})
               .then(result => {
                 const resumeLink = `http://localhost:3001/resumes/${result.resumeFileNameM}`
                 JobApplication.updateOne({applicantIDForeignKeyM: req.body.id, jobIDForeignKeyM: req.body.jobID}, {resumeM:resumeLink})
@@ -325,6 +324,7 @@ app.post('/api/upload-resume', upload.single('resume'), (req, res, next)  => {
         const newResume = new Resume({
           resumeFileNameM: req.file.filename,
           applicantIDForeignKeyM: req.body.id,
+          jobIDForeignKeyM: req.body.jobID
         })
         newResume.save()
           .then(result => {

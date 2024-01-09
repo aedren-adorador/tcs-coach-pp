@@ -7,6 +7,7 @@ import Education from './Education'
 import { Formik, Form } from "formik";
 import axios from "axios";
 import WorkExperience from "./WorkExperience";
+import Questions from "./Questions";
 
 function MyApplicationStepper() {
     const navigate = useNavigate();
@@ -130,13 +131,14 @@ function MyApplicationStepper() {
                 >{jobData.jobTitleM} Position</Flex>
                 <Stepper
                 minW='900px'
-                index={activeStep}>
-                
+                index={activeStep}
+                colorScheme='facebook'
+                >
                 {steps.map((step, index) => (
                     <Step key={index}>
-                    <StepIndicator>
+                    <StepIndicator >
                         <StepStatus
-                        complete={<StepIcon />}
+                        complete={<StepIcon/>}
                         incomplete={<StepNumber />}
                         active={<StepNumber />}
                         />
@@ -156,6 +158,7 @@ function MyApplicationStepper() {
                     {activeStep === 0 && <PersonalInformation applicantData={applicantData} getFieldProps={formikProps.getFieldProps} jobApplicationDetails={jobApplicationDetails}/>}
                     {activeStep === 1 && <Education setFieldValue={formikProps.setFieldValue} setJobApplicationDetails={setJobApplicationDetails}  jobApplicationDetails={jobApplicationDetails}/>}
                     {activeStep === 2 && <WorkExperience applicantData={applicantData} getFieldProps={formikProps.getFieldProps} jobData={jobData}/>}
+                    {activeStep === 3 && <Questions applicantData={applicantData} getFieldProps={formikProps.getFieldProps} jobApplicationDetails={jobApplicationDetails}/>}
                 </Box>
                 <Flex
                 justify='center'
