@@ -9,24 +9,30 @@ const Applicant = require('./models/applicants');
 const Admin = require('./models/admins');
 const Job = require('./models/jobs');
 const JobApplication = require('./models/jobApplications');
-const multer = require('multer');
+const fs = require('fs');
+
+const Resume = require('./models/resumes');
 require('dotenv').config();
+const multer = require('multer');
+const { stringify } = require('querystring');
+
+// Mandatory Settings
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
+app.use('/resumes', express.static('resumes'))
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, './resumes')
   },
   filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now()
-    cb(null, uniqueSuffix+file.originalname)
+    cb(null, 'TCS-Resume-'+Math.round(Math.random() * 1E9)+'-'+file.originalname)
   }
 })
 
 const upload = multer({ storage: storage })
 
-// Mandatory Settings
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
+
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
@@ -40,7 +46,9 @@ app.use((req, res, next) => {
   next();
 });
 
-mongoose.connect(process.env.MONGODB_CONNECT)
+mongoose.connect(process.env.MONGODB_CONNECT, {
+  useNewUrlParser: true
+})
   .then(() => {console.log('connected to mongodb!')})
   .catch(() => {console.log('failed to connect')})
 
@@ -285,4 +293,59 @@ app.get('/api/verify-application-if-continue-or-new/:details', (req, res, next) 
       }
     })
 })
+
+
+app.post('/api/upload-resume', upload.single('resume'), (req, res, next)  => {
+  Resume.findOne({applicantIDForeignKeyM: req.body.id})
+    .then(record => {
+      if (record) {
+        console.log(record)
+        const filePath = 'resumes/'+record.resumeFileNameM
+        fs.unlink(filePath, (err) => {
+          if (err) {
+            console.error('Error deleting file:', err);
+            return;
+          }
+        });
+        const toUpdate = { resumeFileNameM: req.file.filename }
+        Resume.updateOne({applicantIDForeignKeyM: req.body.id}, toUpdate)
+          .then(result => {
+            console.log("Updated Resume for " + req.body.firstName + ' ' + req.body.lastName)
+            Resume.findOne({applicantIDForeignKeyM: req.body.id})
+              .then(result => {
+                const resumeLink = `http://localhost:3001/resumes/${result.resumeFileNameM}`
+                JobApplication.updateOne({applicantIDForeignKeyM: req.body.id, jobIDForeignKeyM: req.body.jobID}, {resumeM:resumeLink})
+                  .then(()=>{
+                    console.log('Updated Job Application Resume Link in Backend')
+                    res.json({resumeLink:resumeLink})
+                  }) 
+              })
+          })
+      } else {
+        const newResume = new Resume({
+          resumeFileNameM: req.file.filename,
+          applicantIDForeignKeyM: req.body.id,
+        })
+        newResume.save()
+          .then(result => {
+            console.log('Resume saved!')
+            const resumeLink = `http://localhost:3001/resumes/${result.resumeFileNameM}`
+            JobApplication.updateOne({applicantIDForeignKeyM: req.body.id, jobIDForeignKeyM: req.body.jobID}, {resumeM:resumeLink})
+              .then(()=>{
+                console.log('Updated Job Application Resume Link in Backend')
+                res.json({resumeLink:resumeLink})
+              }) 
+          })
+      }
+    })
+})
+
+app.get('/api/get-job-application-resume/:details', (req, res, next) => {
+  const details = JSON.parse(req.params.details)
+  console.log(details.applicantID)
+  console.log(details.jobID)
+  JobApplication.findOne({applicantIDForeignKeyM:details.applicantID, jobIDForeignKeyM: details.jobID})
+    .then(result => res.json({savedResumeLink: result.resumeM}))
+})
+
 module.exports = app;

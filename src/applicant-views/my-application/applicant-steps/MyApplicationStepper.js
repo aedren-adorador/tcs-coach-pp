@@ -62,7 +62,6 @@ function MyApplicationStepper() {
     }
 
     useEffect(() => {
-        // console.log('WOOSH CHANGED!',jobApplicationDetails)
     }, [jobApplicationDetails])
 
     useEffect(() => {
@@ -156,7 +155,7 @@ function MyApplicationStepper() {
                 <Box margin='10px 0px 10px 0px'>
                     {activeStep === 0 && <PersonalInformation applicantData={applicantData} getFieldProps={formikProps.getFieldProps} jobApplicationDetails={jobApplicationDetails}/>}
                     {activeStep === 1 && <Education setFieldValue={formikProps.setFieldValue} setJobApplicationDetails={setJobApplicationDetails}  jobApplicationDetails={jobApplicationDetails}/>}
-                    {activeStep === 2 && <WorkExperience applicantData={applicantData} getFieldProps={formikProps.getFieldProps}/>}
+                    {activeStep === 2 && <WorkExperience applicantData={applicantData} getFieldProps={formikProps.getFieldProps} jobData={jobData}/>}
                 </Box>
                 <Flex
                 justify='center'
