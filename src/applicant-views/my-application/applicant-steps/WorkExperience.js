@@ -6,9 +6,6 @@ function WorkExperience({applicantData, getFieldProps, jobData}) {
 
     const handleResumeUpload = (e) => {
         const uploadedResume = e.target.files[0]
-        if (uploadedResume) {
-            setIsFileAttached(true);
-        }
         const resumeField = new FormData();
         resumeField.append('resume', uploadedResume)
         resumeField.append('firstName', applicantData.firstNameM)
@@ -18,8 +15,6 @@ function WorkExperience({applicantData, getFieldProps, jobData}) {
         axios.post('http://localhost:3001/api/upload-resume', resumeField)
             .then(result => setResumeLink(result.data.resumeLink))
     }
-
-  
 
     const [isFileAttached, setIsFileAttached] = useState(false);
     const [resumeLink, setResumeLink] = useState('');
@@ -33,7 +28,7 @@ function WorkExperience({applicantData, getFieldProps, jobData}) {
         const details = {applicantID: applicantData._id, jobID: jobData._id}
         axios.get(`http://localhost:3001/api/get-job-application-resume/${encodeURIComponent(JSON.stringify(details))}`)
             .then(result => {
-                if (result) {
+                if (result.data.savedResumeLink) {
                     setResumeLink(result.data.savedResumeLink)
                     setIsFileAttached(true)
                 }

@@ -61,7 +61,7 @@ function MyApplicationStepper() {
             .then(() => console.log('DONE saving!'))
     }
 
-    useEffect(() => {
+    useEffect(() => {   
     }, [jobApplicationDetails])
 
     useEffect(() => {
