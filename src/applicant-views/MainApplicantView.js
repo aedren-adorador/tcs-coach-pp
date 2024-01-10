@@ -21,6 +21,7 @@ function MainApplicantView() {
         localStorage.removeItem('applicantID')
         localStorage.removeItem('isAuthenticated')
         localStorage.removeItem('token')
+        localStorage.removeItem('currentStep')
         navigate('/');
     }
     const getActiveNavButton = (navButton) => {

@@ -22,8 +22,6 @@ function App() {
   }
 
   useEffect(() => {
-    // console.log('localstorage:', localStorage.getItem('isAuthenticated'))
-    // console.log(isAuthenticated)
   }, [isAuthenticated])
 
   const theme = extendTheme({
@@ -31,7 +29,8 @@ function App() {
     tcs: {
       main: "#0C3C55",
       dirtywhite: '#F2F2F2',
-      linky: '#0073DC'
+      linky: '#0073DC',
+      mongo: '#09A334',
     },
   },
 })

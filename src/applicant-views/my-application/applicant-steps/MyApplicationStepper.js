@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { Box, Button, Stepper, StepIndicator, Step, StepStatus, useSteps, StepNumber, StepIcon, StepTitle, StepDescription, StepSeparator, Input, Text, Flex } from "@chakra-ui/react";
+import React, { useEffect, useRef, useState } from "react";
+import { Box, Button, Stepper, StepIndicator, Step, StepStatus, useSteps, StepNumber, StepIcon, StepTitle, StepDescription, StepSeparator, Input, Text, Flex, useDisclosure, Modal, ModalBody, ModalOverlay, ModalFooter, ModalHeader, ModalContent, ModalCloseButton } from "@chakra-ui/react";
 import { ArrowLeftOutlined } from "@ant-design/icons";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import PersonalInformation from "./PersonalInformation";
 import Education from './Education'
 import { Formik, Form } from "formik";
@@ -11,6 +11,9 @@ import Questions from "./Questions";
 import Summary from "./Summary";
 
 function MyApplicationStepper() {
+    const { isOpen, onOpen, onClose } = useDisclosure()
+    const finalRef = useRef(null)
+
     const steps = [
     { title: 'Step 1', description: 'Personal Info' },
     { title: 'Step 2', description: 'Education' },
@@ -25,6 +28,7 @@ function MyApplicationStepper() {
     })
 
     const state = useLocation();
+    const navigate = useNavigate();
     const applicantData = state.state.applicantData
     const jobData = state.state.jobData
 
@@ -201,15 +205,17 @@ function MyApplicationStepper() {
                     handleApplicationSubmit={handleApplicationSubmit}
                     />}
 
-                    {activeStep ===4 &&
+                    {activeStep === 4 &&
                     <Summary
                     applicantData={applicantData}
                     jobApplicationDetails={jobApplicationDetails}
                     jobData={jobData}
                     />}
-                    
+
                 </Box>
                 <Flex
+                bottom={0}
+                minW='1000px'
                 justify='center'
                 >
                     {activeStep === 0 ? '' :
@@ -222,15 +228,63 @@ function MyApplicationStepper() {
                     onClick={() => setActiveStep(activeStep-1 < 0 ? 0 : activeStep-1)}
                     mr='10'>Back</Button>
                     }
+                  
+                   
+                    <Box>
                     <Button
-                    bg='#0C3C55'
+                    display={activeStep === 4 ? '' : 'none'}
+                    colorScheme="green"
+                    bg='tcs.mongo'
+                    borderRadius='0px'
+                    size='md'
+                    variant='solid'
+                    onClick={onOpen}
+                    >Submit Application</Button> 
+
+                    <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
+                        <ModalOverlay />
+                        <ModalContent>
+                        <ModalBody 
+                        fontWeight='300'
+                        fontSize='15px'
+                        padding='40px 40px 0px 40px'
+                        >
+                            You are now about to submit your application.
+                            Make sure all the details you have inputted are as accurate as possible before confirming.
+                        </ModalBody>
+
+                        <ModalFooter>
+                            <Button
+                            bg='tcs.mongo'
+                            color='white'
+                            colorScheme='green'
+                            mr={3}
+                            onClick={() => {
+                                localStorage.setItem('currentStep', 'submittedInitialApplication')
+                                localStorage.removeItem('activeNavButton')
+                                localStorage.setItem('activeNavButton', 'My Application')
+                                navigate(`/applicant-home/${applicantData._id}`)
+                            }}
+                            >
+                            Confirm
+                            </Button>
+                        </ModalFooter>
+                        </ModalContent>
+                    </Modal>
+                    </Box>
+                    
+                    <Button
+                    display={activeStep === 4 ? 'none' : ''}
+                    type='submit'
+                    bg='tcs.main'
                     borderRadius='0px'
                     size='md'
                     variant='solid'
                     colorScheme="blue"
-                    onClick={() => setActiveStep(activeStep+1 > steps.length ? steps.length : activeStep+1)}
-                    type='submit'
+                    onClick={()=>setActiveStep(activeStep+1 > steps.length ? steps.length : activeStep+1)}
+                    
                     >Save and Continue</Button>
+                    
                 </Flex>
             </Box>
             </Form>

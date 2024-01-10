@@ -1,8 +1,10 @@
-import { BulbOutlined, FireOutlined, HeartOutlined, ThunderboltFilled, ThunderboltOutlined } from "@ant-design/icons";
-import { Accordion, AccordionItem, Box, Card, Flex, Grid, GridItem, Text, AccordionButton, AccordionIcon, AccordionPanel} from "@chakra-ui/react";
+import { BulbOutlined, CalendarOutlined, FireOutlined, HeartOutlined, ThunderboltFilled, ThunderboltOutlined } from "@ant-design/icons";
+import { Accordion, AccordionItem, Box, Card, Flex, Grid, GridItem, Text, AccordionButton, AccordionIcon, AccordionPanel, Button, Link} from "@chakra-ui/react";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 function Summary({applicantData, jobData, jobApplicationDetails}) {
+    const navigate = useNavigate();
     return(
         <>
         <Grid
@@ -57,8 +59,13 @@ function Summary({applicantData, jobData, jobApplicationDetails}) {
                     </Box>
                 </Flex>
                  <Text color='gray'>Resume Attachment</Text>
-                 <Text mb='4'>{applicantData.emailM}</Text>
-
+                 <Link href={jobApplicationDetails.resume} target='_blank'>
+                     <Button
+                    mb='4'
+                    variant='link'
+                    color='tcs.linky'
+                    >TCS-Resume-{applicantData.lastNameM}.pdf (click to view)</Button>
+                 </Link>
                  <Text color='gray'>Education</Text>
                 {jobApplicationDetails.education.length > 1 ?
                 <Accordion mb='4' allowMultiple bg='tcs.dirtywhite'>
@@ -71,8 +78,8 @@ function Summary({applicantData, jobData, jobApplicationDetails}) {
                             <AccordionIcon />
                         </AccordionButton>
                         </h2>
-                        {jobApplicationDetails.education.map(education => (
-                            <AccordionPanel pb={4}>
+                        {jobApplicationDetails.education.map((education, index) => (
+                            <AccordionPanel pb={4} key={index}>
                                 <Text fontSize='13px'>
                                 <BulbOutlined/> {education.university} - {education.degreeProgram}
                                 </Text>
@@ -97,8 +104,8 @@ function Summary({applicantData, jobData, jobApplicationDetails}) {
                             <AccordionIcon />
                         </AccordionButton>
                         </h2>
-                        {jobApplicationDetails.coachingExperience.map(coachingExperience => (
-                            <AccordionPanel pb={4}>
+                        {jobApplicationDetails.coachingExperience.map((coachingExperience, index) => (
+                            <AccordionPanel pb={4} key={index}>
                                 <Text fontSize='13px'>
                                 <FireOutlined/> {coachingExperience}
                                 </Text>
@@ -123,8 +130,8 @@ function Summary({applicantData, jobData, jobApplicationDetails}) {
                             <AccordionIcon />
                         </AccordionButton>
                         </h2>
-                        {jobApplicationDetails.areasOfExpertise.map(area => (
-                            <AccordionPanel pb={4}>
+                        {jobApplicationDetails.areasOfExpertise.map((area, index) => (
+                            <AccordionPanel pb={4} key={index}>
                                 <Text fontSize='13px'>
                                 <ThunderboltOutlined/> {area}
                                 </Text>
@@ -149,10 +156,10 @@ function Summary({applicantData, jobData, jobApplicationDetails}) {
                             <AccordionIcon />
                         </AccordionButton>
                         </h2>
-                        {jobApplicationDetails.availability.map(availability => (
-                            <AccordionPanel pb={4}>
+                        {jobApplicationDetails.availability.map((availability, index) => (
+                            <AccordionPanel pb={4} key={index}>
                                 <Text fontSize='13px'>
-                                <FireOutlined/> {availability}
+                                <CalendarOutlined/> {availability}
                                 </Text>
                             </AccordionPanel>
                         ))}

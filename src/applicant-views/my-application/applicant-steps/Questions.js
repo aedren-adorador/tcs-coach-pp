@@ -21,8 +21,6 @@ function Questions({applicantData, getFieldProps, setFieldValue, jobApplicationD
                 return prevCoachingExperience.filter(experience => experience !== e.target.value)
             }
         })
-       
-        
     }
 
     const handleClickedArea = (e) => {
@@ -50,7 +48,6 @@ function Questions({applicantData, getFieldProps, setFieldValue, jobApplicationD
     }
 
     useEffect(() => {
-        console.log("yep", jobApplicationDetails)
     }, [jobApplicationDetails])
 
     useEffect(() => {

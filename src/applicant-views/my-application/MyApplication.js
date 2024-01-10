@@ -1,10 +1,14 @@
 import { WarningIcon } from "@chakra-ui/icons";
 import { Td, Table, TableCaption, TableContainer, Tr, Th, Tbody, Thead, Button, Badge, Text, Image, Flex} from "@chakra-ui/react";
-import { Link } from "react-router-dom";
 import suitcase from '../../admin-views/admin-view-imgs/suitcase.png'
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 function MyApplication({applicantData, setObtainedActiveNavButton}) {
+    const [currentStepUpdate, setCurrentStepUpdate] = useState('')
+    
+    useEffect(() => {
+        setCurrentStepUpdate(localStorage.getItem('currentStep'))
+    }, [])
     return (
         <> 
             <TableContainer
@@ -76,7 +80,9 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                         —
                     </Td>
                     <Td>
-                        —
+                        {currentStepUpdate === 'submittedInitialApplication' &&
+                        <Badge bg='tcs.mongo' color='white' fontWeight='300' padding='2'>Application In Process</Badge>
+                        }
                     </Td>
                 </Tr>
                 }
@@ -121,8 +127,12 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                          {applicantData.applied === false && '—'}
                     </Td>
                     <Td>
-                        {applicantData.applied === false &&
-                        <Badge colorScheme="green" fontWeight='300' padding='2'>Apply to Job Portal</Badge>}
+                        {!currentStepUpdate &&<Badge colorScheme="green" fontWeight='300' padding='2'>Apply to Job Portal</Badge>}
+                        
+                        {currentStepUpdate === 'submittedInitialApplication' &&
+                        <Badge bg='tcs.dirtywhite' fontWeight='300' padding='2'>Wait for next steps</Badge>
+                        }
+        
                     </Td>
                 </Tr>
                 </Tbody>
