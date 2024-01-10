@@ -2,15 +2,15 @@ import { Input, InputGroup, Stack, Checkbox, InputRightAddon, Text } from "@chak
 import React, { useEffect, useState } from "react";
 
 
-function Questions({applicantData, getFieldProps}) {
+function Questions({applicantData, getFieldProps, setFieldValue, jobApplicationDetails}) {
     const coachingExperience = ['I have coached/tutored professionally', 'I have coached/tutored as an intern', 'I have coached/tutored friends or co-students', 'I have no tutoring experience']
     const areasOfExpertise = ['MERN/MEAN Stack Development','Financial Literacy (Accounting)', 'Data Science (SQL, Python, Excel)', 'Python Programming', 'Machine Learning/Artificial Intelligence', 'Calculus', 'Robotics', 'Cybersecurity']
 
     const availability = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
-    const [checkedCoachingExperience, setCheckedCoachingExperience] = useState([]);
-    const [checkedAreasOfExpertise, setCheckedAreasOfExpertise] = useState([]);
-    const [checkedAvailabilities, setCheckedAvailabilities] = useState([]);
+    const [checkedCoachingExperience, setCheckedCoachingExperience] = useState(jobApplicationDetails.coachingExperience || []);
+    const [checkedAreasOfExpertise, setCheckedAreasOfExpertise] = useState(jobApplicationDetails.areasOfExpertise || []);
+    const [checkedAvailabilities, setCheckedAvailabilities] = useState(jobApplicationDetails.availability || []);
 
     const handleClickedCoachingExperience =(e) => {
         setCheckedCoachingExperience(prevCoachingExperience => {
@@ -21,6 +21,8 @@ function Questions({applicantData, getFieldProps}) {
                 return prevCoachingExperience.filter(experience => experience !== e.target.value)
             }
         })
+       
+        
     }
 
     const handleClickedArea = (e) => {
@@ -32,6 +34,7 @@ function Questions({applicantData, getFieldProps}) {
                 return prevAreasOfExpertise.filter(area => area !== e.target.value)
             }
         })
+        
     }
 
     const handleClickedAvailability = (e) => {
@@ -43,7 +46,18 @@ function Questions({applicantData, getFieldProps}) {
                 return prevAvailabilities.filter(availability => availability !== e.target.value)
             }
         })
+        
     }
+
+    useEffect(() => {
+        console.log("yep", jobApplicationDetails)
+    }, [jobApplicationDetails])
+
+    useEffect(() => {
+        setFieldValue('coachingExperience', checkedCoachingExperience)
+        setFieldValue('areasOfExpertise', checkedAreasOfExpertise)
+        setFieldValue('availability', checkedAvailabilities)
+    },[checkedAreasOfExpertise, checkedAvailabilities, checkedCoachingExperience, setFieldValue])
 
     return(
         <>
@@ -57,6 +71,7 @@ function Questions({applicantData, getFieldProps}) {
         >
             {coachingExperience.map((coachingExperience, index) => {
             return <Checkbox
+            defaultChecked={checkedCoachingExperience.includes(coachingExperience) ? true : false}
             colorScheme='facebook'
             onChange={handleClickedCoachingExperience}
             key={index}
@@ -77,6 +92,8 @@ function Questions({applicantData, getFieldProps}) {
         >
             {areasOfExpertise.map((area, index) => {
                 return <Checkbox
+                defaultChecked={checkedAreasOfExpertise.includes(area) ? true : false}
+                checked
                 key={index}
                 colorScheme='facebook'
                 value={area}
@@ -87,7 +104,7 @@ function Questions({applicantData, getFieldProps}) {
             })}
         </Stack>
 
-         <Text color='gray'>Availability (Philippine Standard Time)</Text>
+         <Text color='gray'>Teaching Schedule Availability (Philippine Standard Time)</Text>
         <Stack
         mt='1'
         ml='5'
@@ -98,6 +115,7 @@ function Questions({applicantData, getFieldProps}) {
         >
             {availability.map((availability, index) => {
                 return <Checkbox
+                defaultChecked={checkedAvailabilities.includes(availability) ? true : false}
                 key={index}
                 colorScheme='facebook'
                 value={availability}
@@ -108,9 +126,6 @@ function Questions({applicantData, getFieldProps}) {
             })}
         </Stack>
 
-        
-
-        <Text color='gray'>Schedule Availability</Text>
         <Text color='gray'>Internet Speed</Text>
         <InputGroup>
             <Input
@@ -123,9 +138,9 @@ function Questions({applicantData, getFieldProps}) {
             >
             </Input>
             <InputRightAddon
+            border='solid tcs.main'
             size='sm'
             height='35px'
-            border='solid 0.2px'
             bg='#0C3C55'   
             color='white'         
             >MBPS</InputRightAddon>

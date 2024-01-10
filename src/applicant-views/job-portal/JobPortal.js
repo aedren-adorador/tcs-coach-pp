@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Text, InputGroup, Input, Modal, ModalOverlay, FormControl, ModalContent, ModalBody, ModalCloseButton, ModalHeader, FormLabel, ModalFooter, Flex, Button, Select, Grid, GridItem, Box, Image} from "@chakra-ui/react";
+import { Text, InputGroup, Input, Modal, ModalOverlay, FormControl, ModalContent, ModalBody, ModalCloseButton, ModalHeader, FormLabel, ModalFooter, Flex, Button, Select, Grid, GridItem, Box, Image, Skeleton} from "@chakra-ui/react";
 import { Search2Icon } from "@chakra-ui/icons";
 import { AppstoreOutlined, ClockCircleOutlined, DeleteOutlined, FileOutlined, HomeOutlined } from "@ant-design/icons";
 import tcsDarkLogo  from '../../tcs-dark-logo.png'
@@ -12,6 +12,7 @@ function JobPortal({isAdmin, applicantData}) {
     const jobFilters = ['Categories', 'Posting Dates', 'Job Types', 'More'];
     const [jobsList, setJobsList] = useState([]);
     const [clickedJob, setClickedJob] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     const clickJob = (index) => {
         setClickedJob(index)
@@ -36,9 +37,12 @@ function JobPortal({isAdmin, applicantData}) {
 
     const fetchJobsList = () => {
         axios.get('http://localhost:3001/api/fetch-jobs-list')
-            .then(response => (
+            .then(response => {
                 setJobsList(response.data.jobs)
-            ))
+                
+                    setIsLoading(false)
+            })
+           
     }
 
     useEffect(() => {
@@ -61,7 +65,7 @@ function JobPortal({isAdmin, applicantData}) {
         backgroundColor={isAdmin ? 'white' : '#f2f2f2'}
         >
         <InputGroup
-        maxW='750px'
+        maxW='650px'
         margin='10px 0px 0px 20px'
         >  
             <Input
@@ -123,6 +127,7 @@ function JobPortal({isAdmin, applicantData}) {
         templateColumns='repeat(3, 1fr)'
         gap={10}
         >
+            <Skeleton isLoaded={!isLoading}>
             <GridItem
             border={isAdmin ? 'solid 0.2px' : ''}
             colSpan={2}
@@ -133,6 +138,7 @@ function JobPortal({isAdmin, applicantData}) {
             >
 
                 {jobsList.map((job, index) => (
+                    
                     <Box
                     key={index}
                     padding='20px'
@@ -161,9 +167,11 @@ function JobPortal({isAdmin, applicantData}) {
                             }
                         </Text>
                     </Box>
+                    
                 ))}
                 
             </GridItem>
+            </Skeleton>
 
             <GridItem
             border={isAdmin ? 'solid 0.2px' : ''}

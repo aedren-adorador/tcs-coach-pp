@@ -172,7 +172,7 @@ function MyApplicationStepper() {
                     {activeStep === 0 && <PersonalInformation applicantData={applicantData} getFieldProps={formikProps.getFieldProps} jobApplicationDetails={jobApplicationDetails}/>}
                     {activeStep === 1 && <Education setFieldValue={formikProps.setFieldValue} setJobApplicationDetails={setJobApplicationDetails}  jobApplicationDetails={jobApplicationDetails}/>}
                     {activeStep === 2 && <WorkExperience applicantData={applicantData} getFieldProps={formikProps.getFieldProps} jobData={jobData} jobApplicationDetails={jobApplicationDetails}/>}
-                    {activeStep === 3 && <Questions applicantData={applicantData} getFieldProps={formikProps.getFieldProps} jobApplicationDetails={jobApplicationDetails}/>}
+                    {activeStep === 3 && <Questions applicantData={applicantData} getFieldProps={formikProps.getFieldProps} jobApplicationDetails={jobApplicationDetails} setFieldValue={formikProps.setFieldValue} handleApplicationSubmit={handleApplicationSubmit}/>}
                 </Box>
                 <Flex
                 justify='center'
