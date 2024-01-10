@@ -14,6 +14,7 @@ function NavApplicant({persistentButton, getActiveNavButton}) {
     const navClickedButtonSVGs = [
         <IdcardFilled style={iconSize}/>, <FolderFilled style={iconSize}/>, <QuestionCircleFilled style={iconSize}/>
     ]
+    
     const [clickedNavButton, setClickedNavButton] = useState(persistentButton || 'Job Portal')
     
     const handleNavButtonClick = (index) => {

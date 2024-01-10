@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Box, Button, Stepper, StepIndicator, Step, StepStatus, useSteps, StepNumber, StepIcon, StepTitle, StepDescription, StepSeparator, Input, Text, Flex } from "@chakra-ui/react";
 import { ArrowLeftOutlined } from "@ant-design/icons";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import PersonalInformation from "./PersonalInformation";
 import Education from './Education'
 import { Formik, Form } from "formik";
@@ -10,7 +10,19 @@ import WorkExperience from "./WorkExperience";
 import Questions from "./Questions";
 
 function MyApplicationStepper() {
-    const navigate = useNavigate();
+    const steps = [
+    { title: 'Step 1', description: 'Personal Info' },
+    { title: 'Step 2', description: 'Education' },
+    { title: 'Step 3', description: 'Work Experience' },
+    { title: 'Step 4', description: 'Questions' },
+    { title: 'Step 5', description: 'Summary' },
+    ]
+
+    const { activeStep, setActiveStep } = useSteps({
+    index: 0,
+    count: steps.length,
+    })
+
     const state = useLocation();
     const applicantData = state.state.applicantData
     const jobData = state.state.jobData
@@ -24,14 +36,13 @@ function MyApplicationStepper() {
         linkedIn: '',
         f2f: '',
         address: '',
-        coachingExperience: '',
-        areasOfExpertise: '',
+        coachingExperience: [],
+        areasOfExpertise: [],
         sourceOfInfo: '',
         availability: [],
         internetSpeed: '',
         referredBy: '',
         positionAppliedTo: jobData.jobTitleM,
-
         currentStep: '',
         dateSubmittedApplication: '',
         dateSubmittedInterview: '',
@@ -40,23 +51,6 @@ function MyApplicationStepper() {
         finalVerdict: '',
     })
     
-    const steps = [
-    { title: 'Step 1', description: 'Personal Info' },
-    { title: 'Step 2', description: 'Education' },
-    { title: 'Step 3', description: 'Work Experience' },
-    { title: 'Step 4', description: 'Questions' },
-    { title: 'Step 5', description: 'Summary' },
-    ]
-
-    const { activeStep, setActiveStep } = useSteps({
-    index: 0,
-    count: steps.length,
-    })
-    
-    const previousPage = () => {
-        navigate(-1);
-    }
-
     const handleApplicationSubmit = (applicationDetails) => {
         axios.post('http://localhost:3001/api/save-job-application-progress', applicationDetails)
             .then(() => console.log('DONE saving!'))
@@ -78,32 +72,44 @@ function MyApplicationStepper() {
             })
     }, [applicantData, jobData])
 
+    useEffect(() => {
+        const verifyDetails = { applicantData, jobData }
+        axios.get(`http://localhost:3001/api/verify-application-if-continue-or-new/${encodeURIComponent(JSON.stringify(verifyDetails))}`)
+             .then(result => {
+                const modifiedJobApplicationDetails = {};
+                    Object.keys(result.data.jobApplicationSavedDetails).forEach((key) => {
+                    const newKey = key.endsWith('M') ? key.slice(0, -1) : key;
+                    modifiedJobApplicationDetails[newKey] = result.data.jobApplicationSavedDetails[key];
+                    });
+                setJobApplicationDetails(modifiedJobApplicationDetails)
+            })
+    }, [])
+
     return (
         <> 
             <Formik
             initialValues={{
-                applicantIDForeignKey: jobApplicationDetails.applicantIDForeignKey,
-                jobIDForeignKey: jobApplicationDetails.jobIDForeignKey,
-                contactNumber: jobApplicationDetails.contactNumber,
-                birthday: jobApplicationDetails.birthday ? jobApplicationDetails.birthday.slice(0, 10) : jobApplicationDetails.birthday,
-                education: jobApplicationDetails.education,
-                resume: jobApplicationDetails.resume,
-                linkedIn: jobApplicationDetails.linkedIn,
-                f2f: jobApplicationDetails.f2f,
-                address: jobApplicationDetails.address,
-                coachingExperience: jobApplicationDetails.coachingExperience,
-                areasOfExpertise: jobApplicationDetails.areasOfExpertise,
-                sourceOfInfo: jobApplicationDetails.sourceOfInfo,
-                availability: jobApplicationDetails.availability,
-                internetSpeed: jobApplicationDetails.internetSpeed,
-                referredBy: jobApplicationDetails.referredBy,
-                positionAppliedTo: jobApplicationDetails.positionAppliedTo,
-
-                currentStep: jobApplicationDetails.currentStep,
-                dateSubmittedApplication: jobApplicationDetails.dateSubmittedApplication,
-                dateSubmittedInterview: jobApplicationDetails.dateSubmittedInterview,
-                dateSubmittedTeachingDemo: jobApplicationDetails.dateSubmittedTeachingDemo,
-                dateSubmittedOnboardingRequirements: jobApplicationDetails.dateSubmittedOnboardingRequirements,
+                applicantIDForeignKey: jobApplicationDetails.applicantIDForeignKey || '',
+                jobIDForeignKey: jobApplicationDetails.jobIDForeignKey || '',
+                contactNumber: jobApplicationDetails.contactNumber || '',
+                birthday: jobApplicationDetails.birthday ? jobApplicationDetails.birthday.slice(0, 10) : '',
+                education: jobApplicationDetails.education || [],
+                resume: jobApplicationDetails.resume || '',
+                linkedIn: jobApplicationDetails.linkedIn || '',
+                f2f: jobApplicationDetails.f2f || '',
+                address: jobApplicationDetails.address || '',
+                coachingExperience: jobApplicationDetails.coachingExperience || [],
+                areasOfExpertise: jobApplicationDetails.areasOfExpertise || [],
+                sourceOfInfo: jobApplicationDetails.sourceOfInfo || '',
+                availability: jobApplicationDetails.availability || [],
+                internetSpeed: jobApplicationDetails.internetSpeed || '',
+                referredBy: jobApplicationDetails.referredBy || '',
+                positionAppliedTo: jobApplicationDetails.positionAppliedTo || '',
+                currentStep: jobApplicationDetails.currentStep || '',
+                dateSubmittedApplication: jobApplicationDetails.dateSubmittedApplication|| '' ,
+                dateSubmittedInterview: jobApplicationDetails.dateSubmittedInterview || '',
+                dateSubmittedTeachingDemo: jobApplicationDetails.dateSubmittedTeachingDemo || '',
+                dateSubmittedOnboardingRequirements: jobApplicationDetails.dateSubmittedOnboardingRequirements || '',
                 finalVerdict: jobApplicationDetails.finalVerdict
             }}
             onSubmit={handleApplicationSubmit}
@@ -113,17 +119,18 @@ function MyApplicationStepper() {
                 
             <Form>
             <Box margin='5% 15% 5% 15%'>
+                <Link to={`/applicant-home/${applicantData._id}`}>
                 <Button
                 mb='3'
                 size='sm'
                 variant='link'
                 colorScheme="blackAlpha"
                 fontWeight='500'
-                onClick={previousPage}
                 >
                     <ArrowLeftOutlined /> 
                     &nbsp;Back to Job Portal
                 </Button>
+                </Link>
                 <Flex
                 textAlign='center'
                 fontWeight='1000'

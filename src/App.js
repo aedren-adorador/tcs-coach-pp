@@ -30,6 +30,7 @@ function App() {
   colors: {
     tcs: {
       main: "#0C3C55",
+      dirtywhite: '#F2F2F2'
     },
   },
 })
@@ -41,6 +42,7 @@ function App() {
           <Route path="/register-email" element={<RegisterApplicantEmail/>}/>
           <Route path="/create-applicant-account" element={<CreateApplicantAccount/>}/>
           <Route path="/create-admin-account" element={<CreateAdminAccount/>}/>
+          
           <Route
           path='/applicant-home/:id'
           element={
@@ -69,6 +71,8 @@ function App() {
             />
           }
           />
+
+          
         </Routes>
       </BrowserRouter>
     </ChakraProvider>

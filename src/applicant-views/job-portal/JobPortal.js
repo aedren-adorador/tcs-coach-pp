@@ -14,7 +14,6 @@ function JobPortal({isAdmin, applicantData}) {
     ]
 
     const [jobsList, setJobsList] = useState([]);
-
     const [clickedJob, setClickedJob] = useState(null);
 
     const clickJob = (index) => {
@@ -23,7 +22,6 @@ function JobPortal({isAdmin, applicantData}) {
 
     const fetchJobsList = async () => {
         const response = await axios.get('http://localhost:3001/api/fetch-jobs-list')
-        // console.log(response.data.jobs)
         setJobsList(response.data.jobs)
     }
 
@@ -49,11 +47,14 @@ function JobPortal({isAdmin, applicantData}) {
     }, [])
 
     useEffect(() => {
-        // console.log(jobsList)
     }, [jobsList])
 
     useEffect(() => {
     }, [clickedJob])
+
+    useEffect(() => { 
+        fetchJobsList()
+    }, [])
 
     return(
         <>
@@ -76,7 +77,7 @@ function JobPortal({isAdmin, applicantData}) {
             />
            
                 <Button
-                backgroundColor='#0C3C55'
+                backgroundColor='tcs.main'
                 height='50px'
                 width='120px'
                 borderLeftRadius='0px'

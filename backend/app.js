@@ -256,7 +256,7 @@ app.post('/api/save-job-application-progress', (req, res, next) => {
           areasOfExpertiseM: req.body.areasOfExpertise,
           sourceOfInfoM: req.body.sourceOfInfo,
           availabilityM: req.body.availability,
-          internetSpeedM: req.body.internetSpeedM,
+          internetSpeedM: req.body.internetSpeed,
           referredByM: req.body.referredBy,
           positionAppliedToM: req.body.positionAppliedTo,
 

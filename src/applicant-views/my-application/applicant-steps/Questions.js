@@ -111,8 +111,6 @@ function Questions({applicantData, getFieldProps}) {
         
 
         <Text color='gray'>Schedule Availability</Text>
-        <Text mb='4'>{applicantData.lastNameM}</Text>
-
         <Text color='gray'>Internet Speed</Text>
         <InputGroup>
             <Input
@@ -121,7 +119,6 @@ function Questions({applicantData, getFieldProps}) {
             border='solid 0.2px black'
             width='180px'
             height='35px'
-            type='number'
             mb='4'
             >
             </Input>

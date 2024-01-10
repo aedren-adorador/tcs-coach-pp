@@ -1,8 +1,8 @@
-import { CiCircleOutlined } from "@ant-design/icons";
 import { WarningIcon } from "@chakra-ui/icons";
 import { Td, Table, TableCaption, TableContainer, Tr, Th, Tbody, Thead, Button, Badge, Text, Image, Flex} from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import suitcase from '../../admin-views/admin-view-imgs/suitcase.png'
+import { useEffect } from "react";
 
 function MyApplication({applicantData, setObtainedActiveNavButton}) {
     return (

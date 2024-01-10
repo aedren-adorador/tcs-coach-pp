@@ -36,7 +36,7 @@ function Login({onLoginSuccess}) {
                         navigate(`/applicant-home/${loggedInUserID}`)
                     }
                 } else {
-                    setIsLoading(false)
+                    setIsLoading(false) 
                     setIsInvalidCredentials(true);
                 }
             })

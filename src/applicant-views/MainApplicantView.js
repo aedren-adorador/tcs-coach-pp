@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { Box, Button, Grid, GridItem } from "@chakra-ui/react";
+import { Box, Button, Grid, GridItem, VStack } from "@chakra-ui/react";
 import { jwtDecode } from "jwt-decode";
 import NavApplicant from "../nav/applicant/NavApplicant";
 import JobPortal from "./job-portal/JobPortal";
@@ -55,7 +55,7 @@ function MainApplicantView() {
     }, [obtainedActiveNavButton])
 
     return(
-        <>  
+        <>
        <Grid
             templateAreas={`"nav header"
                             "nav main"
