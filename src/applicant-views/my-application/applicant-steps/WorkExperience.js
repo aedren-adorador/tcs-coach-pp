@@ -2,7 +2,7 @@ import { Button, Input, Text, Link, Flex } from "@chakra-ui/react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
-function WorkExperience({applicantData, getFieldProps, jobData}) {
+function WorkExperience({applicantData, getFieldProps, jobData, jobApplicationDetails}) {
 
     const handleResumeUpload = (e) => {
         const uploadedResume = e.target.files[0]
@@ -28,6 +28,7 @@ function WorkExperience({applicantData, getFieldProps, jobData}) {
     }, [resumeLink])
 
     useEffect(() => {
+        // console.log('WORK EXP PORTION: ', jobApplicationDetails)
         const details = {applicantID: applicantData._id, jobID: jobData._id}
         axios.get(`http://localhost:3001/api/get-job-application-resume/${encodeURIComponent(JSON.stringify(details))}`)
             .then(result => {

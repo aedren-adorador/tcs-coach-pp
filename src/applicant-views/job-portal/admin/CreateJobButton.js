@@ -11,10 +11,7 @@ function CreateJobButton({fetchJobsList}) {
       axios.post('http://localhost:3001/api/create-job', job)
         .then(() => {
           fetchJobsList()
-            .then(() => {
-              console.log('added!')
-              onClose()
-            })
+          onClose()
         })
     }
 

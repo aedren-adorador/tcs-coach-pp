@@ -22,8 +22,8 @@ function App() {
   }
 
   useEffect(() => {
-    console.log('localstorage:', localStorage.getItem('isAuthenticated'))
-    console.log(isAuthenticated)
+    // console.log('localstorage:', localStorage.getItem('isAuthenticated'))
+    // console.log(isAuthenticated)
   }, [isAuthenticated])
 
   const theme = extendTheme({

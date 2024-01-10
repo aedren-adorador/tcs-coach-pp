@@ -7,22 +7,14 @@ import CreateJobButton from "./admin/CreateJobButton";
 import axios from "axios";
 import EditDetailsButton from "./admin/EditDetailsButton";
 import { Link } from "react-router-dom";
+
 function JobPortal({isAdmin, applicantData}) {
-
-    const jobFilters = [
-        'Categories', 'Posting Dates', 'Job Types', 'More'
-    ]
-
+    const jobFilters = ['Categories', 'Posting Dates', 'Job Types', 'More'];
     const [jobsList, setJobsList] = useState([]);
     const [clickedJob, setClickedJob] = useState(null);
 
     const clickJob = (index) => {
         setClickedJob(index)
-    }
-
-    const fetchJobsList = async () => {
-        const response = await axios.get('http://localhost:3001/api/fetch-jobs-list')
-        setJobsList(response.data.jobs)
     }
 
     const deleteJob = (jobID) => {
@@ -42,6 +34,13 @@ function JobPortal({isAdmin, applicantData}) {
         }
     }
 
+    const fetchJobsList = () => {
+        axios.get('http://localhost:3001/api/fetch-jobs-list')
+            .then(response => (
+                setJobsList(response.data.jobs)
+            ))
+    }
+
     useEffect(() => {
         fetchJobsList()
     }, [])
@@ -52,9 +51,8 @@ function JobPortal({isAdmin, applicantData}) {
     useEffect(() => {
     }, [clickedJob])
 
-    useEffect(() => { 
-        fetchJobsList()
-    }, [])
+    useEffect(() => {
+    }, [applicantData])
 
     return(
         <>

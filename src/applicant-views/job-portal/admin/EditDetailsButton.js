@@ -18,8 +18,10 @@ function EditDetailsButton({id, fetchJobsList}) {
     const updateJobDetails = (job) => {
         axios.put('http://localhost:3001/api/update-job', job)
             .then(() => {
-                fetchJobsList()
-                    .then(() => onClose())
+              fetchJobsList()
+              onClose()
+                // fetchJobsList()
+                    // .then(() => onClose())
             })
     }
 

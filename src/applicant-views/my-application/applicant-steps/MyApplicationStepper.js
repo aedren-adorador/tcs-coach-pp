@@ -53,7 +53,14 @@ function MyApplicationStepper() {
     
     const handleApplicationSubmit = (applicationDetails) => {
         axios.post('http://localhost:3001/api/save-job-application-progress', applicationDetails)
-            .then(() => console.log('DONE saving!'))
+            .then(result => {
+                const modifiedJobApplicationDetails = {};
+                    Object.keys(result.data.updatedJobApplication).forEach((key) => {
+                    const newKey = key.endsWith('M') ? key.slice(0, -1) : key;
+                    modifiedJobApplicationDetails[newKey] = result.data.updatedJobApplication[key];
+                    });
+                setJobApplicationDetails(modifiedJobApplicationDetails)
+            })
     }
 
     useEffect(() => {   
@@ -164,7 +171,7 @@ function MyApplicationStepper() {
                 <Box margin='10px 0px 10px 0px'>
                     {activeStep === 0 && <PersonalInformation applicantData={applicantData} getFieldProps={formikProps.getFieldProps} jobApplicationDetails={jobApplicationDetails}/>}
                     {activeStep === 1 && <Education setFieldValue={formikProps.setFieldValue} setJobApplicationDetails={setJobApplicationDetails}  jobApplicationDetails={jobApplicationDetails}/>}
-                    {activeStep === 2 && <WorkExperience applicantData={applicantData} getFieldProps={formikProps.getFieldProps} jobData={jobData}/>}
+                    {activeStep === 2 && <WorkExperience applicantData={applicantData} getFieldProps={formikProps.getFieldProps} jobData={jobData} jobApplicationDetails={jobApplicationDetails}/>}
                     {activeStep === 3 && <Questions applicantData={applicantData} getFieldProps={formikProps.getFieldProps} jobApplicationDetails={jobApplicationDetails}/>}
                 </Box>
                 <Flex
