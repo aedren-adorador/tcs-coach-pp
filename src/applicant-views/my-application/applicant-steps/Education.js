@@ -11,8 +11,6 @@ function Education({jobApplicationDetails, setFieldValue, setJobApplicationDetai
     }
 
     useEffect(() => {
-        console.log("TRIGGEREDDD", educationGroup)
-        console.log('FROM PARENT', jobApplicationDetails)
         setFieldValue('education', educationGroup)
         setJobApplicationDetails(prevState => ({
             ...prevState,
