@@ -8,6 +8,7 @@ import { Formik, Form } from "formik";
 import axios from "axios";
 import WorkExperience from "./WorkExperience";
 import Questions from "./Questions";
+import Summary from "./Summary";
 
 function MyApplicationStepper() {
     const steps = [
@@ -169,10 +170,44 @@ function MyApplicationStepper() {
                 ))}
                 </Stepper>
                 <Box margin='10px 0px 10px 0px'>
-                    {activeStep === 0 && <PersonalInformation applicantData={applicantData} getFieldProps={formikProps.getFieldProps} jobApplicationDetails={jobApplicationDetails}/>}
-                    {activeStep === 1 && <Education setFieldValue={formikProps.setFieldValue} setJobApplicationDetails={setJobApplicationDetails}  jobApplicationDetails={jobApplicationDetails}/>}
-                    {activeStep === 2 && <WorkExperience applicantData={applicantData} getFieldProps={formikProps.getFieldProps} jobData={jobData} jobApplicationDetails={jobApplicationDetails}/>}
-                    {activeStep === 3 && <Questions applicantData={applicantData} getFieldProps={formikProps.getFieldProps} jobApplicationDetails={jobApplicationDetails} setFieldValue={formikProps.setFieldValue} handleApplicationSubmit={handleApplicationSubmit}/>}
+                    {activeStep === 0 &&
+                    <PersonalInformation
+                    applicantData={applicantData}
+                    getFieldProps={formikProps.getFieldProps}
+                    jobApplicationDetails={jobApplicationDetails}
+                    />}
+
+                    {activeStep === 1 &&
+                    <Education
+                    setFieldValue={formikProps.setFieldValue}
+                    setJobApplicationDetails={setJobApplicationDetails}
+                    jobApplicationDetails={jobApplicationDetails}
+                    />}
+
+                    {activeStep === 2 &&
+                    <WorkExperience
+                    applicantData={applicantData}
+                    getFieldProps={formikProps.getFieldProps}
+                    jobData={jobData}
+                    jobApplicationDetails={jobApplicationDetails}
+                    />}
+
+                    {activeStep === 3 &&
+                    <Questions
+                    applicantData={applicantData}
+                    getFieldProps={formikProps.getFieldProps}
+                    jobApplicationDetails={jobApplicationDetails}
+                    setFieldValue={formikProps.setFieldValue}
+                    handleApplicationSubmit={handleApplicationSubmit}
+                    />}
+
+                    {activeStep ===4 &&
+                    <Summary
+                    applicantData={applicantData}
+                    jobApplicationDetails={jobApplicationDetails}
+                    jobData={jobData}
+                    />}
+                    
                 </Box>
                 <Flex
                 justify='center'

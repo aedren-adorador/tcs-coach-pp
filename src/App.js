@@ -30,7 +30,8 @@ function App() {
   colors: {
     tcs: {
       main: "#0C3C55",
-      dirtywhite: '#F2F2F2'
+      dirtywhite: '#F2F2F2',
+      linky: '#0073DC'
     },
   },
 })
