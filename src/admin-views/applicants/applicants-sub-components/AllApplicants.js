@@ -1,17 +1,26 @@
-import React, { useEffect } from "react";
-import { TableContainer, Table, Thead, Tr, Th, Td, Flex, Tbody, Input, InputLeftElement, InputGroup, Text, HStack, Menu, MenuButton, Button, MenuList, MenuItem} from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
+import { TableContainer, Table, Thead, Tr, Th, Td, Flex, Tbody, Input, InputLeftElement, InputGroup, Text, HStack, Menu, MenuButton, Button, MenuList, MenuItem, Badge} from "@chakra-ui/react";
 import { Search2Icon, ChevronDownIcon } from "@chakra-ui/icons";
 import axios from "axios";
 
 
 function AllApplicants({applicants, updateChosenApplicantToReview, handleButtonClick}) {
-    const allApplicantsTableHeaders = [
-        'Applicant ID', 'Date Submitted', 'Name', 'Position Applied', 'Application Status', 'Offer Status'
-    ]
+    const allApplicantsTableHeaders = ['Applicant ID', 'Date Submitted', 'Name', 'Position Applied', 'Application Status', 'Offer Status']
+    const [allJobApplications, setAllJobApplications] = useState([]);
 
     const goToApplicantProgress = (id) => {
       updateChosenApplicantToReview(id);
     }
+
+    useEffect(() => {
+        axios.get('http://localhost:3001/api/get-job-applications-joined-with-applicants')
+            .then(result => {
+                setAllJobApplications(result.data.joinedApplicantAndJobApplicationDetails)
+            })
+    }, [])
+
+    useEffect(() => {
+    }, [allJobApplications])
     return(
         <>
         <HStack
@@ -65,12 +74,12 @@ function AllApplicants({applicants, updateChosenApplicantToReview, handleButtonC
         <TableContainer
         border='solid 0.5px lightgray'
         borderRadius='20px'
-        padding='30px 80px'
+        padding='30px 10px'
         >
             <Table
             variant='simple'
             backgroundColor='white'
-            fontSize='12px'
+            fontSize='10px'
             >
                 <Thead>
                 <Tr key='tbl-hdrs'>
@@ -80,26 +89,38 @@ function AllApplicants({applicants, updateChosenApplicantToReview, handleButtonC
                 </Tr>
                 </Thead>
                 <Tbody>
-                {applicants.map((applicant, index) => {
+                {allJobApplications.map((jobApp, index) => {
                     return <Tr
-                    onClick={()=>goToApplicantProgress(applicant._id)}
+                    key={index}
+                    onClick={()=>goToApplicantProgress(jobApp.applicantJoinedDetails[0]._id)}
                     _hover={{
-                        backgroundColor: "#f2f1f1",
-                        color: 'teal'
+                        backgroundColor: "tcs.bluey",
+                        color: 'tcs.main'
                     }}
                     >
                         <Td>
                             <Flex
                             align='center'
                             >
-                                {applicant.firstNameM} {applicant.lastNameM}
+                                TCS-{jobApp._id}
                             </Flex>
                         </Td>
-                        <Td textAlign='center'>3</Td>
-                        <Td textAlign='center'>123</Td>
-                        <Td textAlign='center'>40</Td>
-                        <Td textAlign='center'>33</Td>
-                        <Td textAlign='center'>7</Td>
+                        <Td textAlign='center'>{new Date(jobApp.dateSubmittedApplicationM).toLocaleDateString()}</Td>
+                       
+                        <Td textAlign='center'> {jobApp.applicantJoinedDetails[0].firstNameM} {jobApp.applicantJoinedDetails[0].lastNameM}</Td>
+                        <Td textAlign='center'>{jobApp.positionAppliedToM}</Td>
+                        <Td textAlign='center'>
+                            {jobApp.currentStepM === 'submittedInitialApplication' &&
+                            <Badge
+                            bg='tcs.dirtywhite'
+                            padding='5px'
+                            border='solid 0.2px'
+                            fontSize='8px'
+                            >Submitted Resume Application (to review)</Badge>}
+                        </Td>
+                        <Td textAlign='center'>
+                            {jobApp.currentStepM === 'submittedInitialApplication' && 'NA'}
+                        </Td>
                     </Tr>
                 })}
     

@@ -1,14 +1,25 @@
 import { WarningIcon } from "@chakra-ui/icons";
-import { Td, Table, TableCaption, TableContainer, Tr, Th, Tbody, Thead, Button, Badge, Text, Image, Flex} from "@chakra-ui/react";
+import { Td, Table, TableCaption, TableContainer, Tr, Th, Tbody, Thead, Button, Badge, Text, Image, Flex, Skeleton} from "@chakra-ui/react";
 import suitcase from '../../admin-views/admin-view-imgs/suitcase.png'
 import { useEffect, useState } from "react";
+import axios from "axios";
 
 function MyApplication({applicantData, setObtainedActiveNavButton}) {
-    const [currentStepUpdate, setCurrentStepUpdate] = useState('')
-    
+    const [submittedJobApplicationDetails, setSubmittedJobApplicatioDetails] = useState({});
+    const [isLoading, setIsLoading] = useState(true);
+
     useEffect(() => {
-        setCurrentStepUpdate(localStorage.getItem('currentStep'))
-    }, [])
+        if (applicantData.jobApplicationsM && applicantData.jobApplicationsM.length !== 0) {
+            axios.get(`http://localhost:3001/api/get-job-application/${applicantData.jobApplicationsM}`)
+                .then(response => {
+                    setSubmittedJobApplicatioDetails(response.data.submittedApplicationDetails)
+                    setIsLoading(false);
+                })
+        }     
+    }, [applicantData])
+
+    useEffect(() => {
+    }, [submittedJobApplicationDetails])
     return (
         <> 
             <TableContainer
@@ -19,7 +30,7 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
             fontSize='sm'
             fontWeight='300'
             mb='20px'
-            >Hello, {applicantData.firstNameM}.</Text>
+            >Hello, {applicantData.firstNameM} {applicantData.lastNameM}.</Text>
             <Text
             fontWeight='1000'
             >My Application</Text>
@@ -38,8 +49,10 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                 </Tr>
                 </Thead>
                 <Tbody>
-                {applicantData.applied !== false ?
+                {applicantData.jobApplicationsM && applicantData.jobApplicationsM.length !==0 ?
+               
                 <Tr>
+                     
                     <Td textAlign='center'>
                         <Flex
                         justify='center'
@@ -52,14 +65,40 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                             ></Image>
                         </Flex>
                     </Td>
-                    <Td>{applicantData.positionAppliedToM}</Td>
+                    
                     <Td>
-                        {applicantData.dateSubmittedApplicationM}
+                        <Skeleton
+                        height='50px'
+                        isLoaded={!isLoading}
+                        >{submittedJobApplicationDetails.positionAppliedToM}</Skeleton>
+                    </Td>
+                   
+                    <Td>
+                        <Skeleton
+                        isLoaded={!isLoading}
+                        height='50px'
+                        >
+                        {new Date(submittedJobApplicationDetails.dateSubmittedApplicationM).toDateString()}
+                        </Skeleton>
                     </Td>
                     <Td>
-                        Under Review
-                    </Td>
-                </Tr> :
+                        <Skeleton
+                        height='50px'
+                        isLoaded={!isLoading}
+                        >
+                        {submittedJobApplicationDetails.currentStepM === 'submittedInitialApplication' &&
+                        <Badge
+                        bg='tcs.mongo'
+                        color='white'
+                        fontWeight='300'
+                        padding='5px'
+                        >Active: Application Received</Badge>}
+                        </Skeleton>
+                    </Td>   
+                </Tr>
+                
+                
+                :
                 <Tr>
                     <Td textAlign='center'>
                         <Flex
@@ -80,9 +119,7 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                         —
                     </Td>
                     <Td>
-                        {currentStepUpdate === 'submittedInitialApplication' &&
-                        <Badge bg='tcs.mongo' color='white' fontWeight='300' padding='2'>Application In Process</Badge>
-                        }
+                        -
                     </Td>
                 </Tr>
                 }
@@ -122,17 +159,17 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                         
                         />
                     </Td>
-                    <Td>Submit Application</Td>
                     <Td>
-                         {applicantData.applied === false && '—'}
+                        {submittedJobApplicationDetails.currentStepM === '' && '—'}
+                        {submittedJobApplicationDetails.currentStepM === 'submittedInitialApplication' && 'No Tasks Yet'}
                     </Td>
                     <Td>
-                        {!currentStepUpdate &&<Badge colorScheme="green" fontWeight='300' padding='2'>Apply to Job Portal</Badge>}
-                        
-                        {currentStepUpdate === 'submittedInitialApplication' &&
-                        <Badge bg='tcs.dirtywhite' fontWeight='300' padding='2'>Wait for next steps</Badge>
-                        }
-        
+                        {submittedJobApplicationDetails.currentStepM === '' && '—'}
+                        {submittedJobApplicationDetails.currentStepM === 'submittedInitialApplication' && '—'}
+                    </Td>
+                    <Td>
+                        {submittedJobApplicationDetails.currentStepM === '' && '—'}
+                       {submittedJobApplicationDetails.currentStepM === 'submittedInitialApplication' && '—'}
                     </Td>
                 </Tr>
                 </Tbody>

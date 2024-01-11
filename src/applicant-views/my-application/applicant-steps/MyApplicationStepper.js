@@ -260,10 +260,14 @@ function MyApplicationStepper() {
                             colorScheme='green'
                             mr={3}
                             onClick={() => {
-                                localStorage.setItem('currentStep', 'submittedInitialApplication')
-                                localStorage.removeItem('activeNavButton')
-                                localStorage.setItem('activeNavButton', 'My Application')
-                                navigate(`/applicant-home/${applicantData._id}`)
+                                const details = {applicantID: applicantData._id, jobID: jobData._id, position: jobData.jobTitleM, currentStep: 'submittedInitialApplication'}
+                                axios.post('http://localhost:3001/api/save-job-application-id-to-applicant', details)
+                                    .then(response => {
+                                        console.log(response.data.result)
+                                        localStorage.removeItem('activeNavButton')
+                                        localStorage.setItem('activeNavButton', 'My Application')
+                                        navigate(`/applicant-home/${applicantData._id}`)
+                                    })
                             }}
                             >
                             Confirm

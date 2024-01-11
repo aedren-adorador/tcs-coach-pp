@@ -6,7 +6,7 @@ const applicantSchema = mongoose.Schema({
     lastNameM: {type: String, required: true},
     passwordM: {type: String, required: true},
     admin: {type: String, required: true, default: 'false'},
-    applied: {type: Boolean, required: true, default: false},
+    jobApplicationsM: {type: Array, required: true, default: []},
 })
 
 const Applicant = mongoose.model('Applicant', applicantSchema);

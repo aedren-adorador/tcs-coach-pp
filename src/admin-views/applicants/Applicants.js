@@ -35,11 +35,9 @@ function Applicants() {
     },[])
 
     useEffect(() => {
-        console.log('CHANGED!', chosenApplicantToReview)
     }, [chosenApplicantToReview])
 
     useEffect(()=> {
-        console.log(applicantsResult, 'WOW')
     }, [applicantsResult])
 
     useEffect(()=> { 

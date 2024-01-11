@@ -9,28 +9,35 @@ function RequireAttention() {
         <>
         <TableContainer
         margin='0px 5% 5%'
+        height='300px'
+        overflowY='scroll'
         >
-            <Text
-            color='#071C50'
-            fontWeight='600'
-            fontSize='14px'
-            >Require Attention</Text>
-
             <Table
             variant='simple'
             backgroundColor='#F3F8FF'
             fontSize='12px'
+            position='relative'
+            
             >
                 <Thead>
                 <Tr>
                     {requireAttentionHeaders.map((header, index) => {
-                        return <Th fontSize='10px'textAlign='center' key={index}>{header}</Th>
+                        return <Th
+                        fontSize='10px'
+                        textAlign='center'
+                        key={index}
+                        position='sticky'
+                        top='0'
+                        zIndex='1'
+                        backgroundColor='#F3F8FF'
+                        >{header}</Th>
                     })}
                 </Tr>
                 </Thead>
                 <Tbody>
                 <Tr
                 key='1'
+                _hover={{backgroundColor: 'tcs.bluey'}}
                 >
                     <Td>
                         <Flex
@@ -55,7 +62,9 @@ function RequireAttention() {
                     <Td textAlign='center'>40</Td>
                     <Td textAlign='center'>2</Td>
                 </Tr>
-                <Tr key='2'>
+                <Tr
+                _hover={{backgroundColor: 'tcs.bluey'}}
+                key='2'>
                     <Td>
                         <Flex
                         align='center'
@@ -78,7 +87,9 @@ function RequireAttention() {
                     <Td textAlign='center'>40</Td>
                     <Td textAlign='center'>2</Td>
                 </Tr>
-                <Tr key='3'>
+                <Tr
+                _hover={{backgroundColor: 'tcs.bluey'}}
+                key='3'>
                     <Td>
                         <Flex
                         align='center'
@@ -101,7 +112,9 @@ function RequireAttention() {
                     <Td textAlign='center'>40</Td>
                     <Td textAlign='center'>2</Td>
                 </Tr>
-                <Tr key='4'>
+                <Tr 
+                _hover={{backgroundColor: 'tcs.bluey'}}
+                key='4'>
                     <Td>
                         <Flex
                         align='center'

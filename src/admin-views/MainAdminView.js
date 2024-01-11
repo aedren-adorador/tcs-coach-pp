@@ -61,7 +61,7 @@ function MainAdminView() {
             <Grid
             templateAreas={`"nav header"
                             "nav main"
-                            "nav footer"`}
+                            "nav main"`}
             gridTemplateRows={'45px 1fr'}
             gridTemplateColumns={'80px 1fr'}
             h='100vh'

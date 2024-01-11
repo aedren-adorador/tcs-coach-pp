@@ -16,7 +16,7 @@ function Overview() {
   return (
     <>
       <Text
-      margin='20px 0px 0px 5%'
+       margin='20px 0px 0px 5%'
       color='#071C50'
       fontWeight='600'
       fontSize='14px'
@@ -31,12 +31,14 @@ function Overview() {
         {boxesOverview.map((box, index) => (
           <Card
           key={index}
-          height="200px"
+          height="170px"
           minW="250px"
-          maxW="300px"
+          maxW="280px"
           position="relative"
           shadow='none'
           backgroundColor='#F3F8FF'
+
+          _hover={{color: 'teal', border:'solid'}}
           >
             <Box
             backgroundColor='#F3F8FF'
@@ -51,6 +53,7 @@ function Overview() {
             alignItems="center"
             borderRadius='15px'
             borderColor='lightgray'
+            _hover={{color: 'teal', border:'solid'}}
             >
               10
             </Box>

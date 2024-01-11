@@ -343,10 +343,60 @@ app.post('/api/upload-resume', upload.single('resume'), (req, res, next)  => {
 
 app.get('/api/get-job-application-resume/:details', (req, res, next) => {
   const details = JSON.parse(req.params.details)
-  console.log(details.applicantID)
-  console.log(details.jobID)
   JobApplication.findOne({applicantIDForeignKeyM:details.applicantID, jobIDForeignKeyM: details.jobID})
     .then(result => res.json({savedResumeLink: result.resumeM}))
 })
+
+app.post('/api/save-job-application-id-to-applicant', (req, res, next) => {
+  const toUpdateDetailsForJobApp = { dateSubmittedApplicationM: new Date(), positionAppliedToM: req.body.position, currentStepM: req.body.currentStep }
+  JobApplication.updateOne({applicantIDForeignKeyM: req.body.applicantID, jobIDForeignKeyM: req.body.jobID}, toUpdateDetailsForJobApp)
+    .then(
+       JobApplication.findOne({applicantIDForeignKeyM: req.body.applicantID, jobIDForeignKeyM: req.body.jobID})
+        .then(result => {
+          Applicant.findOne({_id: req.body.applicantID})
+            .then(toUpdateApplicant => {
+                const toUpdateDetails = {
+                  jobApplicationsM: toUpdateApplicant.jobApplicationsM.includes(result._id) ? [toUpdateApplicant.jobApplicationsM]:[...toUpdateApplicant.jobApplicationsM, result._id],
+                }
+                Applicant.updateOne({_id: req.body.applicantID}, toUpdateDetails)
+                    .then(result => res.json({result: result}))
+              }
+            )
+          }
+        )
+    )
+})
+
+
+app.get('/api/get-job-application/:details', (req, res, next) => {
+  const jobApplicationID = req.params.details
+  JobApplication.findOne({_id:jobApplicationID })
+    .then(record => res.json({submittedApplicationDetails: record}))
+})
+
+app.get('/api/get-job-applications-joined-with-applicants', async (req, res, next) => {
+  const result = await JobApplication.aggregate([
+  {
+    $lookup: {
+      from: 'applicants',  
+      let: { localFieldConverted: { $toObjectId: '$applicantIDForeignKeyM' } },
+      pipeline: [
+        {
+          $match: {
+            $expr: {
+              $eq: ['$_id', '$$localFieldConverted']
+            }
+          }
+        }
+      ],
+      as: 'applicantJoinedDetails'  // The alias for the merged data
+    }
+  },
+]).exec();
+res.json({joinedApplicantAndJobApplicationDetails: result})
+  
+});
+
+
 
 module.exports = app;
