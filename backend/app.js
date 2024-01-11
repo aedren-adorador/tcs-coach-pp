@@ -78,6 +78,16 @@ async function sendEmail(emailAddressInput, token) {
     })
 }
 
+async function sendInterviewInvite(emailAddressInput, position, deadline, applicantName) {
+  // const interviewLink = `http://localhost:3001/api/auth/verify?token=${token}&email=${emailAddressInput}`
+  await transporter.sendMail({
+      from: process.env.USER_EMAIL,
+      to: emailAddressInput,
+      subject: "Congratulations! The Coding School Application - Interview Invitation",
+      html: `<p style='font-size: 14px'>Dear ${applicantName}</p><br/><p>We are pleased to inform you that you have passed the initial screening for the ${position} position! The next step of the application process would be an asynchronous video interview which will further make us get to know you more in terms of experience, values, and qualities. Do not worry as we have provided a quick tutorial before you take the interview. All the information is in the link provided in this email. Please note that you have until ${deadline} to take the interview. Goodluck! : <strong>TAKE INTERVIEW HERE</strong>`
+    })
+}
+
 // Main Requests
 app.post('/api/auth/send-verification-email', (req, res, next) => {
     Applicant.findOne({emailM: req.body.email.toLowerCase()})
@@ -92,6 +102,13 @@ app.post('/api/auth/send-verification-email', (req, res, next) => {
           res.status(400).json({errorMessage: 'Email already taken!'})
         }
       })
+})
+
+app.post('/api/send-interview-invite', (req, res, next) => {
+  const details = req.body
+  const stringifiedDeadline = new Date(details.oneWeekDeadline).toDateString()
+  sendInterviewInvite(details.emailAddress, details.position, stringifiedDeadline, details.firstName)
+    .then(result => res.json({success: 'Interview Invite Sent via Email!'}))
 })
 
 app.get('/api/auth/verify',(req, res, next) => {

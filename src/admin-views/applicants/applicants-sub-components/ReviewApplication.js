@@ -1,306 +1,271 @@
-import { Text, Grid, GridItem, HStack, VStack, Box } from "@chakra-ui/react";
-import React from "react";
+import {Grid, GridItem, Flex, Box, Text, Accordion, AccordionButton, AccordionItem, AccordionIcon, AccordionPanel, Link, Button, Badge} from "@chakra-ui/react";
+import { ThunderboltOutlined, BulbOutlined, FireOutlined, CalendarOutlined} from "@ant-design/icons";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
+function ReviewApplication({chosenApplicantAllJobApplicationDetails}) {
+    useEffect(() => {
+    }, [chosenApplicantAllJobApplicationDetails])
+    
+    const [isInterviewInviteSent, setIsInterviewInviteSent] = useState(false);
+    const [isSending, setIsSending] = useState(false);
+    const [isEitherButtonClicked, setIsEitherButtonClicked] = useState(false);
 
-function ReviewApplication() {
+    const sendInterviewInvite = () => {
+        setIsSending(true)
+        const today = new Date()
+        const oneWeekDeadline = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
+        const details = {
+            oneWeekDeadline: oneWeekDeadline,
+            position: chosenApplicantAllJobApplicationDetails.positionAppliedToM,
+            emailAddress: chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0].emailM,
+            firstName: chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0].firstNameM
+        }
+        axios.post('http://localhost:3001/api/send-interview-invite', details)
+            .then(response => {
+                console.log(response.data.success)
+                setIsInterviewInviteSent(true)
+                setIsSending(false)
+                setIsEitherButtonClicked(true)
+            })
+    }
+    
     return(
         <>
         <Grid
-        mt='40px'
-        templateAreas={`"column1 column2"`}
-        templateColumns='repeat(2, 1fr)'
-
-        h='100%'
-        fontWeight='bold'
+        gridTemplateColumns='repeat(2, 1fr)'
+        minW='1000px'
+        mt='20px'
+        fontWeight='300'
+        color='black'
+        fontSize='14px'
         >
-        <GridItem
-        area={'column1'}
-        >   
-        <VStack
-        spacing={4}
-        align='flex-start'
-        >
-            <Box>
-                <Text
-                fontSize='15px'
-                color='gray.400'
-                fontWeight='500'
-                >Last Name &nbsp;&nbsp;&nbsp;&nbsp; First Name
-                </Text>
-                <Text
-                fontSize='20px'
-                color='black'
-                fontWeight='1000'
-                >FABIAN&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; DAWN NICOLE</Text>
-            </Box>
+            <GridItem
+            >
+                <Flex mb='4'>
+                    <Box mr='5'>
+                        <Text color='gray'>Last Name</Text>
+                        <Text
+                        fontSize='30px'
+                        fontWeight='1000'
+                        color='black'
+                        >{chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0].lastNameM}</Text>
+                    </Box>
+                    <Box>
+                        <Text color='gray'>First Name</Text>
+                        <Text
+                        color='black'
+                        fontSize='30px'
+                        fontWeight='1000'
+                        >
+                        {chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0].firstNameM}
+                        </Text>
+                    </Box>
+                </Flex>
+                 <Text color='gray'>Email Address</Text>
+                 <Text mb='4'>
+                    {chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0].emailM}
+                 </Text>
 
-            <Box>
-                <Text
-                fontSize='15px'
-                color='gray.400'
-                fontWeight='500'
-                >Email Address
+                 <Text color='gray'>Contact Number</Text>
+                 <Text mb='4'>
+                    {chosenApplicantAllJobApplicationDetails.contactNumberM}
+                 </Text>
+                
+                
+                <Text color='gray'>LinkedIn Profile Link</Text>
+                <Text mb='4'>
+                    {chosenApplicantAllJobApplicationDetails.linkedInM}
                 </Text>
-                <Text
-                fontSize='15px'
-                color='black'
-                fontWeight='400'
-                display='inline-block'
-                >dawn.fabian@obf.ateneo.edu</Text>
-            </Box>
 
-            <Box>
-                <Text
-                fontSize='15px'
-                color='gray.400'
-                fontWeight='500'
-                >Contact Number
+                <Text color='gray'>Internet Speed</Text>
+                <Text mb='4'>
+                    {chosenApplicantAllJobApplicationDetails.internetSpeedM}
+                    mbps
                 </Text>
-                <Text
-                fontSize='15px'
-                color='black'
-                fontWeight='400'
-                display='inline-block'
-                >09061381777</Text>
-            </Box>
 
-             <Box>
-                <Text
-                fontSize='15px'
-                color='gray.400'
-                fontWeight='500'
-                >Institution/University
-                </Text>
-                <Text
-                fontSize='15px'
-                color='black'
-                fontWeight='400'
-                display='inline-block'
-                >Ateneo de Manila University</Text>
-            </Box>
+                <Text color='gray'>Referred by</Text>
+                 <Text mb='4'>
+                    {chosenApplicantAllJobApplicationDetails.referredByM}
+                 </Text>
+            </GridItem>
 
-             <Box>
+            <GridItem>
+                <Flex mb='4'>
+                    <Box mr='5'>
+                        <Text color='tcs.linky'>Position Applied To</Text>
+                        <Text
+                        fontSize='30px'
+                        fontWeight='1000'
+                        color='tcs.linky'
+                        >
+                            {chosenApplicantAllJobApplicationDetails.positionAppliedToM}
+                        </Text>
+                    </Box>
+                </Flex>
+                 <Text color='gray'>Resume Attachment</Text>
+                 <Link href={chosenApplicantAllJobApplicationDetails.resumeM} target='_blank'>
+                     <Button
+                    mb='4'
+                    variant='link'
+                    color='tcs.linky'
+                    >TCS-Resume-{chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0].firstNameM}-{chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0].lastNameM} (click to view)</Button>
+                 </Link>
+                
+                <Text color='gray'>Education</Text>
+                {chosenApplicantAllJobApplicationDetails.educationM.length > 1 ?
+                <Accordion mb='4' allowMultiple bg='tcs.dirtywhite'>
+                    <AccordionItem>
+                        <h2>
+                        <AccordionButton>
+                            <Box as="span" flex='1' textAlign='left' fontSize='14px'>
+                            See Education Summary
+                            </Box>
+                            <AccordionIcon />
+                        </AccordionButton>
+                        </h2>
+                        {chosenApplicantAllJobApplicationDetails.educationM.map((education, index) => (
+                            <AccordionPanel pb={4} key={index}>
+                                <Text fontSize='13px'>
+                                <BulbOutlined/> {education.university} - {education.degreeProgram}
+                                </Text>
+                            </AccordionPanel>
+                        ))}
+                    </AccordionItem>
+                </Accordion> :
                 <Text
-                fontSize='15px'
-                color='gray.400'
-                fontWeight='500'
-                >Education Level
-                </Text>
-                <Text
-                fontSize='15px'
-                color='black'
-                fontWeight='400'
-                display='inline-block'
-                >Bachelor's Degree</Text>
-            </Box>
+                mb='4'
+                >{chosenApplicantAllJobApplicationDetails.educationM[0].university} <br></br>{chosenApplicantAllJobApplicationDetails.educationM[0].degreeProgram}</Text>
+                }
 
-            <Box>
+                 <Text color='gray'>Coaching/Tutoring Experience</Text>
+                 {chosenApplicantAllJobApplicationDetails.coachingExperienceM.length > 1 ?
+                <Accordion mb='4' allowMultiple bg='tcs.dirtywhite'>
+                    <AccordionItem>
+                        <h2>
+                        <AccordionButton>
+                            <Box as="span" flex='1' textAlign='left' fontSize='14px'>
+                            See Coaching Experience Summary
+                            </Box>
+                            <AccordionIcon />
+                        </AccordionButton>
+                        </h2>
+                        {chosenApplicantAllJobApplicationDetails.coachingExperienceM.map((coachingExperience, index) => (
+                            <AccordionPanel pb={4} key={index}>
+                                <Text fontSize='13px'>
+                                <FireOutlined/> {coachingExperience}
+                                </Text>
+                            </AccordionPanel>
+                        ))}
+                    </AccordionItem>
+                </Accordion> :
                 <Text
-                fontSize='15px'
-                color='gray.400'
-                fontWeight='500'
-                >Major/Specialization
-                </Text>
-                <Text
-                fontSize='15px'
-                color='black'
-                fontWeight='400'
-                display='inline-block'
-                >BS Management Information Systems</Text>
-            </Box>
+                mb='4'
+                >{chosenApplicantAllJobApplicationDetails.coachingExperienceM[0]}</Text>
+                }
 
-            <Box>
+                <Text color='gray'>Areas of Expertise</Text>
+                {chosenApplicantAllJobApplicationDetails.areasOfExpertiseM.length > 1 ?
+                <Accordion mb='4' allowMultiple bg='tcs.dirtywhite'>
+                    <AccordionItem>
+                        <h2>
+                        <AccordionButton>
+                            <Box as="span" flex='1' textAlign='left' fontSize='14px'>
+                            See Areas of Expertise Summary
+                            </Box>
+                            <AccordionIcon />
+                        </AccordionButton>
+                        </h2>
+                        {chosenApplicantAllJobApplicationDetails.areasOfExpertiseM.map((area, index) => (
+                            <AccordionPanel pb={4} key={index}>
+                                <Text fontSize='13px'>
+                                <ThunderboltOutlined/> {area}
+                                </Text>
+                            </AccordionPanel>
+                        ))}
+                    </AccordionItem>
+                </Accordion> :
                 <Text
-                fontSize='15px'
-                color='gray.400'
-                fontWeight='500'
-                >LinkedIn Profile Link
-                </Text>
-                <Text
-                fontSize='15px'
-                color='black'
-                fontWeight='400'
-                display='inline-block'
-                >https://www.linkedin.com/in/dawn-fabian/</Text>
-            </Box>
+                mb='4'
+                >{chosenApplicantAllJobApplicationDetails.areasOfExpertise[0]}</Text>
+                }
 
-            <Box>
+                <Text color='gray'>Availability</Text>
+                {chosenApplicantAllJobApplicationDetails.availabilityM.length > 1 ?
+                <Accordion mb='4' allowMultiple bg='tcs.dirtywhite'>
+                    <AccordionItem>
+                        <h2>
+                        <AccordionButton>
+                            <Box as="span" flex='1' textAlign='left' fontSize='14px'>
+                            See Availability Summary
+                            </Box>
+                            <AccordionIcon />
+                        </AccordionButton>
+                        </h2>
+                        {chosenApplicantAllJobApplicationDetails.availabilityM.map((availability, index) => (
+                            <AccordionPanel pb={4} key={index}>
+                                <Text fontSize='13px'>
+                                <CalendarOutlined/> {availability}
+                                </Text>
+                            </AccordionPanel>
+                        ))}
+                    </AccordionItem>
+                </Accordion> :
                 <Text
-                fontSize='15px'
-                color='gray.400'
-                fontWeight='500'
-                >Are you willing to do Face-to-Face classes?
-                </Text>
-                <Text
-                fontSize='15px'
-                color='black'
-                fontWeight='400'
-                display='inline-block'
-                >Yes</Text>
-            </Box>
-
-            <Box>
-                <Text
-                fontSize='15px'
-                color='gray.400'
-                fontWeight='500'
-                >If yes, where do you live?
-                </Text>
-                <Text
-                fontSize='15px'
-                color='black'
-                fontWeight='400'
-                display='inline-block'
-                >Katipunan, Quezon City</Text>
-            </Box>
-        </VStack>
-        </GridItem>
-
-
-        <GridItem
-        area={'column2'}
-        >
-        <VStack
-        spacing={4}
-        align='flex-start'
-        >
-            <Box>
-                <Text
-                fontSize='15px'
-                color='blue.400'
-                fontWeight='500'
-                >Position Applied To
-                </Text>
-                <Text
-                fontSize='20px'
-                color='blue.400'
-                fontWeight='1000'
-                >DATA ANALYTICS COACH</Text>
-            </Box>
-
-            <Box>
-                <Text
-                fontSize='15px'
-                color='gray.400'
-                fontWeight='500'
-                >Resume Attachment
-                </Text>
-                <Text
-                fontSize='15px'
-                color='blue.400'
-                fontWeight='400'
-                display='inline-block'
-                textDecoration='underline'
-                >Fabian_Resume.pdf(click to view)</Text>
-            </Box>
-
-            <Box>
-                <Text
-                fontSize='15px'
-                color='gray.400'
-                fontWeight='500'
-                >Coaching/Tutoring Experience
-                </Text>
-                <Text
-                fontSize='15px'
-                color='black'
-                fontWeight='400'
-                display='inline-block'
-                >High School Tutor Experience</Text>
-            </Box>
-
-             <Box>
-                <Text
-                fontSize='15px'
-                color='gray.400'
-                fontWeight='500'
-                >Areas of Expertise
-                </Text>
-                <Text
-                fontSize='15px'
-                color='black'
-                fontWeight='400'
-                display='inline-block'
-                >Data Analytics, Project Management</Text>
-            </Box>
-
-             <Box>
-                <Text
-                fontSize='15px'
-                color='gray.400'
-                fontWeight='500'
-                >Where did you hear about this job opening?
-                </Text>
-                <Text
-                fontSize='15px'
-                color='black'
-                fontWeight='400'
-                display='inline-block'
-                >LinkedIn</Text>
-            </Box>
-
-            <Box>
-                <Text
-                fontSize='15px'
-                color='gray.400'
-                fontWeight='500'
-                >Availability
-                </Text>
-                <Text
-                fontSize='15px'
-                color='black'
-                fontWeight='400'
-                display='inline-block'
-                >Saturday</Text>
-            </Box>
-
-            <Box>
-                <Text
-                fontSize='15px'
-                color='gray.400'
-                fontWeight='500'
-                >Internet Speed
-                </Text>
-                <Text
-                fontSize='15px'
-                color='black'
-                fontWeight='400'
-                display='inline-block'
-                >15 mbps</Text>
-            </Box>
-
-            <Box>
-                <Text
-                fontSize='15px'
-                color='gray.400'
-                fontWeight='500'
-                >Referred by
-                </Text>
-                <Text
-                fontSize='15px'
-                color='black'
-                fontWeight='400'
-                display='inline-block'
-                >Aedren Adorador</Text>
-            </Box>
-
-            <Box>
-                <Text
-                fontSize='15px'
-                color='gray.400'
-                fontWeight='500'
-                >If yes, where do you live?
-                </Text>
-                <Text
-                fontSize='15px'
-                color='black'
-                fontWeight='400'
-                display='inline-block'
-                >Katipunan, Quezon City</Text>
-            </Box>
-        </VStack>
-        </GridItem>
+                mb='4'
+                >{chosenApplicantAllJobApplicationDetails.availabilityM[0]}</Text>
+                }
+                
+            </GridItem>
         </Grid>
+        <Flex
+            justify='flex-end'
+            minW='100vh'
+            gap='5'
+            mb='20px'
+            >
+                {isEitherButtonClicked &&
+                <Badge
+                bg='tcs.mongo'
+                color='white'
+                >Interview Invite Sent. Waiting for applicant to submit asynchronous interview.
+                </Badge>}
+
+                <Button
+                size='sm'
+                variant='outline'
+                colorScheme='red'
+                display={isEitherButtonClicked ? 'none' : ''}
+                >
+                    Send Rejection Email
+                </Button>
+                
+                {isSending ? 
+                <Button
+                isLoading
+                loadingText='Sending Email'
+                size='sm'
+                bg='tcs.mongo'
+                color='white'
+                colorScheme='green'
+                onClick={sendInterviewInvite}
+                >
+                </Button>
+                :
+                 <Button
+                display={isEitherButtonClicked ? 'none' : ''}
+                size='sm'
+                bg='tcs.mongo'
+                color='white'
+                colorScheme='green'
+                onClick={sendInterviewInvite}
+                >
+                    Send Interview Invite
+                </Button>
+                }
+               
+            </Flex>
+
         </>
     )
 }

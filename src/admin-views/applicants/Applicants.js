@@ -6,17 +6,19 @@ import axios from "axios";
 import ReviewSubmissionsStepper from "./applicants-sub-components/ReviewSubmissionsStepper";
 
 function Applicants() {
+    const [applicantsButtons, setApplicantButtons] = useState([
+         'All Applicants', 'Review Application', 'Interview Feedback', 'Teaching Demo Feedback', 'Onboarding Requirements', 'Finish Hiring'
+    ]);
+    const [clickedButton, setClickedButton] = useState('All Applicants');
     const [applicantsResult, setApplicantsResult] = useState([]);
     const [chosenApplicantToReview, setChosenApplicantToReview] = useState('');
-    const [clickedButton, setClickedButton] = useState('All Applicants');
-
+    const [chosenApplicantAllJobApplicationDetails, setChosenApplicantAllJobApplicationDetails] = useState([]);
+    
     const getApplicants = async () => {
         const response = await axios.get('http://localhost:3001/api/get-applicants');
         setApplicantsResult(response.data.applicants)
     }
-    const applicantsButtons = [
-        'All Applicants', 'Review Application', 'Interview Feedback', 'Teaching Demo Feedback', 'Onboarding Requirements', 'Finish Hiring'
-    ]
+    
     
     const handleButtonClick = (index) => {
         if (index===0) {
@@ -25,9 +27,10 @@ function Applicants() {
         setClickedButton(applicantsButtons[index])
     }
 
-    const updateChosenApplicantToReview = (id) => {
-        setChosenApplicantToReview(id);
+    const updateChosenApplicantToReview = (jobApp) => {
+        setChosenApplicantToReview(jobApp.applicantJoinedDetails[0]._id);
         setClickedButton('Review Application')
+        setChosenApplicantAllJobApplicationDetails(jobApp)
     }
 
     useEffect(() => {
@@ -35,6 +38,7 @@ function Applicants() {
     },[])
 
     useEffect(() => {
+
     }, [chosenApplicantToReview])
 
     useEffect(()=> {
@@ -42,6 +46,12 @@ function Applicants() {
 
     useEffect(()=> { 
     },[clickedButton])
+
+    useEffect(() => {
+        if (chosenApplicantAllJobApplicationDetails.currentStepM === 'submittedInitialApplication') {
+            setApplicantButtons(['All Applicants', 'Review Application'])
+        }
+    }, [chosenApplicantAllJobApplicationDetails])
    
 
     return(
@@ -71,7 +81,7 @@ function Applicants() {
 
            <Grid 
            templateAreas={`"nav main"`}
-           gridTemplateColumns={'200px 1fr'}
+           gridTemplateColumns={'180px 1fr'}
            h='100%'
            color='blackAlpha.700'
            fontWeight='bold'
@@ -127,6 +137,7 @@ function Applicants() {
                     handleButtonClick={handleButtonClick}
                     />:
                     <ReviewSubmissionsStepper
+                    chosenApplicantAllJobApplicationDetails={chosenApplicantAllJobApplicationDetails}
                     clickedButton={clickedButton}
                     />
                     }

@@ -20,7 +20,6 @@ function NavAdmin({persistentButton, getActiveNavButton}) {
     }
 
     useEffect(()=> {
-        console.log('changed!', clickedNavButton)
         getActiveNavButton(clickedNavButton)
     },[clickedNavButton])
     

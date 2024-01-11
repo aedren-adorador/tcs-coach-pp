@@ -5,7 +5,7 @@ import InterviewFeedback from "./InterviewFeedback";
 import TeachingDemoFeedback from "./TeachingDemoFeedback";
 import OnboardingRequirements from "./OnboardingRequirements";
 
-function ReviewSubmissionsStepper({clickedButton}) {    
+function ReviewSubmissionsStepper({clickedButton, chosenApplicantAllJobApplicationDetails}) {   
     const steps = [
     { title: 'Step 1', description: 'Review Application' },
     { title: 'Step 2', description: 'Interview Feedback' },
@@ -23,9 +23,13 @@ function ReviewSubmissionsStepper({clickedButton}) {
        setActiveStep(steps.findIndex(step => step.description === clickedButton))
     },[clickedButton])
 
+    useEffect(() => {
+    }, [chosenApplicantAllJobApplicationDetails])
+
     return(
         <>
         <Stepper
+        colorScheme='facebook'
         index={activeStep}
         size='md'
         mt='40px'
@@ -57,7 +61,7 @@ function ReviewSubmissionsStepper({clickedButton}) {
             </Step>
         ))}
         </Stepper>
-        {clickedButton === 'Review Application' && <ReviewApplication/>}
+        {clickedButton === 'Review Application' && <ReviewApplication chosenApplicantAllJobApplicationDetails={chosenApplicantAllJobApplicationDetails}/>}
         {clickedButton === 'Interview Feedback' && <InterviewFeedback/>}
         {clickedButton === 'Teaching Demo Feedback' && <TeachingDemoFeedback/>}
         {clickedButton === 'Onboarding Requirements' && <OnboardingRequirements/>}

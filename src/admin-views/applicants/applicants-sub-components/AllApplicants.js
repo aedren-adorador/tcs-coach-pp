@@ -8,8 +8,8 @@ function AllApplicants({applicants, updateChosenApplicantToReview, handleButtonC
     const allApplicantsTableHeaders = ['Applicant ID', 'Date Submitted', 'Name', 'Position Applied', 'Application Status', 'Offer Status']
     const [allJobApplications, setAllJobApplications] = useState([]);
 
-    const goToApplicantProgress = (id) => {
-      updateChosenApplicantToReview(id);
+    const goToApplicantProgress = (jobApp) => {
+      updateChosenApplicantToReview(jobApp);
     }
 
     useEffect(() => {
@@ -79,7 +79,9 @@ function AllApplicants({applicants, updateChosenApplicantToReview, handleButtonC
             <Table
             variant='simple'
             backgroundColor='white'
-            fontSize='10px'
+            fontSize='10.7px'
+            color='black'
+            fontWeight='300'
             >
                 <Thead>
                 <Tr key='tbl-hdrs'>
@@ -92,7 +94,7 @@ function AllApplicants({applicants, updateChosenApplicantToReview, handleButtonC
                 {allJobApplications.map((jobApp, index) => {
                     return <Tr
                     key={index}
-                    onClick={()=>goToApplicantProgress(jobApp.applicantJoinedDetails[0]._id)}
+                    onClick={()=>goToApplicantProgress(jobApp)}
                     _hover={{
                         backgroundColor: "tcs.bluey",
                         color: 'tcs.main'
