@@ -186,7 +186,8 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                        bg='tcs.mongo'
                        color='white'
                        colorScheme="green"
-                       size='sm'
+                       size='xs'
+                       borderRadius='0px'
                        >Take Interview</Button>}
                     </Td>
                 </Tr>
