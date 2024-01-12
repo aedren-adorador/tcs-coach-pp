@@ -3,13 +3,11 @@ import { ThunderboltOutlined, BulbOutlined, FireOutlined, CalendarOutlined} from
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-function ReviewApplication({chosenApplicantAllJobApplicationDetails}) {
+function ReviewApplication({chosenApplicantAllJobApplicationDetails, setChosenApplicantAllJobApplicationDetails}) {
     useEffect(() => {
     }, [chosenApplicantAllJobApplicationDetails])
     
-    const [isInterviewInviteSent, setIsInterviewInviteSent] = useState(false);
     const [isSending, setIsSending] = useState(false);
-    const [isEitherButtonClicked, setIsEitherButtonClicked] = useState(false);
 
     const sendInterviewInvite = () => {
         setIsSending(true)
@@ -19,16 +17,20 @@ function ReviewApplication({chosenApplicantAllJobApplicationDetails}) {
             oneWeekDeadline: oneWeekDeadline,
             position: chosenApplicantAllJobApplicationDetails.positionAppliedToM,
             emailAddress: chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0].emailM,
-            firstName: chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0].firstNameM
+            firstName: chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0].firstNameM,
+            jobApplicationID: chosenApplicantAllJobApplicationDetails._id
         }
         axios.post('http://localhost:3001/api/send-interview-invite', details)
             .then(response => {
-                console.log(response.data.success)
-                setIsInterviewInviteSent(true)
+                console.log(response.data.joinedApplicantAndJobApplicationDetails[0])
+                setChosenApplicantAllJobApplicationDetails(response.data.joinedApplicantAndJobApplicationDetails[0])
                 setIsSending(false)
-                setIsEitherButtonClicked(true)
             })
     }
+
+    useEffect(() => {
+    }, [chosenApplicantAllJobApplicationDetails])
+
     
     return(
         <>
@@ -224,10 +226,11 @@ function ReviewApplication({chosenApplicantAllJobApplicationDetails}) {
             gap='5'
             mb='20px'
             >
-                {isEitherButtonClicked &&
+                {chosenApplicantAllJobApplicationDetails.currentStepM === 'waitingForInterviewSubmission' &&
                 <Badge
                 bg='tcs.mongo'
                 color='white'
+                padding='5px'
                 >Interview Invite Sent. Waiting for applicant to submit asynchronous interview.
                 </Badge>}
 
@@ -235,7 +238,7 @@ function ReviewApplication({chosenApplicantAllJobApplicationDetails}) {
                 size='sm'
                 variant='outline'
                 colorScheme='red'
-                display={isEitherButtonClicked ? 'none' : ''}
+                display={chosenApplicantAllJobApplicationDetails.currentStepM === 'waitingForInterviewSubmission' ? 'none' : ''}
                 >
                     Send Rejection Email
                 </Button>
@@ -253,7 +256,7 @@ function ReviewApplication({chosenApplicantAllJobApplicationDetails}) {
                 </Button>
                 :
                  <Button
-                display={isEitherButtonClicked ? 'none' : ''}
+                display={chosenApplicantAllJobApplicationDetails.currentStepM === 'waitingForInterviewSubmission' ? 'none' : ''}
                 size='sm'
                 bg='tcs.mongo'
                 color='white'

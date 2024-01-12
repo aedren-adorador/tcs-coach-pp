@@ -93,6 +93,14 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                         fontWeight='300'
                         padding='5px'
                         >Active: Application Received</Badge>}
+
+                        {submittedJobApplicationDetails.currentStepM === 'waitingForInterviewSubmission' &&
+                        <Badge
+                        bg='tcs.limey'
+                        color='black'
+                        fontWeight='300'
+                        padding='5px'
+                        >Active: Waiting for Interview Submission</Badge>}
                         </Skeleton>
                     </Td>   
                 </Tr>
@@ -112,6 +120,7 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                             ></Image>
                         </Flex>
                     </Td>
+                    
                     <Td>
                         No Application Yet
                     </Td>
@@ -162,14 +171,23 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                     <Td>
                         {submittedJobApplicationDetails.currentStepM === '' && '—'}
                         {submittedJobApplicationDetails.currentStepM === 'submittedInitialApplication' && 'No Tasks Yet'}
+                        {submittedJobApplicationDetails.currentStepM === 'waitingForInterviewSubmission' && 'Take Asynchronous Video Interview'}
                     </Td>
                     <Td>
                         {submittedJobApplicationDetails.currentStepM === '' && '—'}
                         {submittedJobApplicationDetails.currentStepM === 'submittedInitialApplication' && '—'}
+                        {submittedJobApplicationDetails.currentStepM === 'waitingForInterviewSubmission' && new Date(submittedJobApplicationDetails.deadlineDateInterviewM).toDateString()}
                     </Td>
                     <Td>
                         {submittedJobApplicationDetails.currentStepM === '' && '—'}
                        {submittedJobApplicationDetails.currentStepM === 'submittedInitialApplication' && '—'}
+                       {submittedJobApplicationDetails.currentStepM === 'waitingForInterviewSubmission' &&
+                       <Button
+                       bg='tcs.mongo'
+                       color='white'
+                       colorScheme="green"
+                       size='sm'
+                       >Take Interview</Button>}
                     </Td>
                 </Tr>
                 </Tbody>

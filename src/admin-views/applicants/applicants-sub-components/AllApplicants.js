@@ -74,12 +74,12 @@ function AllApplicants({applicants, updateChosenApplicantToReview, handleButtonC
         <TableContainer
         border='solid 0.5px lightgray'
         borderRadius='20px'
-        padding='30px 10px'
+        padding='30px 10px'        
         >
             <Table
             variant='simple'
             backgroundColor='white'
-            fontSize='10.7px'
+            fontSize='10px'
             color='black'
             fontWeight='300'
             >
@@ -119,6 +119,14 @@ function AllApplicants({applicants, updateChosenApplicantToReview, handleButtonC
                             border='solid 0.2px'
                             fontSize='8px'
                             >Submitted Resume Application (to review)</Badge>}
+
+                            {jobApp.currentStepM === 'waitingForInterviewSubmission' &&
+                            <Badge
+                            bg='tcs.creamy'
+                            padding='5px'
+                            border='solid 0px'
+                            fontSize='8px'
+                            >Waiting for Interview Submission</Badge>}
                         </Td>
                         <Td textAlign='center'>
                             {jobApp.currentStepM === 'submittedInitialApplication' && 'NA'}

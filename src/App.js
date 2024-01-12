@@ -31,7 +31,9 @@ function App() {
       dirtywhite: '#F2F2F2',
       linky: '#0073DC',
       mongo: '#09A334',
-      bluey: '#E5ECF9'
+      bluey: '#E5ECF9',
+      creamy: '#FFFDD0',
+      limey: '#cdffcd'
     },
   },
 })

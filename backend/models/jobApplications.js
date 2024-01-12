@@ -20,9 +20,16 @@ const jobApplication = mongoose.Schema({
 
     currentStepM: {type: String, required: false, default: ''},
     dateSubmittedApplicationM: {type: Date, required: false, default: ''},
+
     dateSubmittedInterviewM: {type: Date, required: false, default: ''},
+    deadlineDateInterviewM: {type: Date, required: false, default: ''},
+
     dateSubmittedTeachingDemoM: {type: Date, required: false, default: ''},
+    deadlineDateTeachingDemoM: {type: Date, required: false, default: ''},
+
     dateSubmittedOnboardingRequirementsM: {type: Date, required: false, default: ''},
+    deadlineDateOnboardingRequirementsM: {type: Date, required: false, default: ''},
+    
     finalVerdictM: {type: String, required: false, default: ''}
 })
 

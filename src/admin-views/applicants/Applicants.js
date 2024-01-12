@@ -48,7 +48,9 @@ function Applicants() {
     },[clickedButton])
 
     useEffect(() => {
-        if (chosenApplicantAllJobApplicationDetails.currentStepM === 'submittedInitialApplication') {
+        if (chosenApplicantAllJobApplicationDetails.currentStepM === 'submittedInitialApplication' ||
+            chosenApplicantAllJobApplicationDetails.currentStepM === 'waitingForInterviewSubmission'
+        ) {
             setApplicantButtons(['All Applicants', 'Review Application'])
         }
     }, [chosenApplicantAllJobApplicationDetails])
@@ -139,6 +141,7 @@ function Applicants() {
                     <ReviewSubmissionsStepper
                     chosenApplicantAllJobApplicationDetails={chosenApplicantAllJobApplicationDetails}
                     clickedButton={clickedButton}
+                    setChosenApplicantAllJobApplicationDetails={setChosenApplicantAllJobApplicationDetails}
                     />
                     }
 

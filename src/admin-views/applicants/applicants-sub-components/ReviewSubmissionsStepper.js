@@ -5,7 +5,7 @@ import InterviewFeedback from "./InterviewFeedback";
 import TeachingDemoFeedback from "./TeachingDemoFeedback";
 import OnboardingRequirements from "./OnboardingRequirements";
 
-function ReviewSubmissionsStepper({clickedButton, chosenApplicantAllJobApplicationDetails}) {   
+function ReviewSubmissionsStepper({clickedButton, chosenApplicantAllJobApplicationDetails, setChosenApplicantAllJobApplicationDetails}) {   
     const steps = [
     { title: 'Step 1', description: 'Review Application' },
     { title: 'Step 2', description: 'Interview Feedback' },
@@ -61,7 +61,7 @@ function ReviewSubmissionsStepper({clickedButton, chosenApplicantAllJobApplicati
             </Step>
         ))}
         </Stepper>
-        {clickedButton === 'Review Application' && <ReviewApplication chosenApplicantAllJobApplicationDetails={chosenApplicantAllJobApplicationDetails}/>}
+        {clickedButton === 'Review Application' && <ReviewApplication chosenApplicantAllJobApplicationDetails={chosenApplicantAllJobApplicationDetails} setChosenApplicantAllJobApplicationDetails={setChosenApplicantAllJobApplicationDetails}/>}
         {clickedButton === 'Interview Feedback' && <InterviewFeedback/>}
         {clickedButton === 'Teaching Demo Feedback' && <TeachingDemoFeedback/>}
         {clickedButton === 'Onboarding Requirements' && <OnboardingRequirements/>}
