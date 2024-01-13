@@ -13,10 +13,19 @@ function Interview() {
     const applicantData = location.state.applicantData
     const token = location.state.token
     const navigate = useNavigate();
+
     const [prepTimer, setPrepTimer] = useState('00:00');
-    const [prepTimerProgress, setPrepTimerProgress] = useState(0)
     const [prepTime, setPrepTime] = useState(41);
+    const [prepTimerProgress, setPrepTimerProgress] = useState(0)
+
+    const [answerTimer, setAnswerTimer] = useState('00:00')
+    const [answerTime, setAnswerTime] = useState(10);
+    const [answerTimerProgress, setAnswerTimerProgress] = useState(0)
+
     const target = 41;
+    const answerTimeTarget = 10; 
+
+
 
     const {
     activeRecordings,
@@ -35,15 +44,10 @@ function Interview() {
     stopRecording,
   } = useRecordWebcam();
 
-  const {
-    getRecording, updateRecording
-  } = useRecording();
-
     const [videoDeviceId, setVideoDeviceId] = useState('');
     const [audioDeviceId, setAudioDeviceId] = useState('');
 
     const handleSelect = async (event) => {
-        console.log("CHANGED")
         const { deviceid: deviceId }= event.target.options[event.target.selectedIndex].dataset;
         
         if (devicesById[deviceId].type === 'videoinput') {
@@ -54,21 +58,38 @@ function Interview() {
         }
     };
 
+    useEffect(() => {
+        if (answerTime !== 0) {
+        const intervalId = setInterval(() => {
+            setAnswerTime(prevTime => {
+                const minutes = Math.floor(prevTime / 60);
+                const seconds = prevTime % 60;
+                const formattedTime = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                setAnswerTimer(formattedTime);
+                setAnswerTimerProgress(Math.floor(((answerTimeTarget - prevTime) / answerTimeTarget) * 100));
+                return prevTime - 1;
+            });
+        }, 1000);
+        return () => {
+            clearInterval(intervalId);
+            };
+        } else {
+            setTimeout(() => {
+                document.getElementById('recordingEnder').click()
+            }, 1000)     
+        }
+    }, [answerTime])
+
     const start = async () => {
-        const recording = await createRecording(videoDeviceId, audioDeviceId);
-        if (recording) await openCamera(recording.id);
-    };
-
-    const mute = async (recordingId) => {
-    return new Promise((resolve, reject) => {
-        const recording = getRecording(recordingId);
-
-        recording.isMuted = !recording.isMuted;
-
-        const updatedRecording = updateRecording(recordingId, recording);
-
-        resolve(updatedRecording);
-    });
+        try {
+            setAnswerTime(10)
+            setPrepTimer('00:00')
+            setPrepTimerProgress(0)
+            const recording = await createRecording(videoDeviceId, audioDeviceId);
+            if (recording) await openCamera(recording.id);
+        } catch (error) {
+            console.error("Error during start:", error);
+    }
     };
 
     useEffect(() => {
@@ -84,13 +105,16 @@ function Interview() {
 
         return () => {
             clearInterval(intervalId);
+            
         };
     }
     setPrepTimer('00:00');
+    document.getElementById('recordingStarter').click()
     }, [prepTime]);
 
     useEffect(() => {
     }, [videoDeviceId, audioDeviceId])
+   
     useEffect(() => {
         start()
     }, [])
@@ -152,11 +176,11 @@ function Interview() {
                                     <Text
                                     fontSize='12px'
                                     fontWeight='600'
-                                    >Prep time</Text>
+                                    >{recording.status === 'RECORDING'? 'Answer Time' : 'Prep Time'}</Text>
                                     <Text
                                     fontSize='12px'
                                     >
-                                        {prepTimer}
+                                        {recording.status === 'RECORDING' ? answerTimer :prepTimer}
                                     </Text>
 
                                 </Flex>
@@ -164,7 +188,7 @@ function Interview() {
                                 <Progress
                                 borderRadius='20px'
                                 width='95%'
-                                value={prepTimerProgress}
+                                value={recording.status === 'RECORDING' ? answerTimerProgress : prepTimerProgress}
                                 size='sm'
                                 colorScheme='tcs'
                                 />
@@ -177,7 +201,13 @@ function Interview() {
                             color='white'
                             colorScheme='facebook'
                             fontSize='12px'
-                             onClick={() => startRecording(recording.id)}
+                            id='recordingStarter'
+                             onClick={() => {
+                                startRecording(recording.id)
+                                setAnswerTime(10)
+                                setAnswerTimer('00:00')
+                                setAnswerTimerProgress(0)
+                             }}
                             >{recording.status === 'RECORDING' ? 'Recording...' : 'Start Recording'}</Button>
                             <Button
                             display={recording.status === 'RECORDING'?'':'none'}
@@ -188,14 +218,20 @@ function Interview() {
                             color='white'
                             colorScheme='red'
                             fontSize='12px'
-                             onClick={() => stopRecording(recording.id)}
+                            id='recordingEnder'
+                             onClick={() => {
+                                stopRecording(recording.id)
+                                setPrepTime(41)
+                                setPrepTimer('00:00')
+                                setPrepTimerProgress(0)
+                             }}
                             >Stop</Button>
                         </Flex>
                         <Box
                         mt='10px'
                         >
                             <Box key={recording.id}>
-                                <video ref={recording.webcamRef} loop autoPlay playsInline style={{ width: '400px', height:'300px' }} mirrored='false' />
+                                <video ref={recording.webcamRef} loop autoPlay playsInline style={{ width: '400px', height:'300px', minWidth: '400px', minHeight: '300px'}} mirrored='false' />
                             </Box>
                             <Button
                             onClick={() => download(recording.id)}
@@ -328,7 +364,6 @@ function Interview() {
                             </Flex>
                             </Box>
                         </ModalBody>
-
                         <ModalFooter>
                             <Button colorScheme='tcs' borderRadius='0px' size='sm' mr={3} onClick={onClose}>
                             Save Settings
