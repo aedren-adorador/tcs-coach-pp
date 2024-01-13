@@ -19,11 +19,11 @@ function Interview() {
     const [prepTimerProgress, setPrepTimerProgress] = useState(0)
 
     const [answerTimer, setAnswerTimer] = useState('00:00')
-    const [answerTime, setAnswerTime] = useState(10);
+    const [answerTime, setAnswerTime] = useState(180);
     const [answerTimerProgress, setAnswerTimerProgress] = useState(0)
 
     const target = 41;
-    const answerTimeTarget = 10; 
+    const answerTimeTarget = 180; 
 
 
 
@@ -82,9 +82,6 @@ function Interview() {
 
     const start = async () => {
         try {
-            setAnswerTime(10)
-            setPrepTimer('00:00')
-            setPrepTimerProgress(0)
             const recording = await createRecording(videoDeviceId, audioDeviceId);
             if (recording) await openCamera(recording.id);
         } catch (error) {
@@ -105,7 +102,6 @@ function Interview() {
 
         return () => {
             clearInterval(intervalId);
-            
         };
     }
     setPrepTimer('00:00');
@@ -204,7 +200,7 @@ function Interview() {
                             id='recordingStarter'
                              onClick={() => {
                                 startRecording(recording.id)
-                                setAnswerTime(10)
+                                setAnswerTime(180)
                                 setAnswerTimer('00:00')
                                 setAnswerTimerProgress(0)
                              }}
@@ -221,7 +217,7 @@ function Interview() {
                             id='recordingEnder'
                              onClick={() => {
                                 stopRecording(recording.id)
-                                setPrepTime(41)
+                                setPrepTime(0)
                                 setPrepTimer('00:00')
                                 setPrepTimerProgress(0)
                              }}
@@ -230,9 +226,20 @@ function Interview() {
                         <Box
                         mt='10px'
                         >
-                            <Box key={recording.id}>
-                                <video ref={recording.webcamRef} loop autoPlay playsInline style={{ width: '400px', height:'300px', minWidth: '400px', minHeight: '300px'}} mirrored='false' />
+                            <Box
+                            key={recording.id}
+                            display={recording.status === 'STOPPED' ? 'none' : ''}
+                            >
+                                <video ref={recording.webcamRef} loop autoPlay playsInline style={{ width: '400px', height:'300px', minWidth: '400px', minHeight: '300px'}}/>
                             </Box>
+
+                            <Box
+                            key={recording.id}
+                            display={recording.status === 'STOPPED' ? '' : 'none'}
+                            >
+                                <video ref={recording.previewRef} loop autoPlay playsInline style={{ width: '400px', height:'300px', minWidth: '400px', minHeight: '300px'}}/>
+                            </Box>
+
                             <Button
                             onClick={() => download(recording.id)}
                             bg='tcs.mongo'
