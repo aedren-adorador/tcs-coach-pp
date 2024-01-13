@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import AuthHeader from "../../auth/AuthHeader";
 import { useLocation, useNavigate } from "react-router-dom";
 import { RepeatClockIcon, TimeIcon } from "@chakra-ui/icons";
-import { QuestionCircleOutlined, SettingOutlined, StopFilled } from "@ant-design/icons";
+import { QuestionCircleOutlined, RedoOutlined, SettingOutlined, StopFilled } from "@ant-design/icons";
 import { useRecordWebcam } from 'react-record-webcam';
 import { useRecording } from "react-record-webcam/dist/useRecording";
 
@@ -23,9 +23,20 @@ function Interview() {
     const [answerTimerProgress, setAnswerTimerProgress] = useState(0)
 
     const target = 41;
-    const answerTimeTarget = 180; 
+    const answerTimeTarget = 180;
+    
+    const [questions, setQuestions] = useState({
+        'Tell us about yourself.': 2,
+        'Why did you apply to TCS?': 2,
+        'What are your strenghts?': 2,
+        'Tell about a time where you had a conflict with a group.': 2,
+        'How would you explain a complex topic to an audience?': 2,
+        'What do you think is the future of technology?': 2,
+        'In a collaborative environment, who are you in the group?': 2,
+        'State one important mistake that has shaped you for the better.': 2,
+        })
 
-
+    const [questionCounter, setQuestionCounter] = useState(0);
 
     const {
     activeRecordings,
@@ -158,12 +169,14 @@ function Interview() {
 
                         <Flex
                         gap='5'
+                        justify='space-between'
                         >
                             <Card
+                            display={recording.status === 'STOPPED' ? 'none' : ''}
                             borderRadius='0px'
                             padding='5px'
                             pt='0px 5'
-                            width='150px'>
+                            width='50%'>
                                 <Flex
                                 mb='1'
                                 align='center'
@@ -172,7 +185,7 @@ function Interview() {
                                     <Text
                                     fontSize='12px'
                                     fontWeight='600'
-                                    >{recording.status === 'RECORDING'? 'Answer Time' : 'Prep Time'}</Text>
+                                    >{recording.status === 'RECORDING'? 'Response Time' : 'Prep Time'}</Text>
                                     <Text
                                     fontSize='12px'
                                     >
@@ -190,6 +203,30 @@ function Interview() {
                                 />
                             </Card>
                             <Button
+                            width='50%'
+                            fontSize='12px'
+                            borderRadius='0px'
+                            display={recording.status === 'STOPPED' && questions[Object.keys(questions)[questionCounter]] > 0 ? '' : 'none'}
+                            onClick={() => {
+                                startRecording(recording.id)
+                                setAnswerTime(180)
+                                setAnswerTimer('00:00')
+                                setAnswerTimerProgress(0)
+                                setQuestions(prevQs => {
+                                    const currentQuestion = Object.keys(prevQs)[questionCounter]
+                                    const updatedQuestions = { ...prevQs }
+                                    updatedQuestions[currentQuestion] = Math.max(0, updatedQuestions[currentQuestion] - 1)
+                                    return updatedQuestions
+                                })
+                            
+                             }}
+                            >
+                                <RedoOutlined/>
+                                &nbsp;Retry
+                            </Button>
+                            <Button
+                            display={recording.status === 'RECORDING' || recording.status ==='STOPPED'?'none':''}
+                            width='50%'
                             bg='tcs.main'
                             borderRadius='0px'
                             size='md'
@@ -204,10 +241,11 @@ function Interview() {
                                 setAnswerTimer('00:00')
                                 setAnswerTimerProgress(0)
                              }}
-                            >{recording.status === 'RECORDING' ? 'Recording...' : 'Start Recording'}</Button>
+                            >Start Recording</Button>
+
                             <Button
                             display={recording.status === 'RECORDING'?'':'none'}
-                            bg='red'
+                            width='50%'
                             borderRadius='0px'
                             size='md'
                             fontWeight='300'
@@ -215,30 +253,47 @@ function Interview() {
                             colorScheme='red'
                             fontSize='12px'
                             id='recordingEnder'
+
                              onClick={() => {
                                 stopRecording(recording.id)
                                 setPrepTime(0)
                                 setPrepTimer('00:00')
                                 setPrepTimerProgress(0)
                              }}
-                            >Stop</Button>
+                            >Done Recording</Button>
+
+                            <Button
+                            bg='tcs.main'
+                            color='white'
+                            colorScheme='facebook'
+                            width='50%'
+                            fontSize='12px'
+                            borderRadius='0px'
+                            display={recording.status === 'STOPPED' ? '' : 'none'}
+                            >
+                                Submit
+                            </Button>
+                            
                         </Flex>
+
                         <Box
                         mt='10px'
                         >
-                            <Box
+                            <Flex
+                            width='100%'
                             key={recording.id}
                             display={recording.status === 'STOPPED' ? 'none' : ''}
                             >
-                                <video ref={recording.webcamRef} loop autoPlay playsInline style={{ width: '400px', height:'300px', minWidth: '400px', minHeight: '300px'}}/>
-                            </Box>
+                                <video ref={recording.webcamRef} loop autoPlay playsInline style={{width:'100%', height:'100%', minWidth: '400px', minHeight: '300px'}}/>
+                            </Flex>
 
                             <Box
                             key={recording.id}
                             display={recording.status === 'STOPPED' ? '' : 'none'}
                             >
-                                <video ref={recording.previewRef} loop autoPlay playsInline style={{ width: '400px', height:'300px', minWidth: '400px', minHeight: '300px'}}/>
+                                <video ref={recording.previewRef} loop autoPlay playsInline style={{width:'100%', height:'100%', minWidth: '400px', minHeight: '300px'}}/>
                             </Box>
+                        </Box>
 
                             <Button
                             onClick={() => download(recording.id)}
@@ -248,9 +303,6 @@ function Interview() {
                             borderRadius='0px'
                             display={recording.status === 'STOPPED' ? '' : 'none'}
                             >Download</Button>
-
-                           
-                        </Box>
                     </GridItem>
                     ))}
                     
@@ -260,7 +312,7 @@ function Interview() {
                          <Text
                          fontWeight='700'
                          fontSize='18px'
-                         >Question 1 of 8</Text>
+                         >Question 1 of {Object.keys(questions).length}</Text>
                          <Flex
                          gap='10'
                          fontSize='12px'
@@ -268,7 +320,7 @@ function Interview() {
                             <Box>
                                 <RepeatClockIcon/>
                                 &nbsp;
-                                <strong>2</strong> Tries
+                                <strong>{Object.values(questions)[questionCounter]}</strong> Tries
                             </Box>
                              <Box>
                                 <TimeIcon></TimeIcon>
@@ -277,6 +329,13 @@ function Interview() {
                             </Box>
                             
                          </Flex>
+
+                         <Text
+                         mt='30px'
+                         fontSize='20px'
+                         >
+                            {Object.keys(questions)[questionCounter]}
+                         </Text>
                     </GridItem>
 
                 </Grid>
