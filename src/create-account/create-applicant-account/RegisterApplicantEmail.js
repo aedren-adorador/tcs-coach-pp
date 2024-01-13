@@ -57,7 +57,7 @@ function RegisterApplicantEmail() {
                  <Text
                  mb='20px'
                  textAlign='center'
-                 fontWeight='1000'
+                 fontWeight='600'
                  >Verify Email</Text>
                 <Formik
                 initialValues={{email: ''}}
@@ -115,7 +115,7 @@ function RegisterApplicantEmail() {
                             width='100%'
                             size='sm'
                             type='submit'
-                            fontWeight='1000'
+                            fontWeight='600'
                             
                             >Verify Email</Button>
                             <Link to='/'>

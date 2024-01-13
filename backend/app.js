@@ -68,6 +68,11 @@ function generateVerificationToken(email) {
   return jwt.sign({ email, exp: expirationTime }, process.env.JWT_SECRET);
 }
 
+function generateInterviewToken(applicantID, jobAppID) {
+  const expirationTime = Math.floor(Date.now() / 1000) + 7 * 24 * 60 * 60;
+  return jwt.sign({ applicantID, jobAppID, exp: expirationTime }, process.env.JWT_SECRET);
+}
+
 async function sendEmail(emailAddressInput, token) {
     const verificationLink = `http://localhost:3001/api/auth/verify?token=${token}&email=${emailAddressInput}`
     await transporter.sendMail({
@@ -126,7 +131,8 @@ app.post('/api/send-interview-invite', async (req, res, next) => {
           ]).exec();
   const filteredUpdate = update.filter(jobApp => jobApp._id.toString() === req.body.jobApplicationID)
   const filteredUpdateLevel2 = [{...filteredUpdate[0], currentStepM: 'waitingForInterviewSubmission'}]
-  JobApplication.updateOne({_id: req.body.jobApplicationID}, {currentStepM: 'waitingForInterviewSubmission'})
+  const token = generateInterviewToken(req.body.applicantID, req.body.jobApplicationID)
+  JobApplication.updateOne({_id: req.body.jobApplicationID}, {currentStepM: 'waitingForInterviewSubmission', interviewTokenM: token})
     .then(
       sendInterviewInvite(details.emailAddress, details.position, stringifiedDeadline, details.firstName)
         .then(result => {
@@ -147,6 +153,19 @@ app.get('/api/auth/verify',(req, res, next) => {
         } else {
             res.redirect(`http://localhost:3000/create-applicant-account?email=${encodeURIComponent(obtainedEmail)}`)
         }
+    })
+})
+
+app.post('/api/verify-interview-token', (req, res, next) => {
+  JobApplication.findOne({_id: req.body.jobApplicationID})
+    .then(result => {
+      jwt.verify(result.interviewTokenM, process.env.JWT_SECRET, (err) => {
+        if (err) {
+            res.status(400).send('Invalid or expired interview link.');
+        } else {
+            res.json({success: 'interview link verified!', token: result.interviewTokenM})
+        }
+      })
     })
 })
 

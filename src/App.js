@@ -11,6 +11,13 @@ import CreateAdminAccount from './create-account/create-admin-account/CreateAdmi
 import MainAdminView from './admin-views/MainAdminView';
 import MyApplicationStepper from './applicant-views/my-application/applicant-steps/MyApplicationStepper';
 import JobPortal from './applicant-views/job-portal/JobPortal';
+import Video from './Video';
+import InterviewIntroduction from './applicant-views/video-interview/InterviewIntroduction'
+import WhatToExpect from './applicant-views/video-interview/WhatToExpect';
+import CameraAndMicrophoneSettings from './applicant-views/video-interview/CameraAndMicrophoneSettings';
+import Instructions from './applicant-views/video-interview/Instructions';
+import Interview from './applicant-views/video-interview/Interview';
+
 
 function App() {
   
@@ -33,7 +40,8 @@ function App() {
       mongo: '#09A334',
       bluey: '#E5ECF9',
       creamy: '#FFFDD0',
-      limey: '#cdffcd'
+      limey: '#cdffcd',
+      500: '#0C3C55'
     },
   },
 })
@@ -41,6 +49,7 @@ function App() {
     <ChakraProvider theme={theme}>
       <BrowserRouter>
         <Routes>
+          <Route path="/video-test" element={<Video/>}/>
           <Route path="/" element={<Login onLoginSuccess={handleLoginSuccess}/>}/>
           <Route path="/register-email" element={<RegisterApplicantEmail/>}/>
           <Route path="/create-applicant-account" element={<CreateApplicantAccount/>}/>
@@ -75,11 +84,61 @@ function App() {
           }
           />
 
+          <Route
+          path='/video-interview/introduction'
+          element={
+            <AuthPrivateRoute
+            isAuthenticated={isAuthenticated}
+            component={InterviewIntroduction}
+            />
+          }
+          />
+
+          <Route
+          path='/video-interview/what-to-expect'
+          element={
+            <AuthPrivateRoute
+            isAuthenticated={isAuthenticated}
+            component={WhatToExpect}
+            />
+          }
+          />
+
+          <Route
+          path='/video-interview/camera-and-microphone-settings'
+          element={
+            <AuthPrivateRoute
+            isAuthenticated={isAuthenticated}
+            component={CameraAndMicrophoneSettings}
+            />
+          }
+          />
+
+          <Route
+          path='/video-interview/instructions'
+          element={
+            <AuthPrivateRoute
+            isAuthenticated={isAuthenticated}
+            component={Instructions}
+            />
+          }
+          />
+
+          <Route
+          path='/video-interview/interview'
+          element={
+            <AuthPrivateRoute
+            isAuthenticated={isAuthenticated}
+            component={Interview}
+            />
+          }
+          />
+
+
           
         </Routes>
       </BrowserRouter>
     </ChakraProvider>
-
   );
 }
 

@@ -68,7 +68,7 @@ function Login({onLoginSuccess}) {
                     >
                         <Text
                         textAlign='center'
-                        fontWeight='1000'
+                        fontWeight='600'
                         mb='30px'
                         >Sign In</Text>
                         <FormControl isInvalid={isInvalidCredentials}>
@@ -121,7 +121,7 @@ function Login({onLoginSuccess}) {
                         width='100%'
                         size='sm'
                         type='submit'
-                        fontWeight='1000'
+                        fontWeight='600'
                         
                         >Sign In</Button> :
 

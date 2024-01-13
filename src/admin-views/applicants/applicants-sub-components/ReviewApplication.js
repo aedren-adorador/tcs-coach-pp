@@ -18,7 +18,8 @@ function ReviewApplication({chosenApplicantAllJobApplicationDetails, setChosenAp
             position: chosenApplicantAllJobApplicationDetails.positionAppliedToM,
             emailAddress: chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0].emailM,
             firstName: chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0].firstNameM,
-            jobApplicationID: chosenApplicantAllJobApplicationDetails._id
+            jobApplicationID: chosenApplicantAllJobApplicationDetails._id,
+            applicantID: chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0]._id
         }
         axios.post('http://localhost:3001/api/send-interview-invite', details)
             .then(response => {

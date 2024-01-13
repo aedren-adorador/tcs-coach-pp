@@ -92,6 +92,7 @@ function AllApplicants({applicants, updateChosenApplicantToReview, handleButtonC
                 </Thead>
                 <Tbody>
                 {allJobApplications.map((jobApp, index) => {
+                    if(jobApp.currentStepM){
                     return <Tr
                     key={index}
                     onClick={()=>goToApplicantProgress(jobApp)}
@@ -132,7 +133,8 @@ function AllApplicants({applicants, updateChosenApplicantToReview, handleButtonC
                             {jobApp.currentStepM === 'submittedInitialApplication' && 'NA'}
                         </Td>
                     </Tr>
-                })}
+                    }
+                })} 
     
                 </Tbody>
             </Table>

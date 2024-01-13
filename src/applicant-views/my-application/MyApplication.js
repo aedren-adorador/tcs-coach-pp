@@ -1,12 +1,25 @@
 import { WarningIcon } from "@chakra-ui/icons";
-import { Td, Table, TableCaption, TableContainer, Tr, Th, Tbody, Thead, Button, Badge, Text, Image, Flex, Skeleton} from "@chakra-ui/react";
+import { Td, Table, TableCaption, TableContainer, Tr, Th, Tbody, Thead, Button, Badge, Text, Image, Flex, Skeleton, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter} from "@chakra-ui/react";
 import suitcase from '../../admin-views/admin-view-imgs/suitcase.png'
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function MyApplication({applicantData, setObtainedActiveNavButton}) {
+    const navigate = useNavigate();
     const [submittedJobApplicationDetails, setSubmittedJobApplicatioDetails] = useState({});
     const [isLoading, setIsLoading] = useState(true);
+    const { isOpen, onOpen, onClose } = useDisclosure()
+
+    const redirectToVideoInterview = () => {
+        if (applicantData.jobApplicationsM.length === 1) {
+            const details = {jobApplicationID: applicantData.jobApplicationsM[0]}
+            axios.post('http://localhost:3001/api/verify-interview-token', details)
+                .then(response => {
+                    navigate(`/video-interview/introduction`, {state: {applicantData: applicantData, token: response.data.token}})
+                })
+        }
+    }
 
     useEffect(() => {
         if (applicantData.jobApplicationsM && applicantData.jobApplicationsM.length !== 0) {
@@ -30,9 +43,9 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
             fontSize='sm'
             fontWeight='300'
             mb='20px'
-            >Hello, {applicantData.firstNameM} {applicantData.lastNameM}.</Text>
+            >Hello, {applicantData.firstNameM}.</Text>
             <Text
-            fontWeight='1000'
+            fontWeight='600'
             >My Application</Text>
             <Table
             size='sm'
@@ -144,7 +157,7 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
             margin='20px 5% 20px 5%'
             >
             <Text
-            fontWeight='1000'
+            fontWeight='600'
             >Pending Tasks</Text>
             <Table
             size='sm'
@@ -182,13 +195,43 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                         {submittedJobApplicationDetails.currentStepM === '' && '—'}
                        {submittedJobApplicationDetails.currentStepM === 'submittedInitialApplication' && '—'}
                        {submittedJobApplicationDetails.currentStepM === 'waitingForInterviewSubmission' &&
+                       <>
                        <Button
+                       onClick={onOpen}
                        bg='tcs.mongo'
                        color='white'
                        colorScheme="green"
-                       size='xs'
+                       size='sm'
                        borderRadius='0px'
-                       >Take Interview</Button>}
+                       >Take Video Interview</Button>
+                       <Modal isOpen={isOpen} onClose={onClose}>
+                            <ModalOverlay />
+                            <ModalContent>
+                            <ModalHeader fontWeight='700'>Video Interview Confirmation</ModalHeader>
+                            <ModalCloseButton />
+                            <ModalBody fontWeight='300' fontSize='14px'>
+                                Reminder: Once you take the interview, it cannot be undone. Please make sure you are ready before proceeding.
+                            </ModalBody>
+
+                            <ModalFooter>
+                                <Button
+                                colorScheme='red'
+                                mr={3} onClick={onClose}
+                                borderRadius='0px'
+                                >
+                                Cancel
+                                </Button>
+                                <Button
+                                onClick={redirectToVideoInterview}
+                                fontWeight='300'
+                                variant='ghost'
+                                borderRadius='0px'                    
+                                >Yes, I'm ready.</Button>
+                            </ModalFooter>
+                            </ModalContent>
+                        </Modal>
+                       </>
+                      }
                     </Td>
                 </Tr>
                 </Tbody>

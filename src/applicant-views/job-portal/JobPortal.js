@@ -108,7 +108,7 @@ function JobPortal({isAdmin, applicantData}) {
             bg='white'
             key={index}
            fontSize='12px'
-           fontWeight='1000'
+           fontWeight='600'
            placeholder={filterSetting}  
            size='sm'
            border='solid 0.2px black'
@@ -147,7 +147,7 @@ function JobPortal({isAdmin, applicantData}) {
                     >
                         <Text
                         textDecoration='underline'
-                        fontWeight='1000'
+                        fontWeight='600'
                         >{job.jobTitleM}</Text>
                         <Text
                         margin='5px 0px 5px 0px'
@@ -219,7 +219,7 @@ function JobPortal({isAdmin, applicantData}) {
                     >
                         <Text
                         textDecoration='underline'
-                        fontWeight='1000'
+                        fontWeight='600'
                         >{job.jobTitleM}</Text>
                         <Text
                         margin='5px 0px 5px 0px'
@@ -262,7 +262,7 @@ function JobPortal({isAdmin, applicantData}) {
                 >
                      <Text
                     fontSize='20px'
-                    fontWeight='1000'
+                    fontWeight='600'
                     >{jobsList[clickedJob-1].jobTitleM}</Text>
                     
                     {isAdmin ?
@@ -297,7 +297,7 @@ function JobPortal({isAdmin, applicantData}) {
                         mt='10px'
                         size='sm'
                         borderRadius='0px'
-                        fontWeight='1000'
+                        fontWeight='600'
                         width='100px'
                         boxShadow='5px 5px 5px lightgray'
                         >
@@ -329,13 +329,13 @@ function JobPortal({isAdmin, applicantData}) {
                     </Flex>
                     <Text
                     mt='20px'
-                    fontWeight='1000'
+                    fontWeight='700'
                     >Job Location</Text>
                     <Text>{jobsList[clickedJob-1].jobLocationM}</Text>
 
                     <Text
                     mt='20px'
-                    fontWeight='1000'
+                    fontWeight='700'
                     >Job Description</Text>
                     <Text>
                         {jobsList[clickedJob-1].jobDescriptionM}
@@ -343,7 +343,7 @@ function JobPortal({isAdmin, applicantData}) {
 
                     <Text
                     mt='20px'
-                    fontWeight='1000'
+                    fontWeight='700'
                     >Responsibilities</Text>
                     <Text>
                         {jobsList[clickedJob-1].jobResponsibilitiesM}
@@ -351,7 +351,7 @@ function JobPortal({isAdmin, applicantData}) {
 
                     <Text
                     mt='20px'
-                    fontWeight='1000'
+                    fontWeight='700'
                     >Qualifications</Text>
                     <Text>
                         {jobsList[clickedJob-1].jobQualificationsM}
@@ -359,7 +359,7 @@ function JobPortal({isAdmin, applicantData}) {
 
                     <Text
                     mt='20px'
-                    fontWeight='1000'
+                    fontWeight='700'
                     >Job Segmentation</Text>
                     <Text>
                         {jobsList[clickedJob-1].jobSegmentationM}
