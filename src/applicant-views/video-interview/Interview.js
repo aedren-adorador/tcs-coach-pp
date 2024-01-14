@@ -67,18 +67,23 @@ function Interview() {
         let xhr = new XMLHttpRequest();
         xhr.open("GET", recordingSource, true);
         xhr.responseType = "blob";
-
+        
         xhr.onload = function() {
         let blobData = xhr.response;
         const interviewResponse = new FormData()
+        interviewResponse.append('applicantFirstName', applicantData.firstNameM)
+        interviewResponse.append('applicantLastName', applicantData.lastNameM)
+        interviewResponse.append('applicantID', applicantData._id)
+        interviewResponse.append('questionNumber', questionCounter+1)
         interviewResponse.append('interview', blobData, 'testing.mp4', {type: 'video/webm'})
+
         axios.post('http://localhost:3001/api/submit-interview', interviewResponse)
+        
 
         }
         xhr.send()
 
     }
-
 
     const handleSelect = async (event) => {
         const { deviceid: deviceId }= event.target.options[event.target.selectedIndex].dataset;
@@ -506,7 +511,10 @@ function Interview() {
                                 fontSize='14px'
                                 width='150px'
                                 colorScheme='facebook'
-                                onClick={()=>submitInterviewResponse(recording.previewRef.current.currentSrc)}
+                                onClick={()=>{
+                                    submitInterviewResponse(recording.previewRef.current.currentSrc)
+                                    onConfirmationClose()
+                                }}
                                 >Submit</Button>
                             </Flex>
                         </ModalBody>

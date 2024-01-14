@@ -10,12 +10,14 @@ const Admin = require('./models/admins');
 const Job = require('./models/jobs');
 const JobApplication = require('./models/jobApplications');
 const fs = require('fs');
+const path = require('path');
+
 
 const Resume = require('./models/resumes');
 require('dotenv').config();
 const multer = require('multer');
 const { stringify } = require('querystring');
-const { Blob } = require('buffer');
+
 
 // Mandatory Settings
 app.use(bodyParser.json());
@@ -36,11 +38,22 @@ const upload = multer({ storage: storage })
 
 const interviewStorage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, './interview-recordings');
+    const directoryName = `${req.body.applicantFirstName}-${req.body.applicantLastName}-${req.body.applicantID}`
+   
+    if (fs.existsSync(`./interview-recordings/${directoryName}`)) {
+      cb(null, `./interview-recordings/${directoryName}`)
+    } else {
+      fs.mkdir(path.join(__dirname, `../interview-recordings/${directoryName}`),
+        (err) => {
+            if (err) {
+                return console.error(err);
+            }
+            cb(null, `./interview-recordings/${directoryName}`)
+        });
+      }
   },
   filename: function (req, file, cb) {
-    console.log('HERE WE GO')
-    cb(null, 'TCS-Interview-' + Math.round(Math.random() * 1E9)+'.webm');
+    cb(null, 'TCS-Interview-Question'+req.body.questionNumber+'-'+req.body.applicantFirstName + '-' + req.body.applicantLastName +'-' +Math.round(Math.random() * 1E9)+'.webm');
   }
 });
 
@@ -473,8 +486,14 @@ res.json({joinedApplicantAndJobApplicationDetails: result})
   
 });
 
-app.post('/api/submit-interview', uploadInterview.single('interview'), (req, res) => {
-  console.log(req.file)
+app.post('/api/submit-interview', uploadInterview.single('interview'), (req, res, next) => {
+  // console.log(req.body)
+  // console.log(req.file)
+  
+  // uploadInterview.single('interview')(req, res, (err) => {
+    
+  // });
+   
 })
 
 module.exports = app;
