@@ -6,9 +6,11 @@ import { RepeatClockIcon, TimeIcon } from "@chakra-ui/icons";
 import { QuestionCircleOutlined, RedoOutlined, SettingOutlined, StopFilled } from "@ant-design/icons";
 import { useRecordWebcam } from 'react-record-webcam';
 import { useRecording } from "react-record-webcam/dist/useRecording";
+import axios from "axios";
 
 function Interview() {
-    const { isOpen, onOpen, onClose } = useDisclosure()
+    const { isOpen: isSettingsOpen , onOpen: onSettingsOpen, onClose: onSettingsClose } = useDisclosure()
+    const { isOpen: isConfirmationOpen , onOpen: onConfirmationOpen, onClose: onConfirmationClose } = useDisclosure()
     const location = useLocation();
     const applicantData = location.state.applicantData
     const token = location.state.token
@@ -55,8 +57,28 @@ function Interview() {
     stopRecording,
   } = useRecordWebcam();
 
+  const {getRecording} = useRecording();
+
     const [videoDeviceId, setVideoDeviceId] = useState('');
     const [audioDeviceId, setAudioDeviceId] = useState('');
+
+    const submitInterviewResponse = (recordingSource) => {
+        
+        let xhr = new XMLHttpRequest();
+        xhr.open("GET", recordingSource, true);
+        xhr.responseType = "blob";
+
+        xhr.onload = function() {
+        let blobData = xhr.response;
+        const interviewResponse = new FormData()
+        interviewResponse.append('interview', blobData, 'testing.mp4', {type: 'video/webm'})
+        axios.post('http://localhost:3001/api/submit-interview', interviewResponse)
+
+        }
+        xhr.send()
+
+    }
+
 
     const handleSelect = async (event) => {
         const { deviceid: deviceId }= event.target.options[event.target.selectedIndex].dataset;
@@ -121,7 +143,7 @@ function Interview() {
 
     useEffect(() => {
     }, [videoDeviceId, audioDeviceId])
-   
+
     useEffect(() => {
         start()
     }, [])
@@ -129,6 +151,7 @@ function Interview() {
 
     return(
         <>
+        {activeRecordings?.map((recording) => (
         <Box
         height='100vh'
         width='100vw'
@@ -160,7 +183,7 @@ function Interview() {
                 templateColumns='repeat(2, 1fr)'
                 gap='10'
                 >
-                    {activeRecordings?.map((recording) => (
+                    
                     <GridItem>
                         <Text
                         fontWeight='700'
@@ -169,7 +192,7 @@ function Interview() {
 
                         <Flex
                         gap='5'
-                        justify='space-between'
+                        justify='flex-end'
                         >
                             <Card
                             display={recording.status === 'STOPPED' ? 'none' : ''}
@@ -240,6 +263,12 @@ function Interview() {
                                 setAnswerTime(180)
                                 setAnswerTimer('00:00')
                                 setAnswerTimerProgress(0)
+                                setQuestions(prevQs => {
+                                    const currentQuestion = Object.keys(prevQs)[questionCounter]
+                                    const updatedQuestions = { ...prevQs }
+                                    updatedQuestions[currentQuestion] = Math.max(0, updatedQuestions[currentQuestion] - 1)
+                                    return updatedQuestions
+                                })
                              }}
                             >Start Recording</Button>
 
@@ -256,12 +285,8 @@ function Interview() {
 
                              onClick={() => {
                                 stopRecording(recording.id)
-                                setPrepTime(0)
-                                setPrepTimer('00:00')
-                                setPrepTimerProgress(0)
                              }}
                             >Done Recording</Button>
-
                             <Button
                             bg='tcs.main'
                             color='white'
@@ -270,6 +295,7 @@ function Interview() {
                             fontSize='12px'
                             borderRadius='0px'
                             display={recording.status === 'STOPPED' ? '' : 'none'}
+                            onClick={onConfirmationOpen}
                             >
                                 Submit
                             </Button>
@@ -291,7 +317,7 @@ function Interview() {
                             key={recording.id}
                             display={recording.status === 'STOPPED' ? '' : 'none'}
                             >
-                                <video ref={recording.previewRef} loop autoPlay playsInline style={{width:'100%', height:'100%', minWidth: '400px', minHeight: '300px'}}/>
+                                <video ref={recording.previewRef}  loop autoPlay playsInline style={{width:'100%', height:'100%', minWidth: '400px', minHeight: '300px'}}/>
                             </Box>
                         </Box>
 
@@ -304,7 +330,7 @@ function Interview() {
                             display={recording.status === 'STOPPED' ? '' : 'none'}
                             >Download</Button>
                     </GridItem>
-                    ))}
+                    
                     
                     <GridItem
                     minW='400px'
@@ -354,12 +380,12 @@ function Interview() {
                     <Text
                     color='tcs.linky'
                     textDecoration='underline'
-                    onClick={onOpen}
+                    onClick={onSettingsOpen}
                     ><SettingOutlined/> Settings</Text>
 
                      <Modal 
-                     isOpen={isOpen}
-                     onClose={onClose}
+                     isOpen={isSettingsOpen}
+                     onClose={onSettingsClose}
                      
                      >
                         <ModalOverlay />
@@ -431,10 +457,59 @@ function Interview() {
                             </Box>
                         </ModalBody>
                         <ModalFooter>
-                            <Button colorScheme='tcs' borderRadius='0px' size='sm' mr={3} onClick={onClose}>
+                            <Button colorScheme='tcs' borderRadius='0px' size='sm' mr={3} onClick={onSettingsClose}>
                             Save Settings
                             </Button>
                         </ModalFooter>
+                        </ModalContent>
+                    </Modal>
+
+                    <Modal 
+                     isOpen={isConfirmationOpen}
+                     onClose={onConfirmationClose}
+                     
+                     >
+                        <ModalOverlay />
+                        <ModalContent
+                        maxW='550px'
+                        height='250px'
+                        borderRadius='0px'
+                        >
+                        <ModalHeader
+                        fontWeight='700'
+                        bg='tcs.dirtywhite'
+                        fontSize='18px'
+                        >Submit your response</ModalHeader>
+                        <ModalCloseButton />
+                        <ModalBody
+                        mt='20px'
+                        fontSize='14px'
+                        >
+                            Are you sure you want to submit your response? You will not be able to come back and re-record a new response later.
+                            <Flex
+                            mt='40px'
+                            gap='5'
+                            justify='flex-end'
+                            >
+                                <Button
+                                borderRadius='0px'
+                                fontWeight='400'
+                                fontSize='14px'
+                                width='150px'
+                                >Cancel</Button>
+
+                                <Button
+                                borderRadius='0px'
+                                bg='tcs.main'
+                                color='white'
+                                fontWeight='400'
+                                fontSize='14px'
+                                width='150px'
+                                colorScheme='facebook'
+                                onClick={()=>submitInterviewResponse(recording.previewRef.current.currentSrc)}
+                                >Submit</Button>
+                            </Flex>
+                        </ModalBody>
                         </ModalContent>
                     </Modal>
                 </Flex>
@@ -442,6 +517,7 @@ function Interview() {
           </Card>
         </Flex>
        </Box>
+       ))}
 
         </>
     )

@@ -15,6 +15,7 @@ const Resume = require('./models/resumes');
 require('dotenv').config();
 const multer = require('multer');
 const { stringify } = require('querystring');
+const { Blob } = require('buffer');
 
 // Mandatory Settings
 app.use(bodyParser.json());
@@ -31,6 +32,19 @@ const storage = multer.diskStorage({
 })
 
 const upload = multer({ storage: storage })
+
+
+const interviewStorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './interview-recordings');
+  },
+  filename: function (req, file, cb) {
+    console.log('HERE WE GO')
+    cb(null, 'TCS-Interview-' + Math.round(Math.random() * 1E9)+'.webm');
+  }
+});
+
+const uploadInterview = multer({ storage: interviewStorage });
 
 
 app.use((req, res, next) => {
@@ -459,6 +473,8 @@ res.json({joinedApplicantAndJobApplicationDetails: result})
   
 });
 
-
+app.post('/api/submit-interview', uploadInterview.single('interview'), (req, res) => {
+  console.log(req.file)
+})
 
 module.exports = app;
