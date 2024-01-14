@@ -17,6 +17,9 @@ import WhatToExpect from './applicant-views/video-interview/WhatToExpect';
 import CameraAndMicrophoneSettings from './applicant-views/video-interview/CameraAndMicrophoneSettings';
 import Instructions from './applicant-views/video-interview/Instructions';
 import Interview from './applicant-views/video-interview/Interview';
+import ProceedToNextQuestion from './applicant-views/video-interview/ProceedToNextQuestion';
+import SubmissionComplete from './applicant-views/video-interview/SubmissionComplete';
+import Finish from './applicant-views/video-interview/Finish';
 
 
 function App() {
@@ -130,6 +133,35 @@ function App() {
             <AuthPrivateRoute
             isAuthenticated={isAuthenticated}
             component={Interview}
+            />
+          }
+          />
+
+          <Route
+          path='/video-interview/proceed-to-next-question'
+          element={
+            <AuthPrivateRoute
+            isAuthenticated={isAuthenticated}
+            component={ProceedToNextQuestion}
+            />
+          }
+          />
+
+          <Route
+          path='/video-interview/submission-complete'
+          element={
+            <AuthPrivateRoute
+            isAuthenticated={isAuthenticated}
+            component={SubmissionComplete}
+            />
+          }
+          />
+          <Route
+          path='/video-interview/finish'
+          element={
+            <AuthPrivateRoute
+            isAuthenticated={isAuthenticated}
+            component={Finish}
             />
           }
           />

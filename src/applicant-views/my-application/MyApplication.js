@@ -16,7 +16,7 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
             const details = {jobApplicationID: applicantData.jobApplicationsM[0]}
             axios.post('http://localhost:3001/api/verify-interview-token', details)
                 .then(response => {
-                    navigate(`/video-interview/introduction`, {state: {applicantData: applicantData, token: response.data.token}})
+                    navigate(`/video-interview/introduction`, {state: {applicantData: applicantData, token: response.data.token, submittedJobApplicationDetails: submittedJobApplicationDetails}})
                 })
         }
     }
@@ -103,7 +103,7 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                         <Badge
                         bg='tcs.mongo'
                         color='white'
-                        fontWeight='300'
+                        fontWeight='500'
                         padding='5px'
                         >Active: Application Received</Badge>}
 
@@ -111,9 +111,17 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                         <Badge
                         bg='tcs.limey'
                         color='black'
-                        fontWeight='300'
+                        fontWeight='500'
                         padding='5px'
                         >Active: Waiting for Interview Submission</Badge>}
+
+                        {submittedJobApplicationDetails.currentStepM === 'submittedVideoInterview' &&
+                        <Badge
+                        bg='tcs.limey'
+                        color='black'
+                        fontWeight='500'
+                        padding='5px'
+                        >Active: Video Interview Under Review</Badge>}
                         </Skeleton>
                     </Td>   
                 </Tr>
@@ -183,13 +191,16 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                     </Td>
                     <Td>
                         {submittedJobApplicationDetails.currentStepM === '' && '—'}
-                        {submittedJobApplicationDetails.currentStepM === 'submittedInitialApplication' && 'No Tasks Yet'}
+                        {submittedJobApplicationDetails.currentStepM === 'submittedInitialApplication' && 'No tasks yet'}
                         {submittedJobApplicationDetails.currentStepM === 'waitingForInterviewSubmission' && 'Take Asynchronous Video Interview'}
+                        {submittedJobApplicationDetails.currentStepM === 'submittedVideoInterview' && 'No tasks yet'}
                     </Td>
                     <Td>
                         {submittedJobApplicationDetails.currentStepM === '' && '—'}
                         {submittedJobApplicationDetails.currentStepM === 'submittedInitialApplication' && '—'}
                         {submittedJobApplicationDetails.currentStepM === 'waitingForInterviewSubmission' && new Date(submittedJobApplicationDetails.deadlineDateInterviewM).toDateString()}
+                        {submittedJobApplicationDetails.currentStepM === 'submittedVideoInterview' && '—'}
+
                     </Td>
                     <Td>
                         {submittedJobApplicationDetails.currentStepM === '' && '—'}
@@ -232,6 +243,7 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                         </Modal>
                        </>
                       }
+                      {submittedJobApplicationDetails.currentStepM === 'submittedVideoInterview' && '—'}
                     </Td>
                 </Tr>
                 </Tbody>

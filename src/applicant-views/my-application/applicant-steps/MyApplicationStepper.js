@@ -145,7 +145,7 @@ function MyApplicationStepper() {
                 </Link>
                 <Flex
                 textAlign='center'
-                fontWeight='1000'
+                fontWeight='600'
                 mb='20px'
                 >{jobData.jobTitleM} Position</Flex>
                 <Stepper

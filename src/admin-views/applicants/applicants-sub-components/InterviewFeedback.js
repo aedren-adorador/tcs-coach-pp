@@ -32,7 +32,7 @@ function InterviewFeedback() {
         <Text
         mt='40px'
         mb='20px'
-        fontWeight='1000'
+        fontWeight='600'
         color='black'
         >Interview Questions</Text>
         {interviewQuestions.map((question, index)=> {
@@ -105,7 +105,7 @@ function InterviewFeedback() {
         <Text
         mt='40px'
         mb='20px'
-        fontWeight='1000'
+        fontWeight='600'
         color='black'
         >Interview Feedback Criteria</Text>
         {Object.keys(interviewCriteriaScores).map((criterion) => {
@@ -115,7 +115,9 @@ function InterviewFeedback() {
             mb='10px'
             >
                <Box>
-                    <Text>{criterion}</Text>
+                    <Text
+                    key={Math.floor(1000000000 + Math.random() * 9000000000)}
+                    >{criterion}</Text>
                 </Box>
                 <Flex>
                     {Array.from({length: perfectScore}, (_, starIndex) => (

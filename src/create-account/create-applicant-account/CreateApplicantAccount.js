@@ -89,7 +89,7 @@ function CreateApplicantAccount() {
                             <Text
                             textAlign='center'
                             fontSize='14px'
-                            fontWeight='1000'
+                            fontWeight='600'
                             mb='20px'
                             >Create Account</Text>
                             <Flex
@@ -176,7 +176,7 @@ function CreateApplicantAccount() {
                                 width='100%'
                                 size='sm'
                                 type='submit'
-                                fontWeight='1000'
+                                fontWeight='600'
                                 ></Button> :
                                 <Button
                                 mt='10px'
@@ -186,7 +186,7 @@ function CreateApplicantAccount() {
                                 width='100%'
                                 size='sm'
                                 type='submit'
-                                fontWeight='1000'
+                                fontWeight='600'
                                 >Create Account</Button>
                             }
                             </FormControl>

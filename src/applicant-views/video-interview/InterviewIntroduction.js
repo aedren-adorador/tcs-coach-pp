@@ -9,6 +9,7 @@ function InterviewIntroduction() {
   const location = useLocation();
   const applicantData = location.state.applicantData
   const token = location.state.token
+  const submittedJobApplicationDetails = location.state.submittedJobApplicationDetails
 
    return(
     <>
@@ -19,8 +20,6 @@ function InterviewIntroduction() {
         position='fixed'
         margin='0px'
         >
-       
-
         <AuthHeader/>
         <Flex
         justify='center'
@@ -69,7 +68,7 @@ function InterviewIntroduction() {
                 color='white'
                 colorScheme='facebook'
                 onClick={() => {
-                  navigate('/video-interview/what-to-expect', {state: {applicantData: applicantData, token: token}})
+                  navigate('/video-interview/what-to-expect', {state: {applicantData: applicantData, token: token, submittedJobApplicationDetails: submittedJobApplicationDetails}})
                 }}
                 >Continue</Button>
 

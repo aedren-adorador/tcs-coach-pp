@@ -3,30 +3,37 @@ import React, { useEffect, useState } from "react";
 import AuthHeader from "../../auth/AuthHeader";
 import { useLocation, useNavigate } from "react-router-dom";
 import { RepeatClockIcon, TimeIcon } from "@chakra-ui/icons";
-import { QuestionCircleOutlined, RedoOutlined, SettingOutlined, StopFilled } from "@ant-design/icons";
+import { QuestionCircleOutlined, RedoOutlined, SettingOutlined } from "@ant-design/icons";
 import { useRecordWebcam } from 'react-record-webcam';
-import { useRecording } from "react-record-webcam/dist/useRecording";
 import axios from "axios";
 
 function Interview() {
     const { isOpen: isSettingsOpen , onOpen: onSettingsOpen, onClose: onSettingsClose } = useDisclosure()
     const { isOpen: isConfirmationOpen , onOpen: onConfirmationOpen, onClose: onConfirmationClose } = useDisclosure()
+    
     const location = useLocation();
+    const navigate = useNavigate();
+    
     const applicantData = location.state.applicantData
     const token = location.state.token
-    const navigate = useNavigate();
+    const submittedJobApplicationDetails = location.state.submittedJobApplicationDetails
+    console.log("HAGOGAO", submittedJobApplicationDetails)
+
+    const [videoDeviceId, setVideoDeviceId] = useState('');
+    const [audioDeviceId, setAudioDeviceId] = useState('');
 
     const [prepTimer, setPrepTimer] = useState('00:00');
     const [prepTime, setPrepTime] = useState(41);
     const [prepTimerProgress, setPrepTimerProgress] = useState(0)
+    const target = 41;
 
     const [answerTimer, setAnswerTimer] = useState('00:00')
     const [answerTime, setAnswerTime] = useState(180);
     const [answerTimerProgress, setAnswerTimerProgress] = useState(0)
-
-    const target = 41;
     const answerTimeTarget = 180;
     
+    const [questionCounter, setQuestionCounter] = useState(location.state.questionCounter+1 || 0)
+
     const [questions, setQuestions] = useState({
         'Tell us about yourself.': 2,
         'Why did you apply to TCS?': 2,
@@ -37,8 +44,6 @@ function Interview() {
         'In a collaborative environment, who are you in the group?': 2,
         'State one important mistake that has shaped you for the better.': 2,
         })
-
-    const [questionCounter, setQuestionCounter] = useState(0);
 
     const {
     activeRecordings,
@@ -55,39 +60,32 @@ function Interview() {
     resumeRecording,
     startRecording,
     stopRecording,
-  } = useRecordWebcam();
+    } = useRecordWebcam();
 
-  const {getRecording} = useRecording();
-
-    const [videoDeviceId, setVideoDeviceId] = useState('');
-    const [audioDeviceId, setAudioDeviceId] = useState('');
 
     const submitInterviewResponse = (recordingSource) => {
-        
         let xhr = new XMLHttpRequest();
         xhr.open("GET", recordingSource, true);
         xhr.responseType = "blob";
         
         xhr.onload = function() {
-        let blobData = xhr.response;
+        const blobData = xhr.response;
         const interviewResponse = new FormData()
+        console.log("DITO ME")
+        console.log(applicantData)
         interviewResponse.append('applicantFirstName', applicantData.firstNameM)
         interviewResponse.append('applicantLastName', applicantData.lastNameM)
         interviewResponse.append('applicantID', applicantData._id)
         interviewResponse.append('questionNumber', questionCounter+1)
-        interviewResponse.append('interview', blobData, 'testing.mp4', {type: 'video/webm'})
-
+        interviewResponse.append('interview', blobData, {type: 'video/webm'})
         axios.post('http://localhost:3001/api/submit-interview', interviewResponse)
-        
-
+            .then(response => console.log(response.data.success))
         }
         xhr.send()
-
     }
 
     const handleSelect = async (event) => {
         const { deviceid: deviceId }= event.target.options[event.target.selectedIndex].dataset;
-        
         if (devicesById[deviceId].type === 'videoinput') {
         setVideoDeviceId(deviceId);
         }
@@ -124,7 +122,7 @@ function Interview() {
             if (recording) await openCamera(recording.id);
         } catch (error) {
             console.error("Error during start:", error);
-    }
+        }
     };
 
     useEffect(() => {
@@ -153,10 +151,9 @@ function Interview() {
         start()
     }, [])
 
-
     return(
         <>
-        {activeRecordings?.map((recording) => (
+        {activeRecordings?.map((recording, index) => (
         <Box
         height='100vh'
         width='100vw'
@@ -343,7 +340,7 @@ function Interview() {
                          <Text
                          fontWeight='700'
                          fontSize='18px'
-                         >Question 1 of {Object.keys(questions).length}</Text>
+                         >Question {questionCounter+1} of {Object.keys(questions).length}</Text>
                          <Flex
                          gap='10'
                          fontSize='12px'
@@ -408,7 +405,6 @@ function Interview() {
                                 height='200px'
                                 width='500px'
                                 >
-                    
                                 </Box>
                             </Flex>
                             
@@ -511,9 +507,19 @@ function Interview() {
                                 fontSize='14px'
                                 width='150px'
                                 colorScheme='facebook'
-                                onClick={()=>{
-                                    submitInterviewResponse(recording.previewRef.current.currentSrc)
-                                    onConfirmationClose()
+                                onClick={()=>{                                       
+                                    if ( questionCounter+1 === Object.keys(questions).length) {
+                                        submitInterviewResponse(recording.previewRef.current.currentSrc)
+                                        console.log(submittedJobApplicationDetails, "AHTGAA")
+                                        navigate('/video-interview/submission-complete',
+                                         {state: {applicantData: applicantData, submittedJobApplicationDetails: submittedJobApplicationDetails}}
+                                        )
+                                    } else {
+                                        navigate('/video-interview/proceed-to-next-question',
+                                        {state: {applicantData: applicantData, token: token, questions: questions, questionCounter: questionCounter, submittedJobApplicationDetails: submittedJobApplicationDetails}}
+                                        )
+                                        submitInterviewResponse(recording.previewRef.current.currentSrc)
+                                    }
                                 }}
                                 >Submit</Button>
                             </Flex>

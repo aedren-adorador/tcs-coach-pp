@@ -50,7 +50,7 @@ function ReviewApplication({chosenApplicantAllJobApplicationDetails, setChosenAp
                         <Text color='gray'>Last Name</Text>
                         <Text
                         fontSize='30px'
-                        fontWeight='1000'
+                        fontWeight='600'
                         color='black'
                         >{chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0].lastNameM}</Text>
                     </Box>
@@ -59,7 +59,7 @@ function ReviewApplication({chosenApplicantAllJobApplicationDetails, setChosenAp
                         <Text
                         color='black'
                         fontSize='30px'
-                        fontWeight='1000'
+                        fontWeight='600'
                         >
                         {chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0].firstNameM}
                         </Text>
@@ -99,7 +99,7 @@ function ReviewApplication({chosenApplicantAllJobApplicationDetails, setChosenAp
                         <Text color='tcs.linky'>Position Applied To</Text>
                         <Text
                         fontSize='30px'
-                        fontWeight='1000'
+                        fontWeight='600'
                         color='tcs.linky'
                         >
                             {chosenApplicantAllJobApplicationDetails.positionAppliedToM}
@@ -110,6 +110,7 @@ function ReviewApplication({chosenApplicantAllJobApplicationDetails, setChosenAp
                  <Link href={chosenApplicantAllJobApplicationDetails.resumeM} target='_blank'>
                      <Button
                     mb='4'
+                    fontWeight='400'
                     variant='link'
                     color='tcs.linky'
                     >TCS-Resume-{chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0].firstNameM}-{chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0].lastNameM} (click to view)</Button>
@@ -229,17 +230,18 @@ function ReviewApplication({chosenApplicantAllJobApplicationDetails, setChosenAp
             >
                 {chosenApplicantAllJobApplicationDetails.currentStepM === 'waitingForInterviewSubmission' &&
                 <Badge
-                bg='tcs.mongo'
-                color='white'
+                bg='tcs.creamy'
                 padding='5px'
-                >Interview Invite Sent. Waiting for applicant to submit asynchronous interview.
+                fontWeight='500'
+                >Interview Invite Sent. Waiting for applicant to submit video interview.
                 </Badge>}
 
                 <Button
                 size='sm'
                 variant='outline'
                 colorScheme='red'
-                display={chosenApplicantAllJobApplicationDetails.currentStepM === 'waitingForInterviewSubmission' ? 'none' : ''}
+                borderRadius='0px'
+                display={chosenApplicantAllJobApplicationDetails.currentStepM === 'waitingForInterviewSubmission' || chosenApplicantAllJobApplicationDetails.currentStepM ==='submittedVideoInterview' ? 'none' : ''}
                 >
                     Send Rejection Email
                 </Button>
@@ -257,11 +259,12 @@ function ReviewApplication({chosenApplicantAllJobApplicationDetails, setChosenAp
                 </Button>
                 :
                  <Button
-                display={chosenApplicantAllJobApplicationDetails.currentStepM === 'waitingForInterviewSubmission' ? 'none' : ''}
+                display={chosenApplicantAllJobApplicationDetails.currentStepM === 'waitingForInterviewSubmission' || chosenApplicantAllJobApplicationDetails.currentStepM ==='submittedVideoInterview' ? 'none' : ''}
                 size='sm'
                 bg='tcs.mongo'
                 color='white'
                 colorScheme='green'
+                borderRadius='0px'
                 onClick={sendInterviewInvite}
                 >
                     Send Interview Invite

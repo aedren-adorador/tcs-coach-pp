@@ -10,6 +10,7 @@ function WhatToExpect() {
     const location = useLocation();
     const applicantData = location.state.applicantData
     const token = location.state.token
+    const submittedJobApplicationDetails = location.state.submittedJobApplicationDetails
     const navigate = useNavigate();
 
     return(
@@ -89,7 +90,7 @@ function WhatToExpect() {
                 color='white'
                 colorScheme='facebook'
                 onClick={() => {
-                  navigate('/video-interview/camera-and-microphone-settings', {state: {applicantData: applicantData, token: token}})
+                  navigate('/video-interview/camera-and-microphone-settings', {state: {applicantData: applicantData, token: token, submittedJobApplicationDetails: submittedJobApplicationDetails}})
                 }}
                 >Continue</Button>
 

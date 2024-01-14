@@ -39,7 +39,6 @@ const upload = multer({ storage: storage })
 const interviewStorage = multer.diskStorage({
   destination: function (req, file, cb) {
     const directoryName = `${req.body.applicantFirstName}-${req.body.applicantLastName}-${req.body.applicantID}`
-   
     if (fs.existsSync(`./interview-recordings/${directoryName}`)) {
       cb(null, `./interview-recordings/${directoryName}`)
     } else {
@@ -52,8 +51,12 @@ const interviewStorage = multer.diskStorage({
         });
       }
   },
+  
   filename: function (req, file, cb) {
-    cb(null, 'TCS-Interview-Question'+req.body.questionNumber+'-'+req.body.applicantFirstName + '-' + req.body.applicantLastName +'-' +Math.round(Math.random() * 1E9)+'.webm');
+    const nameConvention = `Question${req.body.questionNumber}-${req.body.applicantFirstName}-${req.body.applicantLastName}-${Math.round(Math.random() * 1E9)}.webm`
+
+    console.log(nameConvention)
+    cb(null, nameConvention);
   }
 });
 
@@ -487,13 +490,13 @@ res.json({joinedApplicantAndJobApplicationDetails: result})
 });
 
 app.post('/api/submit-interview', uploadInterview.single('interview'), (req, res, next) => {
-  // console.log(req.body)
-  // console.log(req.file)
-  
-  // uploadInterview.single('interview')(req, res, (err) => {
-    
-  // });
-   
+  res.json({success: 'Video response uploaded successfully!'})
+})
+
+app.post('/api/update-interview-to-finished', (req, res, next) => {
+  console.log(req.body)
+  JobApplication.updateOne({_id: req.body._id}, {dateSubmittedInterviewM: new Date(), currentStepM: 'submittedVideoInterview'})
+    .then(res.json({success: 'Successfully finished video interview!'}))
 })
 
 module.exports = app;

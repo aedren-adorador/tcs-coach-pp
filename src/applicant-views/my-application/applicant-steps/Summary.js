@@ -19,14 +19,14 @@ function Summary({applicantData, jobData, jobApplicationDetails}) {
                         <Text color='gray'>Last Name</Text>
                         <Text
                         fontSize='30px'
-                        fontWeight='1000'
+                        fontWeight='600'
                         >{applicantData.lastNameM}</Text>
                     </Box>
                     <Box>
                         <Text color='gray'>First Name</Text>
                         <Text
                         fontSize='30px'
-                        fontWeight='1000'
+                        fontWeight='600'
                         >{applicantData.firstNameM}</Text>
                     </Box>
                 </Flex>
@@ -53,7 +53,7 @@ function Summary({applicantData, jobData, jobApplicationDetails}) {
                         <Text color='tcs.linky'>Position Applied To</Text>
                         <Text
                         fontSize='30px'
-                        fontWeight='1000'
+                        fontWeight='600'
                         color='tcs.linky'
                         >{jobData.jobTitleM}</Text>
                     </Box>

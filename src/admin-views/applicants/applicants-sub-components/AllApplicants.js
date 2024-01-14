@@ -117,8 +117,8 @@ function AllApplicants({applicants, updateChosenApplicantToReview, handleButtonC
                             <Badge
                             bg='tcs.dirtywhite'
                             padding='5px'
-                            border='solid 0.2px'
                             fontSize='8px'
+                            fontWeight='500'
                             >Submitted Resume Application (to review)</Badge>}
 
                             {jobApp.currentStepM === 'waitingForInterviewSubmission' &&
@@ -126,11 +126,23 @@ function AllApplicants({applicants, updateChosenApplicantToReview, handleButtonC
                             bg='tcs.creamy'
                             padding='5px'
                             border='solid 0px'
+                            fontWeight='500'
                             fontSize='8px'
                             >Waiting for Interview Submission</Badge>}
+
+                            {jobApp.currentStepM === 'submittedVideoInterview' &&
+                            <Badge
+                            colorScheme='green'
+                            padding='5px'
+                            border='solid 0px'
+                            fontSize='8px'
+                            fontWeight='500'
+                            >Submitted Video Interview (to review)</Badge>}
                         </Td>
                         <Td textAlign='center'>
                             {jobApp.currentStepM === 'submittedInitialApplication' && 'NA'}
+                            {jobApp.currentStepM === 'waitingForInterviewSubmission' && 'NA'}
+                            {jobApp.currentStepM === 'submittedVideoInterview' && 'NA'}
                         </Td>
                     </Tr>
                     }

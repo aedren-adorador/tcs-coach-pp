@@ -9,6 +9,7 @@ function Instructions() {
     const location = useLocation();
     const applicantData = location.state.applicantData
     const token = location.state.token
+    const submittedJobApplicationDetails = location.state.submittedJobApplicationDetails
     const navigate = useNavigate();
 
     return(
@@ -54,7 +55,7 @@ function Instructions() {
                 fontSize='14px'
                 size='sm'
                 onClick={() => {
-                  navigate('/video-interview/interview', {state: {applicantData: applicantData, token: token}})
+                  navigate('/video-interview/interview', {state: {applicantData: applicantData, token: token, submittedJobApplicationDetails: submittedJobApplicationDetails}})
                 }}
                 >
                     Begin
