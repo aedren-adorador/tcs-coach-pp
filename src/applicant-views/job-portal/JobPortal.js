@@ -19,7 +19,7 @@ function JobPortal({isAdmin, applicantData}) {
     }
 
     const deleteJob = (jobID) => {
-        axios.delete(`${process.env.REACT_APP_SYS_URL}/api/delete-job/${jobID}`)
+        axios.delete(`${process.env.REACT_APP_SYS_URL}/api/admin/job-portal-action/delete-job/${jobID}`)
             .then(() => {
                 fetchJobsList();
                 setClickedJob(prevIndex => prevIndex-1 < 1 ? 0 : prevIndex-1);
@@ -36,13 +36,11 @@ function JobPortal({isAdmin, applicantData}) {
     }
 
     const fetchJobsList = () => {
-        axios.get(`${process.env.REACT_APP_SYS_URL}/api/fetch-jobs-list`)
+        axios.get(`${process.env.REACT_APP_SYS_URL}/api/general-request/fetch-jobs-list`)
             .then(response => {
                 setJobsList(response.data.jobs)
-                
                     setIsLoading(false)
             })
-           
     }
 
     useEffect(() => {
@@ -269,7 +267,7 @@ function JobPortal({isAdmin, applicantData}) {
                     <Button
                     zIndex='0'
                     size='xs'
-                    fontWeight='1000'
+                    fontWeight='400'
                     width='100px'
                     variant='ghost'
                     colorScheme='red'

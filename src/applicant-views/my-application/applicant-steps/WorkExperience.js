@@ -12,7 +12,7 @@ function WorkExperience({applicantData, getFieldProps, jobData, jobApplicationDe
         resumeField.append('lastName', applicantData.lastNameM)
         resumeField.append('id', applicantData._id)
         resumeField.append('jobID', jobData._id)
-        axios.post(`${process.env.REACT_APP_SYS_URL}/api/upload-resume`, resumeField)
+        axios.post(`${process.env.REACT_APP_SYS_URL}/api/applicant/work-experience-request/upload-resume`, resumeField)
             .then(result => {
                 setResumeLink(result.data.resumeLink)
                 setIsFileAttached(true)
@@ -30,7 +30,7 @@ function WorkExperience({applicantData, getFieldProps, jobData, jobApplicationDe
     useEffect(() => {
         // console.log('WORK EXP PORTION: ', jobApplicationDetails)
         const details = {applicantID: applicantData._id, jobID: jobData._id}
-        axios.get(`${process.env.REACT_APP_SYS_URL}/api/get-job-application-resume/${encodeURIComponent(JSON.stringify(details))}`)
+        axios.get(`${process.env.REACT_APP_SYS_URL}/api/applicant/work-experience-request/get-job-application-resume/${encodeURIComponent(JSON.stringify(details))}`)
             .then(result => {
                 if (result.data.savedResumeLink) {
                     setResumeLink(result.data.savedResumeLink)

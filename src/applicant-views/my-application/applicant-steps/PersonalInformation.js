@@ -1,7 +1,6 @@
 import { Input, Text} from "@chakra-ui/react";
 import React from "react";
 
-
 function PersonalInformation({applicantData, getFieldProps}) {
     return(
         <>
@@ -29,9 +28,7 @@ function PersonalInformation({applicantData, getFieldProps}) {
         size='sm'
         border='solid 0.2px black'
         width='300px'
-        ></Input>
-
-       
+        ></Input>       
         </>
     )
 }

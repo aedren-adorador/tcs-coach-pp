@@ -1,5 +1,5 @@
 import { WarningIcon } from "@chakra-ui/icons";
-import { Td, Table, TableCaption, TableContainer, Tr, Th, Tbody, Thead, Button, Badge, Text, Image, Flex, Skeleton, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter} from "@chakra-ui/react";
+import { Td, Table, TableContainer, Tr, Th, Tbody, Thead, Button, Badge, Text, Image, Flex, Skeleton, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter} from "@chakra-ui/react";
 import suitcase from '../../admin-views/admin-view-imgs/suitcase.png'
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -14,7 +14,7 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
     const redirectToVideoInterview = () => {
         if (applicantData.jobApplicationsM.length === 1) {
             const details = {jobApplicationID: applicantData.jobApplicationsM[0]}
-            axios.post(`${process.env.REACT_APP_SYS_URL}/api/verify-interview-token`, details)
+            axios.post(`${process.env.REACT_APP_SYS_URL}/api/applicant/video-interview-request/verify-interview-token`, details)
                 .then(response => {
                     navigate(`/video-interview/introduction`, {state: {applicantData: applicantData, token: response.data.token, submittedJobApplicationDetails: submittedJobApplicationDetails}})
                 })
@@ -23,7 +23,7 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
 
     useEffect(() => {
         if (applicantData.jobApplicationsM && applicantData.jobApplicationsM.length !== 0) {
-            axios.get(`${process.env.REACT_APP_SYS_URL}/api/get-job-application/${applicantData.jobApplicationsM}`)
+            axios.get(`${process.env.REACT_APP_SYS_URL}/api/applicant/general-request/get-job-application/${applicantData.jobApplicationsM}`)
                 .then(response => {
                     setSubmittedJobApplicatioDetails(response.data.submittedApplicationDetails)
                     setIsLoading(false);

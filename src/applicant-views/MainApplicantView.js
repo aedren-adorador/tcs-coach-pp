@@ -40,7 +40,7 @@ function MainApplicantView() {
             localStorage.removeItem('isAuthenticated')
             navigate('/')
         }
-        axios.post(`${process.env.REACT_APP_SYS_URL}/api/get-user-info/`, {id: decodedToken.userID})
+        axios.post(`${process.env.REACT_APP_SYS_URL}/api/applicant/general-request/get-user-info/`, {id: decodedToken.userID})
         .then(applicant => {
             setApplicantData(applicant.data)
         })

@@ -21,7 +21,7 @@ function ReviewApplication({chosenApplicantAllJobApplicationDetails, setChosenAp
             jobApplicationID: chosenApplicantAllJobApplicationDetails._id,
             applicantID: chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0]._id
         }
-        axios.post(`${process.env.REACT_APP_SYS_URL}/api/send-interview-invite`, details)
+        axios.post(`${process.env.REACT_APP_SYS_URL}/api/admin/applicant-screening/send-interview-invite`, details)
             .then(response => {
                 console.log(response.data.joinedApplicantAndJobApplicationDetails[0])
                 setChosenApplicantAllJobApplicationDetails(response.data.joinedApplicantAndJobApplicationDetails[0])

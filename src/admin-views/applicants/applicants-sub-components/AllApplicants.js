@@ -13,7 +13,7 @@ function AllApplicants({applicants, updateChosenApplicantToReview, handleButtonC
     }
 
     useEffect(() => {
-        axios.get(`${process.env.REACT_APP_SYS_URL}/api/get-job-applications-joined-with-applicants`)
+        axios.get(`${process.env.REACT_APP_SYS_URL}/api/admin/applicant-screening/get-job-applications-joined-with-applicants`)
             .then(result => {
                 setAllJobApplications(result.data.joinedApplicantAndJobApplicationDetails)
             })
