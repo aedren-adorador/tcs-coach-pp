@@ -76,7 +76,7 @@ function Finish() {
               fontWeight='600'
               borderRadius='0px'
               onClick={() => {
-                axios.post('http://localhost:3001/api/update-interview-to-finished', submittedJobApplicationDetails)
+                axios.post(`${process.env.REACT_APP_SYS_URL}/api/update-interview-to-finished`, submittedJobApplicationDetails)
                 navigate(`/applicant-home/${applicantData._id}`)
               }}
               >Done</Button>

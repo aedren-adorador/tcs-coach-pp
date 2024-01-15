@@ -78,7 +78,7 @@ function Interview() {
         interviewResponse.append('applicantID', applicantData._id)
         interviewResponse.append('questionNumber', questionCounter+1)
         interviewResponse.append('interview', blobData, {type: 'video/webm'})
-        axios.post('http://localhost:3001/api/submit-interview', interviewResponse)
+        axios.post(`${process.env.REACT_APP_SYS_URL}/api/submit-interview`, interviewResponse)
             .then(response => console.log(response.data.success))
         }
         xhr.send()

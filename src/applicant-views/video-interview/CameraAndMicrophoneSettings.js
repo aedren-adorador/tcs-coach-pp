@@ -1,10 +1,6 @@
-import { Box, Button, Card, CardBody, CardFooter, CardHeader, Flex, Grid, Image, Text } from "@chakra-ui/react";
-import React, { useEffect } from "react";
+import { Box, Button, Card, CardBody, Flex, Text } from "@chakra-ui/react";
 import AuthHeader from "../../auth/AuthHeader";
 import { useLocation, useNavigate } from "react-router-dom";
-import tcsLogo from '../../tcs-dark-logo.png'
-import interviewIcon from '../../admin-views/admin-view-imgs/review-application.png'
-import { CameraFilled, VideoCameraFilled } from "@ant-design/icons";
 import { CheckCircleIcon } from "@chakra-ui/icons";
 
 function CameraAndMicrophoneSettings() {

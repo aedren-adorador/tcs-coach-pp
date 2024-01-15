@@ -14,7 +14,7 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
     const redirectToVideoInterview = () => {
         if (applicantData.jobApplicationsM.length === 1) {
             const details = {jobApplicationID: applicantData.jobApplicationsM[0]}
-            axios.post('http://localhost:3001/api/verify-interview-token', details)
+            axios.post(`${process.env.REACT_APP_SYS_URL}/api/verify-interview-token`, details)
                 .then(response => {
                     navigate(`/video-interview/introduction`, {state: {applicantData: applicantData, token: response.data.token, submittedJobApplicationDetails: submittedJobApplicationDetails}})
                 })
@@ -23,7 +23,7 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
 
     useEffect(() => {
         if (applicantData.jobApplicationsM && applicantData.jobApplicationsM.length !== 0) {
-            axios.get(`http://localhost:3001/api/get-job-application/${applicantData.jobApplicationsM}`)
+            axios.get(`${process.env.REACT_APP_SYS_URL}/api/get-job-application/${applicantData.jobApplicationsM}`)
                 .then(response => {
                     setSubmittedJobApplicatioDetails(response.data.submittedApplicationDetails)
                     setIsLoading(false);
