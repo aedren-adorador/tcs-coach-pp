@@ -1,7 +1,6 @@
-import { Box, Button, Card, CardBody, CardFooter, CardHeader, Flex, Grid, Image, Text } from "@chakra-ui/react";
-import React, { useEffect } from "react";
+import { Box, Button, Card, CardBody, CardFooter, Flex, Text } from "@chakra-ui/react";
 import AuthHeader from "../../auth/AuthHeader";
-import { CameraFilled, QuestionCircleOutlined, SettingOutlined, VideoCameraFilled } from "@ant-design/icons";
+import { QuestionCircleOutlined, SettingOutlined } from "@ant-design/icons";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 

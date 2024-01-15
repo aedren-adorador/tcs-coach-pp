@@ -1,7 +1,6 @@
 const app = require("./backend/app");
 const debug = require("debug")("tcs-coach-pp-node");
 const http = require("http");
-const dotenv = require('dotenv');
 
 let port; // Declare port variable here
 
@@ -47,7 +46,7 @@ const onListening = () => {
 
 // Check if port is not already declared before assigning a value
 if (!port) {
-  port = normalizePort(process.env.PORT || "3001");
+  port = normalizePort(process.env.REACT_APP_SYS_URL.slice(-4) || "3001");
 }
 
 app.set("port", port);

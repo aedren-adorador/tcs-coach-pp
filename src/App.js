@@ -10,7 +10,6 @@ import { useEffect, useState } from 'react';
 import CreateAdminAccount from './create-account/create-admin-account/CreateAdminAccount';
 import MainAdminView from './admin-views/MainAdminView';
 import MyApplicationStepper from './applicant-views/my-application/applicant-steps/MyApplicationStepper';
-import JobPortal from './applicant-views/job-portal/JobPortal';
 import Video from './Video';
 import InterviewIntroduction from './applicant-views/video-interview/InterviewIntroduction'
 import WhatToExpect from './applicant-views/video-interview/WhatToExpect';
@@ -23,7 +22,6 @@ import Finish from './applicant-views/video-interview/Finish';
 
 
 function App() {
-  
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
     return localStorage.getItem('isAuthenticated') === 'true';
   })
