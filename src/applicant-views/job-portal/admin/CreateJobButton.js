@@ -8,7 +8,7 @@ function CreateJobButton({fetchJobsList}) {
     const initialRef = useRef(null)
     
     const handleCreateJobSubmit = (job) => {
-      axios.post('http://localhost:3001/api/create-job', job)
+      axios.post(`${process.env.REACT_APP_SYS_URL}/api/create-job`, job)
         .then(() => {
           fetchJobsList()
           onClose()

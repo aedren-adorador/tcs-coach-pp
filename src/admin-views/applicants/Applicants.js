@@ -15,7 +15,7 @@ function Applicants() {
     const [chosenApplicantAllJobApplicationDetails, setChosenApplicantAllJobApplicationDetails] = useState([]);
     
     const getApplicants = async () => {
-        const response = await axios.get('http://localhost:3001/api/get-applicants');
+        const response = await axios.get(`${process.env.REACT_APP_SYS_URL}/api/get-applicants`);
         setApplicantsResult(response.data.applicants)
     }
     

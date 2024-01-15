@@ -8,7 +8,6 @@ import AuthHeader from "../../auth/AuthHeader";
 import AuthFooter from "../../auth/AuthFooter";
 
 function CreateApplicantAccount() {
-    const url = 'http://localhost:3001'
     const [revealed, setRevealed] = useState(false);
     const [doPasswordsMatch, setDoPasswordsMatch] = useState(true);
     const [isCreatingAccount, setIsCreatingAccount] = useState(false);
@@ -30,7 +29,7 @@ function CreateApplicantAccount() {
                 /[0-9]/.test(initialDetails.confirmPassword)) {
                     setIsCreatingAccount(true)
                     setDoPasswordsMatch(true);
-                    axios.post(`${url}/api/auth/create-account`, initialDetails)
+                    axios.post(`${process.env.REACT_APP_SYS_URL}/api/auth/create-account`, initialDetails)
                         .then(
                             setTimeout(() => {
                                 setIsAccountCreated(true)

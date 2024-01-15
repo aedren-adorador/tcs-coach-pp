@@ -12,7 +12,6 @@ const JobApplication = require('./models/jobApplications');
 const fs = require('fs');
 const path = require('path');
 
-
 const Resume = require('./models/resumes');
 require('dotenv').config();
 const multer = require('multer');

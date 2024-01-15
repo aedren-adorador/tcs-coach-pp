@@ -11,7 +11,6 @@ import AuthFooter from "../../auth/AuthFooter";
 
 function RegisterApplicantEmail() {
     const navigate = useNavigate();
-    const url = 'http://localhost:3001'
     const [revealed, setRevealed] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
@@ -20,7 +19,7 @@ function RegisterApplicantEmail() {
     const handleSubmit = (e) => {
         const emailInput = e.email
 
-        axios.post(`${url}/api/auth/send-verification-email`, {email: emailInput})
+        axios.post(`${process.env.REACT_APP_SYS_URL}/api/auth/send-verification-email`, {email: emailInput})
             .then(response => {
                 setIsSuccess(true);
                 setSuccessMessage(response.data.successMessage);

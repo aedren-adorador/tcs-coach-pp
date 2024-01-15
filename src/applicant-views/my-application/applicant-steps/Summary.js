@@ -4,7 +4,6 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 function Summary({applicantData, jobData, jobApplicationDetails}) {
-    const navigate = useNavigate();
     return(
         <>
         <Grid

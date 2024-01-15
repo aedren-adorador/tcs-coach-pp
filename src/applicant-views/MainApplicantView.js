@@ -8,7 +8,6 @@ import JobPortal from "./job-portal/JobPortal";
 import MyApplication from "./my-application/MyApplication";
 
 function MainApplicantView() {
-
     const navigate = useNavigate();
     const [applicantData, setApplicantData] = useState({});
     const [obtainedActiveNavButton, setObtainedActiveNavButton] = useState(
@@ -41,7 +40,7 @@ function MainApplicantView() {
             localStorage.removeItem('isAuthenticated')
             navigate('/')
         }
-        axios.post('http://localhost:3001/api/get-user-info/', {id: decodedToken.userID})
+        axios.post(`${process.env.REACT_APP_SYS_URL}/api/get-user-info/`, {id: decodedToken.userID})
         .then(applicant => {
             setApplicantData(applicant.data)
         })

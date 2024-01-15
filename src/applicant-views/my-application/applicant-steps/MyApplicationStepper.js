@@ -57,7 +57,7 @@ function MyApplicationStepper() {
     })
     
     const handleApplicationSubmit = (applicationDetails) => {
-        axios.post('http://localhost:3001/api/save-job-application-progress', applicationDetails)
+        axios.post(`${process.env.REACT_APP_SYS_URL}/api/save-job-application-progress`, applicationDetails)
             .then(result => {
                 const modifiedJobApplicationDetails = {};
                     Object.keys(result.data.updatedJobApplication).forEach((key) => {
@@ -73,7 +73,7 @@ function MyApplicationStepper() {
 
     useEffect(() => {
         const verifyDetails = { applicantData, jobData }
-        axios.get(`http://localhost:3001/api/verify-application-if-continue-or-new/${encodeURIComponent(JSON.stringify(verifyDetails))}`)
+        axios.get(`${process.env.REACT_APP_SYS_URL}/api/verify-application-if-continue-or-new/${encodeURIComponent(JSON.stringify(verifyDetails))}`)
              .then(result => {
                 const modifiedJobApplicationDetails = {};
                     Object.keys(result.data.jobApplicationSavedDetails).forEach((key) => {
@@ -86,7 +86,7 @@ function MyApplicationStepper() {
 
     useEffect(() => {
         const verifyDetails = { applicantData, jobData }
-        axios.get(`http://localhost:3001/api/verify-application-if-continue-or-new/${encodeURIComponent(JSON.stringify(verifyDetails))}`)
+        axios.get(`${process.env.REACT_APP_SYS_URL}/api/verify-application-if-continue-or-new/${encodeURIComponent(JSON.stringify(verifyDetails))}`)
              .then(result => {
                 const modifiedJobApplicationDetails = {};
                     Object.keys(result.data.jobApplicationSavedDetails).forEach((key) => {
@@ -261,7 +261,7 @@ function MyApplicationStepper() {
                             mr={3}
                             onClick={() => {
                                 const details = {applicantID: applicantData._id, jobID: jobData._id, position: jobData.jobTitleM, currentStep: 'submittedInitialApplication'}
-                                axios.post('http://localhost:3001/api/save-job-application-id-to-applicant', details)
+                                axios.post(`${process.env.REACT_APP_SYS_URL}/api/save-job-application-id-to-applicant`, details)
                                     .then(response => {
                                         console.log(response.data.result)
                                         localStorage.removeItem('activeNavButton')

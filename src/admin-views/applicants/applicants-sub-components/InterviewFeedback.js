@@ -2,14 +2,17 @@ import { Box, Button, Card, CardBody, Flex, Grid, GridItem, Text, Textarea, VSta
 import React, { useEffect, useState } from "react";
 import { StarOutlined, StarFilled } from "@ant-design/icons";
 
-function InterviewFeedback() {
-    const interviewQuestions = [
-        'Why TCS?',
-        'What makes you the right fit for the role?',
-        'How do you work with a team with differences in perspecives?',
-        'What are you weaknesses?',
-        'What do you think is the future of technology?'
-    ]
+function InterviewFeedback(chosenApplicantAllJobApplicationDetails) {
+    const [interviewQuestions, setInterviewQuestions] = useState([
+        'Tell us about yourself.',
+        'Why did you apply to TCS?',
+        'What are your strenghts?',
+        'Tell about a time where you had a conflict with a group.',
+        'How would you explain a complex topic to an audience?',
+        'What do you think is the future of technology?',
+        'In a collaborative environment, who are you in the group?',
+        'State one important mistake that has shaped you for the better.',
+    ])
 
     const [interviewCriteriaScores, setInterviewCriteriaScores] = useState({
         'English Proficiency': 0, 
@@ -27,25 +30,47 @@ function InterviewFeedback() {
 
     const perfectScore = 5;
 
+    const showVideo = (videoNumber) => {
+        console.log(videoNumber)
+
+    }
+
     return(
         <>
-        <Text
-        mt='40px'
-        mb='20px'
-        fontWeight='600'
-        color='black'
-        >Interview Questions</Text>
-        {interviewQuestions.map((question, index)=> {
-            return <Flex fontSize='12px' gap='5' mb='10px'>
-            <Button
-            size='xs'
-            variant='link'
-            color='gray'
-            >Question {index+1}</Button>
-            <Box>{question}</Box>
-            </Flex>
-    
-        })}
+        <Grid
+        templateColumns='repeat(2, 1fr)'
+        >
+            <GridItem>
+                <Text
+                mt='10px'
+                mb='20px'
+                fontWeight='600'
+                color='black'
+                >Interview Questions</Text>
+                {interviewQuestions.map((question, index)=> {
+                    return <Flex fontSize='12px' gap='5' mb='10px'>
+                    <Button
+                    key={index}
+                    size='xs'
+                    variant='link'
+                    color='gray'
+                    onClick={()=>showVideo(index+1)}
+                    >Question {index+1}</Button>
+                    <Box>{question}</Box>
+                    </Flex>
+                })}
+            </GridItem>
+
+            <GridItem >
+                <video width="750" height="500" controls >
+                    <source src='../../../../interview-recordings/Aedren-Adorador-65a18b0854ecefdefec9b6c7/Question1-Aedren-Adorador-722007329.webm' type="video/webm"/>
+                </video>
+
+
+            </GridItem>
+
+        </Grid>
+        
         
         <Grid
         templateColumns='repeat(2, 1fr)'

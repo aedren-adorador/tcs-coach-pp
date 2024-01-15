@@ -1,6 +1,7 @@
 const app = require("./backend/app");
 const debug = require("debug")("tcs-coach-pp-node");
 const http = require("http");
+const dotenv = require('dotenv');
 
 let port; // Declare port variable here
 

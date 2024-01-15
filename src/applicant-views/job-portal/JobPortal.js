@@ -19,7 +19,7 @@ function JobPortal({isAdmin, applicantData}) {
     }
 
     const deleteJob = (jobID) => {
-        axios.delete(`http://localhost:3001/api/delete-job/${jobID}`)
+        axios.delete(`${process.env.REACT_APP_SYS_URL}/api/delete-job/${jobID}`)
             .then(() => {
                 fetchJobsList();
                 setClickedJob(prevIndex => prevIndex-1 < 1 ? 0 : prevIndex-1);
@@ -36,7 +36,7 @@ function JobPortal({isAdmin, applicantData}) {
     }
 
     const fetchJobsList = () => {
-        axios.get('http://localhost:3001/api/fetch-jobs-list')
+        axios.get(`${process.env.REACT_APP_SYS_URL}/api/fetch-jobs-list`)
             .then(response => {
                 setJobsList(response.data.jobs)
                 

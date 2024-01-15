@@ -6,9 +6,9 @@ import './auth-styles/auth.styles.css'
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import { LinkedinFilled, FacebookFilled } from "@ant-design/icons";
 import AuthHeader from "./AuthHeader";
 import AuthFooter from "./AuthFooter";
+
 
 function Login({onLoginSuccess}) {
     const navigate = useNavigate();
@@ -20,7 +20,7 @@ function Login({onLoginSuccess}) {
 
     const handleSubmit = (loginInputs) => {
         setIsLoading(true);
-        axios.post('http://localhost:3001/api/auth/login', loginInputs)
+        axios.post(`${process.env.REACT_APP_SYS_URL}/api/auth/login`, loginInputs)
             .then(response => {
                 if (response.data.success) {
                     setIsLoading(false)

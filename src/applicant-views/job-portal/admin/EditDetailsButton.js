@@ -11,17 +11,15 @@ function EditDetailsButton({id, fetchJobsList}) {
     const [toUpdateJob, setToUpdateJob] = useState({});
 
     const getJob = async (id) => {
-        const response = await axios.get(`http://localhost:3001/api/get-job-to-update/${id}`)
+        const response = await axios.get(`${process.env.REACT_APP_SYS_URL}/api/get-job-to-update/${id}`)
         setToUpdateJob(response.data.jobToUpdate)
     }
 
     const updateJobDetails = (job) => {
-        axios.put('http://localhost:3001/api/update-job', job)
+        axios.put(`${process.env.REACT_APP_SYS_URL}/api/update-job`, job)
             .then(() => {
               fetchJobsList()
               onClose()
-                // fetchJobsList()
-                    // .then(() => onClose())
             })
     }
 
