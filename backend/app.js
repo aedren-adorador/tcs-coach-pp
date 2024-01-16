@@ -3,10 +3,13 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const app = express();
 require('dotenv').config();
+const path = require('path');
 const authsRoutes = require('./routes/auth/auths')
 const adminApplicantScreeningsRoutes = require('./routes/admin/admin-applicant-screenings')
 const adminJobPortalActionsRoutes = require('./routes/admin/admin-job-portal-actions')
 const applicantApplicationStepperRequestsRoutes = require('./routes/applicant/step-1-initial-application/applicant-application-stepper-requests')
+const applicantWorkExperienceRequestsRoutes = require('./routes/applicant/step-1-initial-application/applicant-work-experience-requests')
+const applicantVideoInterviewRequestsRoutes = require('./routes/applicant/step-2-video-interview/applicant-video-interview-requests')
 const applicantGeneralRequestsRoutes = require('./routes/applicant/applicant-general-requests')
 const generalRequestsRoutes = require('./routes/general-requests')
 
@@ -14,7 +17,9 @@ const generalRequestsRoutes = require('./routes/general-requests')
 // Mandatory Settings
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
-app.use('/resumes', express.static('resumes'))
+app.use('/backend/files/resumes', express.static('backend/files/resumes'));
+app.use('/backend/files/interview-recordings', express.static('backend/files/interview-recordings'));
+
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -42,11 +47,12 @@ app.use('/api/admin/job-portal-action', adminJobPortalActionsRoutes);
 
 // CLEANED FOR APPLICANT
 app.use('/api/applicant/application-stepper-request', applicantApplicationStepperRequestsRoutes)
-app.use('/api/applicant/work-experience-request', applicantApplicationStepperRequestsRoutes)
-app.use('/api/applicant/video-interview-request', applicantApplicationStepperRequestsRoutes)
+app.use('/api/applicant/work-experience-request', applicantWorkExperienceRequestsRoutes)
+app.use('/api/applicant/video-interview-request', applicantVideoInterviewRequestsRoutes)
 app.use('/api/applicant/general-request', applicantGeneralRequestsRoutes)
 
 // CLEANED ROUTES FOR GENERAL REQUESTS
 app.use('/api/general-request', generalRequestsRoutes)
+
 
 module.exports = app;

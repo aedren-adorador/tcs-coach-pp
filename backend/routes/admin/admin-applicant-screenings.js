@@ -3,6 +3,8 @@ const JobApplication = require('../../models/jobApplications');
 const router = express.Router();
 const {generateInterviewToken, sendInterviewInvite} = require('../../configs/email-config');
 const Applicant = require('../../models/applicants');
+const fs = require('fs');
+
 
 router.get('/get-job-applications-joined-with-applicants', async (req, res, next) => {
   const result = await JobApplication.aggregate([
@@ -68,6 +70,14 @@ router.get('/get-applicants', (req, res, next) => {
     .then(applicants => {
       res.json({applicants: applicants})
     })
+})
+
+router.get('/get-interview-responses/:details', (req, res, next) => {
+  const details = JSON.parse(req.params.details)
+  fs.readdir(`./backend/files/interview-recordings/${details.applicantFirstName}-${details.applicantLastName}-${details.applicantID}`, (err, files) => {
+    const filteredFiles = files.filter(file => file !== '.DS_Store')
+    res.send(filteredFiles);
+  })
 })
 
 

@@ -39,7 +39,7 @@ function MainAdminView() {
             localStorage.removeItem('isAuthenticated')
             navigate('/')
         }
-        axios.post(`${process.env.REACT_APP_SYS_URL}/api/get-user-info/`, {id: decodedToken.userID})
+        axios.post(`${process.env.REACT_APP_SYS_URL}/api/applicant/general-request/get-user-info/`, {id: decodedToken.userID})
         .then(admin => {
             setAdminData(admin.data)
         })

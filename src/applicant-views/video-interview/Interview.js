@@ -17,7 +17,6 @@ function Interview() {
     const applicantData = location.state.applicantData
     const token = location.state.token
     const submittedJobApplicationDetails = location.state.submittedJobApplicationDetails
-    console.log("HAGOGAO", submittedJobApplicationDetails)
 
     const [videoDeviceId, setVideoDeviceId] = useState('');
     const [audioDeviceId, setAudioDeviceId] = useState('');
@@ -71,8 +70,6 @@ function Interview() {
         xhr.onload = function() {
         const blobData = xhr.response;
         const interviewResponse = new FormData()
-        console.log("DITO ME")
-        console.log(applicantData)
         interviewResponse.append('applicantFirstName', applicantData.firstNameM)
         interviewResponse.append('applicantLastName', applicantData.lastNameM)
         interviewResponse.append('applicantID', applicantData._id)

@@ -10,7 +10,7 @@ function AllApplicants({applicants, updateChosenApplicantToReview, handleButtonC
 
     const goToApplicantProgress = (jobApp) => {
       updateChosenApplicantToReview(jobApp);
-    }
+     }
 
     useEffect(() => {
         axios.get(`${process.env.REACT_APP_SYS_URL}/api/admin/applicant-screening/get-job-applications-joined-with-applicants`)

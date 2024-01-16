@@ -28,7 +28,6 @@ function WorkExperience({applicantData, getFieldProps, jobData, jobApplicationDe
     }, [resumeLink])
 
     useEffect(() => {
-        // console.log('WORK EXP PORTION: ', jobApplicationDetails)
         const details = {applicantID: applicantData._id, jobID: jobData._id}
         axios.get(`${process.env.REACT_APP_SYS_URL}/api/applicant/work-experience-request/get-job-application-resume/${encodeURIComponent(JSON.stringify(details))}`)
             .then(result => {

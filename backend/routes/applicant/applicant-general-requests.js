@@ -10,7 +10,7 @@ router.get('/get-job-application/:details', (req, res, next) => {
     .then(record => res.json({submittedApplicationDetails: record}))
 })
 
-router.post('/api/get-user-info', (req, res, next) => {
+router.post('/get-user-info', (req, res, next) => {
   Admin.findOne({_id: req.body.id})
     .then(isAdmin => {
       if (isAdmin) {

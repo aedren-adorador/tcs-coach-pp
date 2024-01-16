@@ -23,12 +23,13 @@ function ReviewSubmissionsStepper({clickedButton, chosenApplicantAllJobApplicati
        setActiveStep(steps.findIndex(step => step.description === clickedButton))
     },[clickedButton])
 
-    useEffect(() => {
-    }, [chosenApplicantAllJobApplicationDetails])
+    // useEffect(() => {
+    // }, [chosenApplicantAllJobApplicationDetails])
 
     return(
         <>
         <Stepper
+        mb='20px'
         colorScheme='facebook'
         index={activeStep}
         size='md'

@@ -1,7 +1,7 @@
 const express = require('express');
 const JobApplication = require('../../../models/jobApplications');
 const router = express.Router();
-const {uploadInterview} = require('./configs/multer-config');
+const {uploadInterview} = require('../../../configs/multer-config');
 const jwt = require('jsonwebtoken');
 
 router.post('/update-interview-to-finished', (req, res, next) => {
@@ -9,7 +9,8 @@ router.post('/update-interview-to-finished', (req, res, next) => {
     .then(res.json({success: 'Successfully finished video interview!'}))
 })
 
-router.post('/api/submit-interview', uploadInterview.single('interview'), (req, res, next) => {
+router.post('/submit-interview', uploadInterview.single('interview'), (req, res, next) => {
+  console.log(req.file)
   res.json({success: 'Video response uploaded successfully!'})
 })
 

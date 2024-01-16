@@ -1,8 +1,10 @@
-import { Box, Button, Card, CardBody, Flex, Grid, GridItem, Text, Textarea, VStack } from "@chakra-ui/react";
+import { Box, Button, Card, CardBody, Flex, Grid, GridItem, Link, Skeleton, Text, Textarea, VStack } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { StarOutlined, StarFilled } from "@ant-design/icons";
+import axios from "axios";
 
 function InterviewFeedback(chosenApplicantAllJobApplicationDetails) {
+   
     const [interviewQuestions, setInterviewQuestions] = useState([
         'Tell us about yourself.',
         'Why did you apply to TCS?',
@@ -26,19 +28,49 @@ function InterviewFeedback(chosenApplicantAllJobApplicationDetails) {
             ...prevState,
             [criterion]: starIndex
         }))
-    }
+    }   
 
     const perfectScore = 5;
 
-    const showVideo = (videoNumber) => {
-        console.log(videoNumber)
+    const [clickedVideo, setClickedVideo] = useState(0)
+    const [interviewResponsesList, setInterviewResponsesList] = useState([])
+    const [isVideoLoading, setIsVideoLoading] = useState(false);
 
-    }
+    useEffect(() => {
+    }, [interviewResponsesList])
+
+    useEffect(() => {
+        if (interviewResponsesList[clickedVideo]) {
+        const videoElement = document.getElementById("interviewVideo");
+        videoElement.src = `${process.env.REACT_APP_SYS_URL}/backend/files/interview-recordings/${chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0].firstNameM}-${chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0].lastNameM}-${chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0]._id}/${interviewResponsesList[clickedVideo]}`
+        setIsVideoLoading(false)
+        } 
+    }, [clickedVideo]);
+
+
+
+    useEffect(() => {
+        const details = {
+        applicantID: chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0]._id,
+        applicantFirstName: chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0].firstNameM,
+        applicantLastName: chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0].lastNameM
+        }
+        axios.get(`${process.env.REACT_APP_SYS_URL}/api/admin/applicant-screening/get-interview-responses/${encodeURIComponent(JSON.stringify(details))}`)
+            .then(response => {
+                setInterviewResponsesList(response.data)
+            })
+
+        }, [chosenApplicantAllJobApplicationDetails])
+
+
 
     return(
         <>
         <Grid
+        minW='1000px'
+        minH='420px'
         templateColumns='repeat(2, 1fr)'
+        mb='50px'
         >
             <GridItem>
                 <Text
@@ -48,27 +80,34 @@ function InterviewFeedback(chosenApplicantAllJobApplicationDetails) {
                 color='black'
                 >Interview Questions</Text>
                 {interviewQuestions.map((question, index)=> {
-                    return <Flex fontSize='12px' gap='5' mb='10px'>
+                    return <Flex fontSize='12px' gap='5' mb='10px' key={index}>
                     <Button
-                    key={index}
                     size='xs'
                     variant='link'
                     color='gray'
-                    onClick={()=>showVideo(index+1)}
+                    onClick={()=>{
+                            setIsVideoLoading(true) 
+                            setTimeout(() => {
+                               setClickedVideo(index)
+                            }, 1000)
+                            }}
                     >Question {index+1}</Button>
                     <Box>{question}</Box>
                     </Flex>
                 })}
             </GridItem>
-
-            <GridItem >
-                <video width="750" height="500" controls >
-                    <source src='../../../../interview-recordings/Aedren-Adorador-65a18b0854ecefdefec9b6c7/Question1-Aedren-Adorador-722007329.webm' type="video/webm"/>
+            <Skeleton
+            isLoaded={!isVideoLoading}
+            >
+            <GridItem minH='400px'>
+                 {interviewResponsesList[clickedVideo] &&
+                 
+                 <video id="interviewVideo" height="100%" controls>
+                    <source src={`${process.env.REACT_APP_SYS_URL}/backend/files/interview-recordings/${chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0].firstNameM}-${chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0].lastNameM}-${chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0]._id}/${interviewResponsesList[clickedVideo]}`} type="video/webm" />
                 </video>
-
-
+                }
             </GridItem>
-
+            </Skeleton>
         </Grid>
         
         
@@ -133,8 +172,9 @@ function InterviewFeedback(chosenApplicantAllJobApplicationDetails) {
         fontWeight='600'
         color='black'
         >Interview Feedback Criteria</Text>
-        {Object.keys(interviewCriteriaScores).map((criterion) => {
+        {Object.keys(interviewCriteriaScores).map((criterion, index) => {
             return <Grid
+            key={index}
             gap={5}
             templateColumns='repeat(4, 1fr)'
             mb='10px'
@@ -149,12 +189,14 @@ function InterviewFeedback(chosenApplicantAllJobApplicationDetails) {
                         <>
                        {starIndex + 1 <= interviewCriteriaScores[criterion] ? (
                             <StarFilled
+                            key={Math.floor(1000000000 + Math.random() * 9000000000)}
                             style={{ fontSize: '30px', marginLeft: '10px',color:'gold' }}
                             
                             onClick={() => handleRating(starIndex + 1, criterion)}
                             />
                         ) : (
                             <StarOutlined
+                            key={Math.floor(1000000000 + Math.random() * 9000000000)}
                             style={{ fontSize: '30px', marginLeft: '10px'}}
                             onClick={() => handleRating(starIndex + 1, criterion)}
                             />

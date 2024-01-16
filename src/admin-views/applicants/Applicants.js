@@ -28,7 +28,8 @@ function Applicants() {
     }
 
     const updateChosenApplicantToReview = (jobApp) => {
-        setChosenApplicantToReview(jobApp.applicantJoinedDetails[0]._id);
+        setChosenApplicantAllJobApplicationDetails(jobApp)
+        setChosenApplicantToReview(jobApp.applicantJoinedDetails[0]._id)
         if (jobApp.currentStepM === 'submittedInitialApplication' ||
         jobApp.currentStepM === 'waitingForInterviewSubmission') {
             setClickedButton('Review Application')
@@ -36,7 +37,6 @@ function Applicants() {
             setClickedButton('Interview Feedback')
         }
         
-        setChosenApplicantAllJobApplicationDetails(jobApp)
 
     }
 
@@ -46,7 +46,7 @@ function Applicants() {
 
     useEffect(() => {
 
-    }, [chosenApplicantToReview])
+    }, [chosenApplicantToReview, chosenApplicantAllJobApplicationDetails])
 
     useEffect(()=> {
     }, [applicantsResult])

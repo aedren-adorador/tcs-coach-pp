@@ -1,15 +1,16 @@
 const express = require('express');
-const Resume = require('./models/resumes');
+const Resume = require('../../../models/resumes')
 const JobApplication = require('../../../models/jobApplications');
 const router = express.Router();
 const fs = require('fs');
-const {upload} = require('./configs/multer-config');
+const {upload} = require('../../../configs/multer-config');
+const path = require('path')
 
 router.post('/upload-resume', upload.single('resume'), (req, res, next)  => {
   Resume.findOne({applicantIDForeignKeyM: req.body.id, jobIDForeignKeyM: req.body.jobID})
     .then(record => {
       if (record) {
-        const filePath = 'resumes/'+record.resumeFileNameM
+        const filePath = 'backend/files/resumes/'+record.resumeFileNameM
         fs.unlink(filePath, (err) => {
           if (err) {
             console.error('Error deleting file:', err);
@@ -22,7 +23,7 @@ router.post('/upload-resume', upload.single('resume'), (req, res, next)  => {
             console.log("Updated Resume for " + req.body.firstName + ' ' + req.body.lastName)
             Resume.findOne({applicantIDForeignKeyM: req.body.id, jobIDForeignKeyM: req.body.jobID})
               .then(result => {
-                const resumeLink = `http://localhost:3001/resumes/${result.resumeFileNameM}`
+                const resumeLink = `${process.env.REACT_APP_SYS_URL}/backend/files/resumes/${result.resumeFileNameM}`
                 JobApplication.updateOne({applicantIDForeignKeyM: req.body.id, jobIDForeignKeyM: req.body.jobID}, {resumeM:resumeLink})
                   .then(()=>{
                     console.log('Updated Job Application Resume Link in Backend')
@@ -39,7 +40,7 @@ router.post('/upload-resume', upload.single('resume'), (req, res, next)  => {
         newResume.save()
           .then(result => {
             console.log('Resume saved!')
-            const resumeLink = `http://localhost:3001/resumes/${result.resumeFileNameM}`
+            const resumeLink = `${process.env.REACT_APP_SYS_URL}/backend/files/resumes/${result.resumeFileNameM}`
             JobApplication.updateOne({applicantIDForeignKeyM: req.body.id, jobIDForeignKeyM: req.body.jobID}, {resumeM:resumeLink})
               .then(()=>{
                 console.log('Updated Job Application Resume Link in Backend')
