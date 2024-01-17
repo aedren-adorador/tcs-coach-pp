@@ -4,6 +4,7 @@ const router = express.Router();
 const {generateInterviewToken, sendInterviewInvite} = require('../../configs/email-config');
 const Applicant = require('../../models/applicants');
 const fs = require('fs');
+const Criteria = require('../../models/criteria');
 
 
 router.get('/get-job-applications-joined-with-applicants', async (req, res, next) => {
@@ -80,5 +81,15 @@ router.get('/get-interview-responses/:details', (req, res, next) => {
   })
 })
 
+router.get('/get-interview-criteria', (req, res, next) => {
+  const toMapObject = {}
+  Criteria.find()
+    .then(result => {
+      result.forEach(criterion => {
+        toMapObject[criterion.criterionM] = 0;
+      });
+     res.send(toMapObject)
+    })
+})
 
 module.exports = router;

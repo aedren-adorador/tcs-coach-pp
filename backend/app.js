@@ -3,7 +3,6 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const app = express();
 require('dotenv').config();
-const path = require('path');
 const authsRoutes = require('./routes/auth/auths')
 const adminApplicantScreeningsRoutes = require('./routes/admin/admin-applicant-screenings')
 const adminJobPortalActionsRoutes = require('./routes/admin/admin-job-portal-actions')
@@ -51,7 +50,7 @@ app.use('/api/applicant/work-experience-request', applicantWorkExperienceRequest
 app.use('/api/applicant/video-interview-request', applicantVideoInterviewRequestsRoutes)
 app.use('/api/applicant/general-request', applicantGeneralRequestsRoutes)
 
-// CLEANED ROUTES FOR GENERAL REQUESTS
+// CLEANED ROUTES FOR GENERAL REQUESTS (Both Admin and Applicant)
 app.use('/api/general-request', generalRequestsRoutes)
 
 

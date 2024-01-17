@@ -16,12 +16,7 @@ function InterviewFeedback(chosenApplicantAllJobApplicationDetails) {
         'State one important mistake that has shaped you for the better.',
     ])
 
-    const [interviewCriteriaScores, setInterviewCriteriaScores] = useState({
-        'English Proficiency': 0, 
-        'Communication Skills': 0,
-        'Expertise in Subject Area': 0,
-        'Professionalism':0,
-    })
+    const [interviewCriteriaScores, setInterviewCriteriaScores] = useState({})
     
     const handleRating = (starIndex, criterion) => {
         setInterviewCriteriaScores(prevState => ({
@@ -35,6 +30,10 @@ function InterviewFeedback(chosenApplicantAllJobApplicationDetails) {
     const [clickedVideo, setClickedVideo] = useState(0)
     const [interviewResponsesList, setInterviewResponsesList] = useState([])
     const [isVideoLoading, setIsVideoLoading] = useState(false);
+
+    useEffect(() => {
+        console.log('nice',interviewCriteriaScores)
+    }, [interviewCriteriaScores])
 
     useEffect(() => {
     }, [interviewResponsesList])
@@ -61,14 +60,17 @@ function InterviewFeedback(chosenApplicantAllJobApplicationDetails) {
             })
 
         }, [chosenApplicantAllJobApplicationDetails])
-
-
-
+    
+    useEffect(() => {
+        axios.get(`${process.env.REACT_APP_SYS_URL}/api/admin/applicant-screening/get-interview-criteria`)
+            .then(response => setInterviewCriteriaScores(response.data))
+        
+    },[])
     return(
         <>
         <Grid
         minW='1000px'
-        minH='420px'
+        minH='350px'
         templateColumns='repeat(2, 1fr)'
         mb='50px'
         >
@@ -83,14 +85,17 @@ function InterviewFeedback(chosenApplicantAllJobApplicationDetails) {
                     return <Flex fontSize='12px' gap='5' mb='10px' key={index}>
                     <Button
                     size='xs'
-                    variant='link'
-                    color='gray'
+                    variant={index === clickedVideo ? 'outline' : 'link'}
+
                     onClick={()=>{
-                            setIsVideoLoading(true) 
-                            setTimeout(() => {
-                               setClickedVideo(index)
-                            }, 1000)
-                            }}
+                            if (index !== clickedVideo) {
+                                 setIsVideoLoading(true) 
+                                setTimeout(() => {
+                                setClickedVideo(index)
+                                }, 1000)
+                                }}
+                            }
+                           
                     >Question {index+1}</Button>
                     <Box>{question}</Box>
                     </Flex>
@@ -102,15 +107,14 @@ function InterviewFeedback(chosenApplicantAllJobApplicationDetails) {
             <GridItem minH='400px'>
                  {interviewResponsesList[clickedVideo] &&
                  
-                 <video id="interviewVideo" height="100%" controls>
+                 <video id="interviewVideo" width='500px' controls>
                     <source src={`${process.env.REACT_APP_SYS_URL}/backend/files/interview-recordings/${chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0].firstNameM}-${chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0].lastNameM}-${chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0]._id}/${interviewResponsesList[clickedVideo]}`} type="video/webm" />
                 </video>
                 }
             </GridItem>
             </Skeleton>
         </Grid>
-        
-        
+         
         <Grid
         templateColumns='repeat(2, 1fr)'
         gap={5}
@@ -140,10 +144,10 @@ function InterviewFeedback(chosenApplicantAllJobApplicationDetails) {
                 align='center'
                 >
                     <Button
-                    borderRadius='30px'
+                    borderRadius='0px'
                     fontSize='12px'
                     width='270px'
-                    height='60px'
+                    height='40px'
                     backgroundColor='#DBF6E5'
                     fontWeight='300'
                     color='black'
@@ -151,13 +155,14 @@ function InterviewFeedback(chosenApplicantAllJobApplicationDetails) {
                     >Send &nbsp;<Text fontWeight='600' display='inline-block'>Teaching Demo Invitation</Text>&nbsp;Email</Button>
 
                     <Button
-                    borderRadius='30px'
+                    variant='outline'
+                    colorScheme="red"
+                    borderRadius='0px'
                     fontSize='12px'
                     width='270px'
-                    height='60px'
-                    backgroundColor='#F7E1E1'
+                    height='40px'
                     fontWeight='300'
-                    color='black'
+                    // color='black'
                     _hover={{color: 'white', bg:'darkred'}}
                     >Send &nbsp;<Text fontWeight='600' display='inline-block'>Interview Rejection</Text>&nbsp;Email</Button>
                 </Flex>
@@ -175,9 +180,9 @@ function InterviewFeedback(chosenApplicantAllJobApplicationDetails) {
         {Object.keys(interviewCriteriaScores).map((criterion, index) => {
             return <Grid
             key={index}
-            gap={5}
-            templateColumns='repeat(4, 1fr)'
-            mb='10px'
+            gap={1}
+            templateColumns='repeat(3, 1fr)'
+            mb='50px'
             >
                <Box>
                     <Text
@@ -208,9 +213,7 @@ function InterviewFeedback(chosenApplicantAllJobApplicationDetails) {
                 <Textarea
                     placeholder='Add comment'
                     size='xs'/>
-                <Button
-                size='sm'
-                >Save</Button>
+                
             </Grid>
         })}
         </>
