@@ -150,8 +150,7 @@ function AllApplicants({applicants, updateChosenApplicantToReview, handleButtonC
     
                 </Tbody>
             </Table>
-        </TableContainer>
-       
+        </TableContainer> 
         </>
     )
 }

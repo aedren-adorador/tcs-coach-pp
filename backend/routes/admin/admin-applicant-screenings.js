@@ -92,4 +92,37 @@ router.get('/get-interview-criteria', (req, res, next) => {
     })
 })
 
+
+router.post('/update-interview-score/:details', (req, res, next) => {
+   const details = JSON.parse(req.params.details)
+
+   JobApplication.findOne({_id: details.jobApplicationID})
+    .then(record => {
+      if (record.interviewCriteriaScoresM) {
+        JobApplication.updateOne({_id: details.jobApplicationID}, {interviewCriteriaScoresM: details.interviewCriteriaScores})
+          .then(result => res.send({success: 'successfully updated!'}))
+      } else {
+
+      }
+    })
+  
+})
+
+
+router.post('/check-if-present-saved-scores', (req, res, next) => {
+  JobApplication.findOne({_id: req.body.jobApplicationID})
+    .then(record => {
+      const toMapObject = {}
+      if (Object.keys(record.interviewCriteriaScoresM).length ===0) {
+        Criteria.find()
+          .then(result => {
+            result.forEach((criterion) => toMapObject[criterion.criterionM] = 0)
+            res.send(toMapObject)
+          })
+      } else {
+        res.send(record.interviewCriteriaScoresM)
+      }
+    })
+})
+
 module.exports = router;

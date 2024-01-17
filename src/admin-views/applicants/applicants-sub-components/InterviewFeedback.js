@@ -23,6 +23,7 @@ function InterviewFeedback(chosenApplicantAllJobApplicationDetails) {
             ...prevState,
             [criterion]: starIndex
         }))
+
     }   
 
     const perfectScore = 5;
@@ -30,10 +31,6 @@ function InterviewFeedback(chosenApplicantAllJobApplicationDetails) {
     const [clickedVideo, setClickedVideo] = useState(0)
     const [interviewResponsesList, setInterviewResponsesList] = useState([])
     const [isVideoLoading, setIsVideoLoading] = useState(false);
-
-    useEffect(() => {
-        console.log('nice',interviewCriteriaScores)
-    }, [interviewCriteriaScores])
 
     useEffect(() => {
     }, [interviewResponsesList])
@@ -66,6 +63,22 @@ function InterviewFeedback(chosenApplicantAllJobApplicationDetails) {
             .then(response => setInterviewCriteriaScores(response.data))
         
     },[])
+
+    useEffect(() => {
+        const details = {interviewCriteriaScores: interviewCriteriaScores, jobApplicationID: chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails._id}
+         axios.post(`${process.env.REACT_APP_SYS_URL}/api/admin/applicant-screening/update-interview-score/${encodeURIComponent(JSON.stringify(details))}`)
+            .then(response => console.log(response.data))
+    }, [interviewCriteriaScores])
+
+    useEffect(() => {
+        const details = {jobApplicationID: chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails._id}
+        axios.post(`${process.env.REACT_APP_SYS_URL}/api/admin/applicant-screening/check-if-present-saved-scores`, details)
+            .then(response => {
+                console.log(response.data)
+                setInterviewCriteriaScores(response.data)
+            })
+   }, [])
+
     return(
         <>
         <Grid
@@ -162,14 +175,11 @@ function InterviewFeedback(chosenApplicantAllJobApplicationDetails) {
                     width='270px'
                     height='40px'
                     fontWeight='300'
-                    // color='black'
-                    _hover={{color: 'white', bg:'darkred'}}
+                     _hover={{color: 'white', bg:'darkred'}}
                     >Send &nbsp;<Text fontWeight='600' display='inline-block'>Interview Rejection</Text>&nbsp;Email</Button>
                 </Flex>
             </GridItem>
         </Grid>
-
-        
 
         <Text
         mt='40px'
