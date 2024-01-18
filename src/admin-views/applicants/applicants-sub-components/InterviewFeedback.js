@@ -77,7 +77,7 @@ function InterviewFeedback(chosenApplicantAllJobApplicationDetails) {
                 console.log(response.data)
                 setInterviewCriteriaScores(response.data)
             })
-   }, [])
+   }, [] )
 
     return(
         <>
