@@ -22,8 +22,8 @@ function InterviewFeedback(chosenApplicantAllJobApplicationDetails) {
         setInterviewCriteriaScores(prevState => ({
             ...prevState,
             [criterion]: starIndex
-        }))
-
+        })
+        )
     }   
 
     const perfectScore = 5;
@@ -41,9 +41,7 @@ function InterviewFeedback(chosenApplicantAllJobApplicationDetails) {
         videoElement.src = `${process.env.REACT_APP_SYS_URL}/backend/files/interview-recordings/${chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0].firstNameM}-${chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0].lastNameM}-${chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0]._id}/${interviewResponsesList[clickedVideo]}`
         setIsVideoLoading(false)
         } 
-    }, [clickedVideo]);
-
-
+    }, [clickedVideo, interviewResponsesList, chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.applicantJoinedDetails]); 
 
     useEffect(() => {
         const details = {
@@ -55,29 +53,7 @@ function InterviewFeedback(chosenApplicantAllJobApplicationDetails) {
             .then(response => {
                 setInterviewResponsesList(response.data)
             })
-
-        }, [chosenApplicantAllJobApplicationDetails])
-    
-    useEffect(() => {
-        axios.get(`${process.env.REACT_APP_SYS_URL}/api/admin/applicant-screening/get-interview-criteria`)
-            .then(response => setInterviewCriteriaScores(response.data))
-        
-    },[])
-
-    useEffect(() => {
-        const details = {interviewCriteriaScores: interviewCriteriaScores, jobApplicationID: chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails._id}
-         axios.post(`${process.env.REACT_APP_SYS_URL}/api/admin/applicant-screening/update-interview-score/${encodeURIComponent(JSON.stringify(details))}`)
-            .then(response => console.log(response.data))
-    }, [interviewCriteriaScores])
-
-    useEffect(() => {
-        const details = {jobApplicationID: chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails._id}
-        axios.post(`${process.env.REACT_APP_SYS_URL}/api/admin/applicant-screening/check-if-present-saved-scores`, details)
-            .then(response => {
-                console.log(response.data)
-                setInterviewCriteriaScores(response.data)
-            })
-   }, [] )
+        }, [chosenApplicantAllJobApplicationDetails]) 
 
     return(
         <>
