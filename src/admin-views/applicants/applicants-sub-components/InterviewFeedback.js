@@ -21,10 +21,18 @@ function InterviewFeedback(chosenApplicantAllJobApplicationDetails) {
     const handleRating = (starIndex, criterion) => {
         setInterviewCriteriaScores(prevState => ({
             ...prevState,
-            [criterion]: starIndex
+             [criterion]: [String(starIndex), prevState[criterion][1]]
         })
         )
-    }   
+    }
+
+    const handleFeedback = (criterion, e) => {
+        setInterviewCriteriaScores(prevState => ({
+            ...prevState,
+            [criterion]: [prevState[criterion][0], e.target.value]
+        }
+        ))
+    }
 
     const perfectScore = 5;
 
@@ -34,6 +42,13 @@ function InterviewFeedback(chosenApplicantAllJobApplicationDetails) {
 
     useEffect(() => {
     }, [interviewResponsesList])
+
+    useEffect(() => {
+        const details = {interviewCriteriaScores: interviewCriteriaScores, jobApplicationID: chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails._id}
+        axios.post(`${process.env.REACT_APP_SYS_URL}/api/admin/applicant-screening/update-interview-scores/${encodeURIComponent(JSON.stringify(details))}`)
+            .then(response => console.log(response.data))
+
+    }, [interviewCriteriaScores, chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails._id])
 
     useEffect(() => {
         if (interviewResponsesList[clickedVideo]) {
@@ -53,7 +68,19 @@ function InterviewFeedback(chosenApplicantAllJobApplicationDetails) {
             .then(response => {
                 setInterviewResponsesList(response.data)
             })
-        }, [chosenApplicantAllJobApplicationDetails]) 
+        }, [chosenApplicantAllJobApplicationDetails])
+
+    useEffect(() => {
+        if (chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.interviewCriteriaScoresM) { 
+            setInterviewCriteriaScores(chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.interviewCriteriaScoresM)
+        } else {
+            const details = { jobApplicationID: chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails._id}
+            axios.post(`${process.env.REACT_APP_SYS_URL}/api/admin/applicant-screening/supply-criteria`, details)
+                .then(response => {
+                    setInterviewCriteriaScores(response.data)
+                })
+        }
+    }, [chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.interviewCriteriaScoresM, chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails._id])
 
     return(
         <>
@@ -178,12 +205,14 @@ function InterviewFeedback(chosenApplicantAllJobApplicationDetails) {
                 <Flex>
                     {Array.from({length: perfectScore}, (_, starIndex) => (
                         <>
-                       {starIndex + 1 <= interviewCriteriaScores[criterion] ? (
+                       {starIndex + 1 <= Number(interviewCriteriaScores[criterion][0]) ? (
                             <StarFilled
                             key={Math.floor(1000000000 + Math.random() * 9000000000)}
                             style={{ fontSize: '30px', marginLeft: '10px',color:'gold' }}
                             
-                            onClick={() => handleRating(starIndex + 1, criterion)}
+                            onClick={() => {
+                                handleRating(starIndex + 1, criterion)
+                            }}
                             />
                         ) : (
                             <StarOutlined
@@ -197,8 +226,12 @@ function InterviewFeedback(chosenApplicantAllJobApplicationDetails) {
                     ))}
                 </Flex>
                 <Textarea
+                    key={index}
                     placeholder='Add comment'
-                    size='xs'/>
+                    size='xs'
+                    value={interviewCriteriaScores[criterion][1]}
+                    onChange={(e) => handleFeedback(criterion, e)}
+                />
                 
             </Grid>
         })}

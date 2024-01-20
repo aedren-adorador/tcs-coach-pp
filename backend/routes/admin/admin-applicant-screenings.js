@@ -81,41 +81,30 @@ router.get('/get-interview-responses/:details', (req, res, next) => {
   })
 })
 
-router.get('/get-interview-criteria', (req, res, next) => {
+router.post('/update-interview-scores/:details', (req, res, next) => {
+  const details = JSON.parse(req.params.details)
+  JobApplication.findOne({_id: details.jobApplicationID})
+    .then(record => {
+       JobApplication.updateOne({_id: details.jobApplicationID}, {interviewCriteriaScoresM: details.interviewCriteriaScores})
+        .then(res.send('success!'))
+    })
+ 
+})
+
+
+router.post('/supply-criteria', (req, res, next) => {
+  const details = req.body
   const toMapObject = {}
   Criteria.find()
     .then(result => {
       result.forEach(criterion => {
-        toMapObject[criterion.criterionM] = 0;
+        toMapObject[criterion.criterionM] = ['0', ''];
       });
-     res.send(toMapObject)
-    })
-})
-
-
-router.post('/update-interview-score/:details', (req, res, next) => {
-   const details = JSON.parse(req.params.details)
-   JobApplication.updateOne({_id: details.jobApplicationID}, {interviewCriteriaScoresM: details.interviewCriteriaScores})
-      .then(result => res.send({success: 'successfully updated!'}))
-})
-
-
-router.post('/check-if-present-saved-scores', (req, res, next) => {
-  JobApplication.findOne({_id: req.body.jobApplicationID})
-    .then(record => {
-      console.log(record.interviewCriteriaScoresM, "HEREYA GO")
-      const toMapObject = {}
-      if (Object.keys(record.interviewCriteriaScoresM).length ===0) {
-        console.log("WE dont have IT", record.interviewCriteriaScoresM)
-        Criteria.find()
-          .then(result => {
-            result.forEach((criterion) => toMapObject[criterion.criterionM] = 0)
-            res.send(toMapObject)
-          })
-      } else {
-        console.log(record.interviewCriteriaScoresM, 'WE HAVE IT')
-        res.send(record.interviewCriteriaScoresM)
-      }
+      console.log(toMapObject)
+      JobApplication.updateOne({_id: details.jobApplicationID}, {interviewCriteriaScoresM: toMapObject})
+        .then(result => {
+          res.send(toMapObject)
+        })
     })
 })
 
