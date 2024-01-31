@@ -84,6 +84,8 @@ function WorkExperience({applicantData, getFieldProps, jobData, jobApplicationDe
         ></Input>
         }
 
+       
+
         <Text color='gray' mt='20px'>LinkedIn Profile Link</Text>
         <Input
         {...getFieldProps('linkedIn')}

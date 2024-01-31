@@ -67,7 +67,6 @@ function MyApplicationStepper() {
                 setJobApplicationDetails(modifiedJobApplicationDetails)
             })
     }
-
     useEffect(() => {   
     }, [jobApplicationDetails])
 
@@ -286,9 +285,7 @@ function MyApplicationStepper() {
                     variant='solid'
                     colorScheme="blue"
                     onClick={()=>setActiveStep(activeStep+1 > steps.length ? steps.length : activeStep+1)}
-                    
                     >Save and Continue</Button>
-                    
                 </Flex>
             </Box>
             </Form>
