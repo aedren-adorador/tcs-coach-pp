@@ -37,8 +37,8 @@ mongoose.connect(process.env.MONGODB_CONNECT, {})
   .then(() => {console.log('Connected to TCS Coach++ Database!')})
   .catch(() => {console.log('Failed to Connect to Database')})
 
-app.use("", (req, res) => {
-  res.json({successMessage: "CONNECTED!"})
+app.use("/yow", (req, res) => {
+  res.json({successMessage: "yow CONNECTED!"})
 })
 // CLEANED ROUTES FOR AUTH
 app.use('/api/auth', authsRoutes);
