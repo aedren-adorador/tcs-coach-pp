@@ -10,7 +10,8 @@ const applicantApplicationStepperRequestsRoutes = require('./routes/applicant/st
 const applicantWorkExperienceRequestsRoutes = require('./routes/applicant/step-1-initial-application/applicant-work-experience-requests')
 const applicantVideoInterviewRequestsRoutes = require('./routes/applicant/step-2-video-interview/applicant-video-interview-requests')
 const applicantGeneralRequestsRoutes = require('./routes/applicant/applicant-general-requests')
-const generalRequestsRoutes = require('./routes/general-requests')
+const generalRequestsRoutes = require('./routes/general-requests');
+const Admin = require('./models/admins');
 
 
 // Mandatory Settings
@@ -37,6 +38,9 @@ mongoose.connect(process.env.MONGODB_CONNECT, {})
   .then(() => {console.log('Connected to TCS Coach++ Database!')})
   .catch(() => {console.log('Failed to Connect to Database')})
 
+app.use("", (req, res) => {
+  console.log("CONNECTED GAGO")
+})
 // CLEANED ROUTES FOR AUTH
 app.use('/api/auth', authsRoutes);
 

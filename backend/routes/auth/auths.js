@@ -4,8 +4,7 @@ const jwt = require('jsonwebtoken');
 const Applicant = require('../../models/applicants');
 const {sendEmail, generateVerificationToken} = require('../../configs/email-config');
 const Admin = require('../../models/admins');
-const bcrypt = require('bcrypt');
-
+const bcrypt = require('bcryptjs');
 
 router.post('/send-verification-email', (req, res) => {
     Applicant.findOne({emailM: req.body.email.toLowerCase()})
