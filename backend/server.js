@@ -46,7 +46,7 @@ const onListening = () => {
 
 // Check if port is not already declared before assigning a value
 if (!port) {
-  port = normalizePort(process.env.PORT || "3001");
+  port = normalizePort(process.env.PORT || 3001);
 }
 
 app.set("port", port);

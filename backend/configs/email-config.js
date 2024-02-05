@@ -19,7 +19,7 @@ function generateVerificationToken(email) {
 }
 
 async function sendEmail(emailAddressInput, token) {
-    const verificationLink = `http://localhost:3001/api/auth/verify?token=${token}&email=${emailAddressInput}`
+    const verificationLink = `${process.env.REACT_APP_SYS_URL}/api/auth/verify?token=${token}&email=${emailAddressInput}`
     await transporter.sendMail({
       from: process.env.USER_EMAIL, // sender address
       to: emailAddressInput, // list of receivers

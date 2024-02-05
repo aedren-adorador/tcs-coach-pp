@@ -28,7 +28,7 @@ router.get('/verify',(req, res) => {
         if (err) {
             res.status(400).send('Invalid or expired verification link.');
         } else {
-            res.redirect(`http://localhost:3000/create-applicant-account?email=${encodeURIComponent(obtainedEmail)}`)
+            res.redirect(`http://localhost:3002/create-applicant-account?email=${encodeURIComponent(obtainedEmail)}`)
         }
     })
 })

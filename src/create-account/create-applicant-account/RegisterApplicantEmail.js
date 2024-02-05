@@ -10,25 +10,48 @@ import AuthHeader from "../../auth/AuthHeader";
 import AuthFooter from "../../auth/AuthFooter";
 
 function RegisterApplicantEmail() {
-    const navigate = useNavigate();
+    const toast = useToast()
     const [revealed, setRevealed] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
     const [emailErrorMessage, setEmailErrorMessage] = useState('');
-
+    const [isSendingEmail, setIsSendingEmail] = useState(false);
     const handleSubmit = (e) => {
         const emailInput = e.email
-
+        setIsSendingEmail(true)
         axios.post(`${process.env.REACT_APP_SYS_URL}/api/auth/send-verification-email`, {email: emailInput})
             .then(response => {
+                toast({
+                    title: 'Verification email sent.',
+                    description: "We've sent a confirmation link in your email address.",
+                    status: 'success',
+                    duration: 9000,
+                    isClosable: true,
+                    position: 'top',
+                    containerStyle: {
+                        fontWeight: '400px'
+                    }
+                    })
+                setIsSendingEmail(false);
                 setIsSuccess(true);
                 setSuccessMessage(response.data.successMessage);
-                setTimeout(() => {
-                    navigate('/')
-                }, 2000);
+                
             })
             .catch(error => {
+                setIsSendingEmail(false);
                 setEmailErrorMessage(error.response.data.errorMessage);
+                toast({
+                    title: `${error.response.data.errorMessage}`,
+                    description: "Choose a different email or reset your password.",
+                    status: 'error',
+                    duration: 9000,
+                    isClosable: true,
+                    position: 'top',
+                    containerStyle: {
+                        fontWeight: '400px'
+                    }
+                    })
+                
             })
     }
     
@@ -46,7 +69,6 @@ function RegisterApplicantEmail() {
         <>
         <AuthHeader/>
         <Box className={`auth-big-container page-reveal ${revealed ? 'reveal' : ''}`}>
-           
             <Box
             border='solid 0.2px'
             borderRadius='5px'
@@ -73,30 +95,10 @@ function RegisterApplicantEmail() {
                 >
                 {(formikProps) => (
                 <Form>   
-                    {isSuccess && 
-                    <Alert
-                    status='success'
-                    mb='2'>
-                        <AlertIcon />
-                        {successMessage}
-                    </Alert>
-                    }
-                    {emailErrorMessage!=='' &&
-                    <Alert
-                    status='error'
-                    mb='2'>
-                        <AlertIcon />
-                        {emailErrorMessage}
-                    </Alert>
-                    }
                     <FormControl isInvalid={formikProps.errors.email}>
                             <Text
                             fontSize='12px'
                             >Enter Email</Text>
-                            <FormErrorMessage
-                            mb='2'
-                            fontSize='12px'
-                            >{formikProps.errors.email}</FormErrorMessage>
                             <Input
                             variant='outline'
                             mb='2'
@@ -106,7 +108,23 @@ function RegisterApplicantEmail() {
 
                             {...formikProps.getFieldProps('email')}
                             />
+                            {isSendingEmail ?
                             <Button
+                            mt='10px'
+                            backgroundColor='#E5ECF9'
+                            border='solid 0.2px'
+                            borderRadius='0px'
+                            width='100%'
+                            size='sm'
+                            isLoading
+                            loadingText='Sending verification link'
+                            colorScheme='blue'
+                            variant='outline'
+                            >
+                            </Button>
+                            :
+                             <Button
+                            display={isSuccess ? 'none' : 'inline-block'}
                             mt='10px'
                             backgroundColor='#E5ECF9'
                             border='solid 0.2px'
@@ -115,8 +133,10 @@ function RegisterApplicantEmail() {
                             size='sm'
                             type='submit'
                             fontWeight='600'
+                            >Send verification link</Button>
+                            }
                             
-                            >Verify Email</Button>
+                           
                             <Link to='/'>
                                 <Button
                                 mt='20px'
