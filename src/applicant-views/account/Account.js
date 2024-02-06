@@ -1,5 +1,6 @@
 import { CheckIcon, CloseIcon } from "@chakra-ui/icons";
 import { Box, Button, Card, CardBody, CardHeader, Grid, GridItem, Input, Text } from "@chakra-ui/react";
+import axios from "axios";
 import React, { useState } from "react";
 
 function Account({applicantData}) {
@@ -8,6 +9,18 @@ function Account({applicantData}) {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [isChangePasswordClicked, setIsChangePasswordClicked] = useState(false);
+    const [isSettingNewPassword, setIsSettingNewPassword] = useState(false);
+
+    const setNewPassword = (newPassword) => {
+        setIsSettingNewPassword(true)
+        const details = {newPassword: newPassword, applicantEmail: applicantData.emailM, applicantID: applicantData._id, applicantFirstName: applicantData.firstNameM}
+        axios.post(`${process.env.REACT_APP_SYS_URL}/api/general-request/set-new-password`, details)
+            .then(response => {
+                console.log(response)
+                setIsSettingNewPassword(false)
+                setIsChangePasswordClicked(current => !current)
+            })
+    }
 
     return(
         <>
@@ -113,6 +126,7 @@ function Account({applicantData}) {
 
                 {isChangePasswordClicked &&
                 <>
+                
                 <Button
                 isDisabled
                 display={(password.length >= 12 || confirmPassword.length >=12) &&
@@ -128,11 +142,27 @@ function Account({applicantData}) {
                 borderRadius='0px'
                 float='right'
                 >Save new password</Button>
+
+                {isSettingNewPassword === true &&
+                 <Button
+                    isLoading
+                    loadingText='Saving password'
+                    colorScheme='green'
+                    variant='outline'
+                    size='xs'
+                    borderRadius='0px'
+                    float='right'
+                    mt='10px'
+                ></Button>
+                }
+
                 <Button
+                onClick={() => setNewPassword(password)}
                 display={(password.length >= 12 || confirmPassword.length >=12) &&
                         (/[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/.test(password) || /[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]/.test(confirmPassword)) &&
                         (/[A-Z]/.test(password) || /[A-Z]/.test(confirmPassword)) &&
                         (/[a-z]/.test(password) || /[a-z]/.test(confirmPassword)) &&
+                        (isSettingNewPassword === false) &&
                         (password === confirmPassword && password !== '') ? 'inline-block' : 'none'}
                 bg='tcs.mongo'
                 color='white'
@@ -148,7 +178,11 @@ function Account({applicantData}) {
                 <Button
                 border='solid 0.2px'
                 mr={isChangePasswordClicked ? '2' : ''}
-                onClick={() => setIsChangePasswordClicked(current => !current)}
+                onClick={() => {
+                    setIsChangePasswordClicked(current => !current)
+                    setPassword('')
+                    setConfirmPassword('')
+                }}
                 mt='10px'
                 size='xs'
                 borderRadius='0px'

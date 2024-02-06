@@ -43,5 +43,20 @@ async function sendInterviewInvite(emailAddressInput, position, deadline, applic
     })
 }
 
+function generateNewPasswordToken(applicantID, newPassword) {
+  const expirationTime = Math.floor(Date.now() / 1000) + 7 * 24 * 60 * 60;
+  return jwt.sign({ applicantID, newPassword, exp: expirationTime }, process.env.JWT_SECRET);
+}
 
-module.exports = {generateVerificationToken, generateInterviewToken, sendEmail, sendInterviewInvite};
+async function sendNewPasswordVerification(emailAddressInput, applicantName, token) {
+  const verificationLink = `${process.env.REACT_APP_SYS_URL}/api/general-request/verify-new-password?token=${token}&email=${emailAddressInput}`
+  await transporter.sendMail({
+      from: process.env.USER_EMAIL,
+      to: emailAddressInput,
+      subject: "[Action Required] The Coding School Password Change Verification",
+      html: `<p style='font-size: 14px'>Dear ${applicantName},</p><br/><p>Kindly verify that you are changing your password by clicking on this link: <a href=${verificationLink}><p>Verify Password Change</p><a/></p>`
+    })
+}
+
+
+module.exports = {generateVerificationToken, generateInterviewToken, sendEmail, sendInterviewInvite, generateNewPasswordToken, sendNewPasswordVerification};
