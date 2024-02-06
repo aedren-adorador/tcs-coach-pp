@@ -6,6 +6,7 @@ import { jwtDecode } from "jwt-decode";
 import NavApplicant from "../nav/applicant/NavApplicant";
 import JobPortal from "./job-portal/JobPortal";
 import MyApplication from "./my-application/MyApplication";
+import Account from "./account/Account";
 
 function MainApplicantView() {
     const navigate = useNavigate();
@@ -104,10 +105,8 @@ function MainApplicantView() {
             padding='0px'
             >
                 {obtainedActiveNavButton === 'Job Portal' && <JobPortal applicantData={applicantData}/>}
-                {obtainedActiveNavButton === 'My Application' &&
-                <MyApplication
-                applicantData={applicantData}
-                />}
+                {obtainedActiveNavButton === 'My Application' && <MyApplication applicantData={applicantData}/>}
+                {obtainedActiveNavButton === 'Account' && <Account applicantData={applicantData}/>}
             </GridItem>
             </Grid>
         </>

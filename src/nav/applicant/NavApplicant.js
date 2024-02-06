@@ -1,18 +1,18 @@
 import { Box, Button, Flex, Image} from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import tcsLogo from '../../tcs-logo.png'
-import { IdcardOutlined, IdcardFilled, FolderOutlined, FolderFilled, QuestionCircleOutlined, QuestionCircleFilled } from "@ant-design/icons";
+import { IdcardOutlined, IdcardFilled, FolderOutlined, FolderFilled, QuestionCircleOutlined, QuestionCircleFilled, SettingOutlined, SettingFilled } from "@ant-design/icons";
 
 
 function NavApplicant({persistentButton, getActiveNavButton}) {
-    const navButtons = ['My Application', 'Job Portal', 'FAQs']
+    const navButtons = ['My Application', 'Job Portal', 'Account']
     const iconSize = {fontSize: '20px', marginBottom:'8px'}
     const navButtonSVGs = [
-        <IdcardOutlined style={iconSize}/>, <FolderOutlined style={iconSize}/>, <QuestionCircleOutlined style={iconSize}/>
+        <IdcardOutlined style={iconSize}/>, <FolderOutlined style={iconSize}/>, <SettingOutlined style={iconSize}/>
 
     ]
     const navClickedButtonSVGs = [
-        <IdcardFilled style={iconSize}/>, <FolderFilled style={iconSize}/>, <QuestionCircleFilled style={iconSize}/>
+        <IdcardFilled style={iconSize}/>, <FolderFilled style={iconSize}/>, <SettingFilled style={iconSize}/>
     ]
     
     const [clickedNavButton, setClickedNavButton] = useState(persistentButton || 'Job Portal')
