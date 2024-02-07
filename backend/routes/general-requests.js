@@ -30,9 +30,8 @@ router.get('/verify-new-password', (req, res, next) => {
           bcrypt.hash(newPassword, 10).then(hash => {
             const newCredential = {passwordM: hash}
             Applicant.updateOne({_id: applicantID}, newCredential)
-              .then(result => res.send(result))
+              .then(result => res.send(`password successfully changed!`))
           })
-          res.send(`password successfully changed!`)
         }
     })
 })

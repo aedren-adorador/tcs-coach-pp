@@ -1,15 +1,19 @@
-import { CheckIcon, CloseIcon } from "@chakra-ui/icons";
-import { Box, Button, Card, CardBody, CardHeader, Grid, GridItem, Input, Text } from "@chakra-ui/react";
+import { CheckIcon, CloseIcon, EditIcon } from "@chakra-ui/icons";
+import { Box, Button, Card, CardBody, CardHeader, Flex, Grid, GridItem, Input, Text, useToast } from "@chakra-ui/react";
 import axios from "axios";
 import React, { useState } from "react";
 
 function Account({applicantData}) {
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
+    const toast = useToast();
+    const [firstName, setFirstName] = useState(applicantData.firstNameM);
+    const [lastName, setLastName] = useState(applicantData.lastNameM);
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [isChangePasswordClicked, setIsChangePasswordClicked] = useState(false);
     const [isSettingNewPassword, setIsSettingNewPassword] = useState(false);
+    const [isEditingFirstName, setIsEditingFirstName] = useState(false);
+    const [isEditingLastName, setIsEditingLastName] = useState(false);
+    const [isEditingEmail, setIsEditingEmail] = useState(false);
 
     const setNewPassword = (newPassword) => {
         setIsSettingNewPassword(true)
@@ -19,6 +23,17 @@ function Account({applicantData}) {
                 console.log(response)
                 setIsSettingNewPassword(false)
                 setIsChangePasswordClicked(current => !current)
+                toast({
+                    title: 'Password verification email sent.',
+                    description: "We've sent a link in your email address.",
+                    status: 'success',
+                    duration: 9000,
+                    isClosable: true,
+                    position: 'top',
+                    containerStyle: {
+                        fontWeight: '400px'
+                    }
+                    })
             })
     }
 
@@ -39,17 +54,78 @@ function Account({applicantData}) {
                         
 
                     <GridItem>
-                        <Text>{applicantData.firstNameM}</Text>
+                        {isEditingFirstName ?
+                        <>
+                        <Flex gap='1'>
+                        <Input size='xs' placeholder={firstName} onKeyUp={(e) => console.log(e.target.value)}></Input>
+                        <Button
+                        _hover={{backgroundColor: 'darkgray'}}
+                        bg='gray'
+                        color='white'
+                        size='xs'
+                        borderRadius='0px'
+                        width='30px'
+                        onClick={()=>setIsEditingFirstName(current => !current)}
+                        ><CloseIcon/></Button>
+                        <Button
+                        bg='tcs.mongo'
+                        color='white'
+                        colorScheme='green'
+                        size='xs'
+                        borderRadius='0px'
+                        width='30px'
+                        ><CheckIcon/></Button>
+                        </Flex>
+                        
+                        </>:
+                        <Text>{applicantData.firstNameM} <EditIcon fontSize='12px' onClick={()=>setIsEditingFirstName(current => !current)}/></Text>
+                        }
                     </GridItem>
 
 
                     <GridItem>
-                        <Text color='gray'>Last Name</Text>
+                        <Text color='gray'>Last Name </Text>
                     </GridItem>
                         
 
                     <GridItem>
-                        <Text>{applicantData.lastNameM}</Text>
+                        {isEditingLastName ?
+                        <>
+                        <Flex gap='1'>
+                        <Input size='xs' value={lastName}></Input>
+                        <Button
+                        _hover={{backgroundColor: 'darkgray'}}
+                        bg='gray'
+                        color='white'
+                        size='xs'
+                        borderRadius='0px'
+                        width='30px'
+                        onClick={()=>setIsEditingLastName(current => !current)}
+                        ><CloseIcon/></Button>
+                        <Button
+                        bg='tcs.mongo'
+                        color='white'
+                        colorScheme='green'
+                        size='xs'
+                        borderRadius='0px'
+                        width='30px'
+                        ><CheckIcon/></Button>
+                        </Flex>
+                        
+                        </>
+                        :
+                        <Text>{applicantData.lastNameM} <EditIcon fontSize='12px' onClick={()=>setIsEditingLastName(current => !current)}/></Text>
+                        }
+                        
+                    </GridItem>
+
+                     <GridItem>
+                        <Text color='gray'>Email</Text>
+                    </GridItem>
+                        
+
+                    <GridItem>
+                        <Text>{applicantData.emailM} <EditIcon fontSize='12px' onClick={()=>setIsEditingEmail(current => !current)}/></Text>
                     </GridItem>
                     
                     {isChangePasswordClicked ? 
