@@ -46,9 +46,21 @@ function Login({onLoginSuccess}) {
     useEffect(() => {
     }, [isInvalidCredentials])
     useEffect(() => {
-        localStorage.removeItem('token')
+        const isStillAuthenticated = localStorage.getItem('isAuthenticated')
+        if (isStillAuthenticated) {
+            console.log(localStorage.getItem('token'))
+            onLoginSuccess();
+            const decodedUserToken = jwtDecode(localStorage.getItem('token'))
+            const loggedInUserID = decodedUserToken.userID
+            const isAdmin =  decodedUserToken.admin                   
+            if (isAdmin === true) {
+                navigate(`/admin-home/${loggedInUserID}`)
+            } else if (isAdmin === 'false'){
+                navigate(`/applicant-home/${loggedInUserID}`)
+            }
+        }
         setRevealed(true);
-    }, []);
+    }, [navigate, onLoginSuccess]);
     return (   
         <>
         <AuthHeader/>
@@ -150,6 +162,7 @@ function Login({onLoginSuccess}) {
                         <Flex
                         justify='center'
                         >
+                        <Link to='/forgot-password'>
                         <Button
                         variant='link'
                         color='#608EE4'
@@ -157,6 +170,7 @@ function Login({onLoginSuccess}) {
                         size='xs'
                         textAlign='center'
                         >Forgot your password?</Button>
+                        </Link>
                         </Flex>
                         
                         </FormControl>

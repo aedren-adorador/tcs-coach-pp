@@ -1,12 +1,13 @@
-import { CheckIcon, CloseIcon, EditIcon } from "@chakra-ui/icons";
+import { CheckIcon, CloseIcon, DragHandleIcon, EditIcon } from "@chakra-ui/icons";
 import { Box, Button, Card, CardBody, CardHeader, Flex, Grid, GridItem, Input, Text, useToast } from "@chakra-ui/react";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 function Account({applicantData}) {
     const toast = useToast();
     const [firstName, setFirstName] = useState(applicantData.firstNameM);
     const [lastName, setLastName] = useState(applicantData.lastNameM);
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [isChangePasswordClicked, setIsChangePasswordClicked] = useState(false);
@@ -14,6 +15,7 @@ function Account({applicantData}) {
     const [isEditingFirstName, setIsEditingFirstName] = useState(false);
     const [isEditingLastName, setIsEditingLastName] = useState(false);
     const [isEditingEmail, setIsEditingEmail] = useState(false);
+    const [isSettingNewEmail, setIsSettingNewEmail] =useState(false);
 
     const setNewPassword = (newPassword) => {
         setIsSettingNewPassword(true)
@@ -23,7 +25,8 @@ function Account({applicantData}) {
                 console.log(response)
                 setIsSettingNewPassword(false)
                 setIsChangePasswordClicked(current => !current)
-                toast({
+                setTimeout(() => {
+                    toast({
                     title: 'Password verification email sent.',
                     description: "We've sent a link in your email address.",
                     status: 'success',
@@ -34,8 +37,59 @@ function Account({applicantData}) {
                         fontWeight: '400px'
                     }
                     })
+
+                }, 500)
+                
             })
     }
+
+    const handleFirstNameChange = (firstName) => {
+        const details = {applicantID: applicantData._id, applicantFirstName: firstName}
+        axios.post(`${process.env.REACT_APP_SYS_URL}/api/general-request/set-new-first-name`, details)
+            .then(response => {
+                setTimeout(() => {
+                    setIsEditingFirstName(false)
+                }, 1000)
+                    window.location.reload()                
+            })
+    }
+
+    const handleLastNameChange = (lastName) => {
+        const details = {applicantID: applicantData._id, applicantLastName: lastName}
+        axios.post(`${process.env.REACT_APP_SYS_URL}/api/general-request/set-new-last-name`, details)
+            .then(response => {
+                setTimeout(() => {
+                    setIsEditingLastName(false)
+                }, 1000)
+                    window.location.reload()                
+            })
+    }
+
+    const handleEmailChange = (email) => {
+        setIsSettingNewEmail(true)
+        const details = {applicantID: applicantData._id, applicantEmail: email, applicantFirstName: applicantData.firstNameM}
+        axios.post(`${process.env.REACT_APP_SYS_URL}/api/general-request/set-new-email`, details)
+            .then(response => {
+                setIsEditingEmail(false)
+                toast({
+                    title: 'Verification link sent to new email.',
+                    description: "Check email to activate your new email.",
+                    status: 'success',
+                    duration: 9000,
+                    isClosable: true,
+                    position: 'top',
+                    containerStyle: {
+                        fontWeight: '400px'
+                    }
+                    })
+                setIsSettingNewEmail(false)
+                           
+            })
+    }
+
+    useEffect(() => {
+        console.log(email)
+    }, [firstName, lastName, applicantData, email])
 
     return(
         <>
@@ -57,7 +111,7 @@ function Account({applicantData}) {
                         {isEditingFirstName ?
                         <>
                         <Flex gap='1'>
-                        <Input size='xs' placeholder={firstName} onKeyUp={(e) => console.log(e.target.value)}></Input>
+                        <Input size='xs' placeholder={firstName} onKeyUp={(e) => setFirstName(e.target.value)}></Input>
                         <Button
                         _hover={{backgroundColor: 'darkgray'}}
                         bg='gray'
@@ -67,7 +121,9 @@ function Account({applicantData}) {
                         width='30px'
                         onClick={()=>setIsEditingFirstName(current => !current)}
                         ><CloseIcon/></Button>
+
                         <Button
+                        onClick={()=>handleFirstNameChange(firstName)}
                         bg='tcs.mongo'
                         color='white'
                         colorScheme='green'
@@ -92,7 +148,7 @@ function Account({applicantData}) {
                         {isEditingLastName ?
                         <>
                         <Flex gap='1'>
-                        <Input size='xs' value={lastName}></Input>
+                        <Input size='xs' placeholder={lastName} onKeyUp={(e) => setLastName(e.target.value)}></Input>
                         <Button
                         _hover={{backgroundColor: 'darkgray'}}
                         bg='gray'
@@ -103,6 +159,7 @@ function Account({applicantData}) {
                         onClick={()=>setIsEditingLastName(current => !current)}
                         ><CloseIcon/></Button>
                         <Button
+                        onClick={()=>handleLastNameChange(lastName)}
                         bg='tcs.mongo'
                         color='white'
                         colorScheme='green'
@@ -123,9 +180,64 @@ function Account({applicantData}) {
                         <Text color='gray'>Email</Text>
                     </GridItem>
                         
-
+                    
                     <GridItem>
+                        {isSettingNewEmail ?
+                        <Button
+                        isLoading
+                        loadingText='sending confirmation link'
+                        bg='tcs.mongo'
+                        color='white'
+                        colorScheme='green'
+                        size='xs'
+                        borderRadius='0px'
+                        ><CheckIcon/></Button>
+                        :
+                        <>
+                             {isEditingEmail ? 
+                        <>
+                        <Flex gap='1'>
+                        <Input size='xs' onKeyUp={(e) => setEmail(e.target.value)} placeholder='Set new email'></Input>
+                        <Button
+                        _hover={{backgroundColor: 'darkgray'}}
+                        bg='gray'
+                        color='white'
+                        size='xs'
+                        borderRadius='0px'
+                        width='30px'
+                        onClick={()=>setIsEditingEmail(current => !current)}
+                        ><CloseIcon/></Button>
+                        {email && email.slice(-10) === "@gmail.com" ?
+                        <Button
+                        onClick={()=>handleEmailChange(email)}
+                        bg='tcs.mongo'
+                        color='white'
+                        colorScheme='green'
+                        size='xs'
+                        borderRadius='0px'
+                        width='30px'
+                        ><CheckIcon/></Button>
+                        :
+                         <Button
+                        isDisabled
+                        bg='tcs.mongo'
+                        color='white'
+                        colorScheme='green'
+                        size='xs'
+                        borderRadius='0px'
+                        width='30px'
+                        ><CheckIcon/></Button>
+                        }
+                        
+                       
+                        </Flex>
+                        
+                        </>
+                        :
                         <Text>{applicantData.emailM} <EditIcon fontSize='12px' onClick={()=>setIsEditingEmail(current => !current)}/></Text>
+                        }
+                        </>
+                        }
                     </GridItem>
                     
                     {isChangePasswordClicked ? 

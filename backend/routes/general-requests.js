@@ -4,7 +4,7 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const Applicant = require('../models/applicants');
 const jwt = require('jsonwebtoken')
-const {generateNewPasswordToken, sendNewPasswordVerification} = require('../../backend/configs/email-config');
+const {generateNewPasswordToken, sendNewPasswordVerification, generateNewEmailToken, sendNewEmailVerification} = require('../configs/email-config');
 const {jwtDecode} = require('jwt-decode');
 
 
@@ -35,24 +35,40 @@ router.get('/verify-new-password', (req, res, next) => {
         }
     })
 })
-  
+})
 
+router.post('/set-new-first-name', (req, res, next) => {
+  Applicant.updateOne({_id: req.body.applicantID}, {firstNameM: req.body.applicantFirstName})
+    .then(result => res.send(result))
+})
+
+router.post('/set-new-last-name', (req, res, next) => {
+  Applicant.updateOne({_id: req.body.applicantID}, {lastNameM: req.body.applicantLastName})
+    .then(result => res.send(result))
 })
 
 
-// router.post('/create-account', (req, res, next) => {
-//   bcrypt.hash(req.body.confirmPassword, 10).then(hash => {
-//     const newApplicant = new Applicant({
-//     emailM: req.body.email,
-//     firstNameM: req.body.firstName,
-//     lastNameM: req.body.lastName,
-//     passwordM: hash
-//   })
-//   newApplicant.save()
-//   })
-// })
+router.post('/set-new-email', (req, res, next) => {
+  const token = generateNewEmailToken(req.body.applicantID, req.body.applicantEmail)
+  sendNewEmailVerification(req.body.applicantEmail, req.body.applicantFirstName, token)
+    .then(result => res.send(result))
+})
 
-
+router.get('/verify-new-email', (req, res, next) => {
+    const obtainedToken = req.query.token
+    const decodedToken = jwtDecode(obtainedToken)
+    const newEmail = decodedToken.newEmail
+    const applicantID = decodedToken.applicantID
+    jwt.verify(obtainedToken, process.env.JWT_SECRET, (err) => {
+        if (err) {
+            res.status(400).send('Invalid or expired verification link.');
+        } else {
+            const newCredential = {emailM: newEmail}
+            Applicant.updateOne({_id: applicantID}, newCredential)
+              .then(result => res.send(`email successfully changed!`))
+        }
+    })
+})
 
 
 module.exports = router;

@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const Applicant = require('../../models/applicants');
-const {sendEmail, generateVerificationToken} = require('../../configs/email-config');
+const {sendEmail, generateVerificationToken, generateForgotPasswordToken, sendForgotPasswordVerification } = require('../../configs/email-config');
 const Admin = require('../../models/admins');
 const bcrypt = require('bcryptjs');
 
@@ -28,7 +28,7 @@ router.get('/verify',(req, res) => {
         if (err) {
             res.status(400).send('Invalid or expired verification link.');
         } else {
-            res.redirect(`http://localhost:3002/create-applicant-account?email=${encodeURIComponent(obtainedEmail)}`)
+            res.redirect(`${process.env.MAIN_URL}/create-applicant-account?email=${encodeURIComponent(obtainedEmail)}`)
         }
     })
 })
@@ -80,6 +80,37 @@ router.post('/create-account', (req, res, next) => {
   })
   newApplicant.save()
   })
+})
+
+
+router.post('/send-forgot-password-email', (req, res, next) => {
+  const token = generateForgotPasswordToken(req.body.applicantEmail)
+  sendForgotPasswordVerification(req.body.applicantEmail, token)
+    .then(result => res.send(result))
+})
+
+
+router.get('/verify-forgot-password',(req, res) => {
+    const obtainedToken = req.query.token
+    const obtainedEmail = req.query.email
+    jwt.verify(obtainedToken, process.env.JWT_SECRET, (err) => {
+        if (err) {
+            res.status(400).send('Invalid or expired verification link.');
+        } else {
+            res.redirect(`${process.env.MAIN_URL}/set-new-password?email=${encodeURIComponent(obtainedEmail)}`)
+        }
+    })
+})
+
+router.post('/set-new-password', (req, res, next) => {
+  bcrypt.hash(req.body.setPassword, 10)
+    .then(hash => {
+      Applicant.updateOne({emailM: req.body.email}, {passwordM: hash})
+        .then(result => {
+          console.log(result)
+          res.send(result)
+        })
+    })
 })
 
 module.exports = router;

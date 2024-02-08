@@ -19,6 +19,8 @@ import Interview from './applicant-views/video-interview/Interview';
 import ProceedToNextQuestion from './applicant-views/video-interview/ProceedToNextQuestion';
 import SubmissionComplete from './applicant-views/video-interview/SubmissionComplete';
 import Finish from './applicant-views/video-interview/Finish';
+import ForgotPassword from './forgot password/ForgotPassword';
+import SetNewPassword from './forgot password/SetNewPassword';
 
 
 function App() {
@@ -50,11 +52,12 @@ function App() {
     <ChakraProvider theme={theme}>
       <BrowserRouter>
         <Routes>
-          <Route path="/video-test" element={<Video/>}/>
           <Route path="/" element={<Login onLoginSuccess={handleLoginSuccess}/>}/>
           <Route path="/register-email" element={<RegisterApplicantEmail/>}/>
           <Route path="/create-applicant-account" element={<CreateApplicantAccount/>}/>
           <Route path="/create-admin-account" element={<CreateAdminAccount/>}/>
+          <Route path="/forgot-password" element={<ForgotPassword/>}/>
+          <Route path="/set-new-password" element={<SetNewPassword/>}/>
           
           <Route
           path='/applicant-home/:id'

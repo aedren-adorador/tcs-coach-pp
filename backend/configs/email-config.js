@@ -43,6 +43,7 @@ async function sendInterviewInvite(emailAddressInput, position, deadline, applic
     })
 }
 
+// Email settings for password editing
 function generateNewPasswordToken(applicantID, newPassword) {
   const expirationTime = Math.floor(Date.now() / 1000) + 7 * 24 * 60 * 60;
   return jwt.sign({ applicantID, newPassword, exp: expirationTime }, process.env.JWT_SECRET);
@@ -58,5 +59,38 @@ async function sendNewPasswordVerification(emailAddressInput, applicantName, tok
     })
 }
 
+// Email settings for email address editing
+function generateNewEmailToken(applicantID, newEmail) {
+  const expirationTime = Math.floor(Date.now() / 1000) + 7 * 24 * 60 * 60;
+  return jwt.sign({ applicantID, newEmail, exp: expirationTime }, process.env.JWT_SECRET);
+}
 
-module.exports = {generateVerificationToken, generateInterviewToken, sendEmail, sendInterviewInvite, generateNewPasswordToken, sendNewPasswordVerification};
+async function sendNewEmailVerification(emailAddressInput, applicantName, token) {
+  const verificationLink = `${process.env.REACT_APP_SYS_URL}/api/general-request/verify-new-email?token=${token}&email=${emailAddressInput}`
+  await transporter.sendMail({
+      from: process.env.USER_EMAIL,
+      to: emailAddressInput,
+      subject: "[Action Required] The Coding School Email Change Verification",
+      html: `<p style='font-size: 14px'>Dear ${applicantName},</p><br/><p>Kindly verify that you are changing your email address by clicking on this link: <a href=${verificationLink}><p>Verify Email Change</p><a/></p>`
+    })
+}
+
+// Email settings for forgot password editing
+function generateForgotPasswordToken(email) {
+  const expirationTime = Math.floor(Date.now() / 1000) + 7 * 24 * 60 * 60;
+  return jwt.sign({ email, exp: expirationTime }, process.env.JWT_SECRET);
+}
+
+async function sendForgotPasswordVerification(emailAddressInput, token) {
+  const verificationLink = `${process.env.REACT_APP_SYS_URL}/api/auth/verify-forgot-password?token=${token}&email=${emailAddressInput}`
+  await transporter.sendMail({
+      from: process.env.USER_EMAIL,
+      to: emailAddressInput,
+      subject: "[Action Required] The Coding School Reset Password",
+      html: `<p style='font-size: 14px'>Dear Applicant,</p><br/><p>Kindly confirm that you forgot and will change your password by clicking on this link: <a href=${verificationLink}><p>Reset Password</p><a/></p>`
+    })
+}
+
+
+module.exports = {generateVerificationToken, generateInterviewToken, sendEmail, sendInterviewInvite, generateNewPasswordToken, sendNewPasswordVerification, generateNewEmailToken, sendNewEmailVerification,
+                  generateForgotPasswordToken, sendForgotPasswordVerification};

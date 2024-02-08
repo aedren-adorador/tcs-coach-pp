@@ -29,6 +29,9 @@ function MainApplicantView() {
     }
     
     useEffect(() => {
+        setToSendActiveNavButton(obtainedActiveNavButton)
+        localStorage.setItem("activeNavButton", obtainedActiveNavButton);
+
         setObtainedActiveNavButton(localStorage.getItem("activeNavButton"))
         setToSendActiveNavButton(obtainedActiveNavButton)
         const obtainedToken = localStorage.getItem('token');
@@ -45,15 +48,14 @@ function MainApplicantView() {
         .then(applicant => {
             setApplicantData(applicant.data)
         })
-    },[])
+    },[obtainedActiveNavButton, navigate])
     
     useEffect(() => {
     }, [applicantData])
 
-    useEffect(() => {
-        setToSendActiveNavButton(obtainedActiveNavButton)
-        localStorage.setItem("activeNavButton", obtainedActiveNavButton);
-    }, [obtainedActiveNavButton])
+    // useEffect(() => {
+        
+    // }, [obtainedActiveNavButton])
 
     return(
         <>

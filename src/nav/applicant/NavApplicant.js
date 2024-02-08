@@ -1,7 +1,7 @@
 import { Box, Button, Flex, Image} from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import tcsLogo from '../../tcs-logo.png'
-import { IdcardOutlined, IdcardFilled, FolderOutlined, FolderFilled, QuestionCircleOutlined, QuestionCircleFilled, SettingOutlined, SettingFilled } from "@ant-design/icons";
+import { IdcardOutlined, IdcardFilled, FolderOutlined, FolderFilled, SettingOutlined, SettingFilled } from "@ant-design/icons";
 
 
 function NavApplicant({persistentButton, getActiveNavButton}) {
@@ -23,7 +23,7 @@ function NavApplicant({persistentButton, getActiveNavButton}) {
 
     useEffect(()=> {
         getActiveNavButton(clickedNavButton)
-    },[clickedNavButton])
+    },[clickedNavButton, getActiveNavButton])
     
     return(
         <>
