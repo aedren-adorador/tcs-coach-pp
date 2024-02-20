@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { Text, InputGroup, Input, Modal, ModalOverlay, FormControl, ModalContent, ModalBody, ModalCloseButton, ModalHeader, FormLabel, ModalFooter, Flex, Button, Select, Grid, GridItem, Box, Image, Skeleton} from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
+import { Text, InputGroup, Input, Flex, Button, Select, Grid, GridItem, Box, Image, Skeleton, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter} from "@chakra-ui/react";
 import { Search2Icon } from "@chakra-ui/icons";
 import { AppstoreOutlined, ClockCircleOutlined, DeleteOutlined, FileOutlined, HomeOutlined } from "@ant-design/icons";
 import tcsDarkLogo  from '../../tcs-dark-logo.png'
@@ -9,10 +9,13 @@ import EditDetailsButton from "./admin/EditDetailsButton";
 import { Link } from "react-router-dom";
 
 function JobPortal({isAdmin, applicantData}) {
-    const jobFilters = ['Categories', 'Posting Dates', 'Job Types', 'More'];
+    const jobFilters = ['Categories', 'Posting Dates', 'Job Types'];
     const [jobsList, setJobsList] = useState([]);
     const [clickedJob, setClickedJob] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
+    const { isOpen, onOpen, onClose } = useDisclosure()
+  const finalRef = React.useRef(null)
+
 
     const clickJob = (index) => {
         setClickedJob(index)
@@ -67,7 +70,7 @@ function JobPortal({isAdmin, applicantData}) {
         margin='10px 0px 0px 20px'
         >  
             <Input
-            type='tel'
+            zIndex='0'
             border='solid 0.2px black'
             placeholder='Search Job title, Skill, Keyword'
             borderRadius='0px'
@@ -272,14 +275,13 @@ function JobPortal({isAdmin, applicantData}) {
                     variant='ghost'
                     colorScheme='red'
                     color='red'
-                    onClick={() => deleteJob(jobsList[clickedJob-1]._id)}
+                    onClick={onOpen}
                     >
                         <DeleteOutlined/>
                         &nbsp;Delete Job
                     </Button>:
                     ''}
                 </Flex>
-               
                
                     {isAdmin ?
                     <EditDetailsButton
@@ -363,11 +365,34 @@ function JobPortal({isAdmin, applicantData}) {
                         {jobsList[clickedJob-1].jobSegmentationM}
                     </Text>
             </Box>
+           
 
             </GridItem>
 
         </Grid>
         }
+        <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
+            <ModalOverlay/>
+            <ModalContent borderRadius='0'>
+            <ModalHeader>Permanently Deletion Warning</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+                <h1>Are you sure you want to delete this job? This action cannot be undone.</h1>
+            </ModalBody>
+
+            <ModalFooter>
+                <Button colorScheme='blue' mr={3} onClick={onClose} borderRadius='0'>
+                Cancel
+                </Button>
+                <Button variant='ghost' borderRadius='0px' colorScheme="red"
+                onClick={() => {
+                    deleteJob(jobsList[clickedJob-1]._id)
+                    onClose()
+                }}
+                >Delete Job</Button>
+            </ModalFooter>
+            </ModalContent>
+        </Modal>
         </>
     )
 }

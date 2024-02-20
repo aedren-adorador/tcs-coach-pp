@@ -21,6 +21,7 @@ import SubmissionComplete from './applicant-views/video-interview/SubmissionComp
 import Finish from './applicant-views/video-interview/Finish';
 import ForgotPassword from './forgot password/ForgotPassword';
 import SetNewPassword from './forgot password/SetNewPassword';
+import JobPortal from './applicant-views/job-portal/JobPortal';
 
 
 function App() {
@@ -58,7 +59,6 @@ function App() {
           <Route path="/create-admin-account" element={<CreateAdminAccount/>}/>
           <Route path="/forgot-password" element={<ForgotPassword/>}/>
           <Route path="/set-new-password" element={<SetNewPassword/>}/>
-          
           <Route
           path='/applicant-home/:id'
           element={

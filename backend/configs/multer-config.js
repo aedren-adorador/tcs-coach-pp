@@ -7,7 +7,7 @@ const path = require('path');
 // Multer configuration for saving resumes
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, './backend/files/resumes')
+    cb(null, process.env.MULTER_DEPLOYMENT_URL_RESUME)
   },
   filename: function (req, file, cb) {
     cb(null, 'TCS-Resume-'+Math.round(Math.random() * 1E9)+'-'+file.originalname)
@@ -31,8 +31,7 @@ const interviewStorage = multer.diskStorage({
             cb(null, `./backend/files/interview-recordings/${directoryName}`)
         });
       }
-  },
-  
+  }, 
   filename: function (req, file, cb) {
     const nameConvention = `Question${req.body.questionNumber}-${req.body.applicantFirstName}-${req.body.applicantLastName}-${Math.round(Math.random() * 1E9)}.webm`
 

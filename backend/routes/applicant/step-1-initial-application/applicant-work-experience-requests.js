@@ -4,8 +4,6 @@ const JobApplication = require('../../../models/jobApplications');
 const router = express.Router();
 const fs = require('fs');
 const {upload} = require('../../../configs/multer-config');
-const path = require('path');
-
 
 router.post('/upload-resume', upload.single('resume'), (req, res, next)  => {
   Resume.findOne({applicantIDForeignKeyM: req.body.id, jobIDForeignKeyM: req.body.jobID})

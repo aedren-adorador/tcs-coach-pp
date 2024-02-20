@@ -1,5 +1,4 @@
 import { Input, Text} from "@chakra-ui/react";
-import React from "react";
 
 function PersonalInformation({applicantData, getFieldProps}) {
     return(
@@ -13,22 +12,22 @@ function PersonalInformation({applicantData, getFieldProps}) {
         <Text color='gray'>Email Address</Text>
         <Text mb='4'>{applicantData.emailM}</Text>
 
-        <Text color='gray'>Birthday</Text>
+        <Text color='gray'>Birthday (YYYY-MM-DD)</Text>
          <Input
-         {...getFieldProps('birthday')}
+        {...getFieldProps('birthday')}
         size='sm'
         border='solid 0.2px black'
         width='300px'
-        placeholder='YYYY-MM-DD'
+        mb='4'
         ></Input>
         
-        <Text color='gray'>Contact Number</Text>
+        <Text color='gray'>Contact Number (09xxxxxxxxx)</Text>
         <Input
          {...getFieldProps('contactNumber')}
         size='sm'
         border='solid 0.2px black'
         width='300px'
-        ></Input>       
+        ></Input>
         </>
     )
 }
