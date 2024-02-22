@@ -17,7 +17,7 @@ const generalRequestsRoutes = require('./routes/general-requests');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use('/files/resumes', express.static('files/resumes'));
-app.use('/backend/files/interview-recordings', express.static('backend/files/interview-recordings'));
+app.use('/files/interview-recordings', express.static('files/interview-recordings'));
 
 
 app.use((req, res, next) => {
@@ -55,6 +55,5 @@ app.use('/api/applicant/general-request', applicantGeneralRequestsRoutes)
 
 // CLEANED ROUTES FOR GENERAL REQUESTS (Both Admin and Applicant)
 app.use('/api/general-request', generalRequestsRoutes)
-
 
 module.exports = app;

@@ -20,22 +20,20 @@ const upload = multer({ storage: storage })
 const interviewStorage = multer.diskStorage({
   destination: function (req, file, cb) {
     const directoryName = `${req.body.applicantFirstName}-${req.body.applicantLastName}-${req.body.applicantID}`
-    if (fs.existsSync(`./backend/files/interview-recordings/${directoryName}`)) {
-      cb(null, `./backend/files/interview-recordings/${directoryName}`)
+    if (fs.existsSync(`files/interview-recordings/${directoryName}`)) {
+      cb(null, `files/interview-recordings/${directoryName}`)
     } else {
-      fs.mkdir(`./backend/files/interview-recordings/${directoryName}`,
+      fs.mkdir(`files/interview-recordings/${directoryName}`,
         (err) => {
             if (err) {
                 return console.error(err);
             }
-            cb(null, `./backend/files/interview-recordings/${directoryName}`)
+            cb(null, `files/interview-recordings/${directoryName}`)
         });
       }
   }, 
   filename: function (req, file, cb) {
     const nameConvention = `Question${req.body.questionNumber}-${req.body.applicantFirstName}-${req.body.applicantLastName}-${Math.round(Math.random() * 1E9)}.webm`
-
-    console.log(nameConvention)
     cb(null, nameConvention);
   }
 });
