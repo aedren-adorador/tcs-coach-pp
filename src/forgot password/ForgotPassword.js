@@ -118,7 +118,7 @@ function ForgotPassword() {
                             type='submit'
                             >Send password reset link</Button>
                             }
-                            <Link to='/'>
+                            <Link to='/login'>
                                 <Button
                                 mt='20px'
                                 colorScheme='blackAlpha'

@@ -137,7 +137,7 @@ function RegisterApplicantEmail() {
                             }
                             
                            
-                            <Link to='/'>
+                            <Link to='/login'>
                                 <Button
                                 mt='20px'
                                 colorScheme='blackAlpha'

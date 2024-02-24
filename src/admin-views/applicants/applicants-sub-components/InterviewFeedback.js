@@ -5,16 +5,7 @@ import axios from "axios";
 
 function InterviewFeedback(chosenApplicantAllJobApplicationDetails) {
    
-    const [interviewQuestions, setInterviewQuestions] = useState([
-        'Tell us about yourself.',
-        'Why did you apply to TCS?',
-        'What are your strenghts?',
-        'Tell about a time where you had a conflict with a group.',
-        'How would you explain a complex topic to an audience?',
-        'What do you think is the future of technology?',
-        'In a collaborative environment, who are you in the group?',
-        'State one important mistake that has shaped you for the better.',
-    ])
+    const [interviewQuestions, setInterviewQuestions] = useState(chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.interviewQuestionsM)
 
     const [interviewCriteriaScores, setInterviewCriteriaScores] = useState({})
     
@@ -53,7 +44,7 @@ function InterviewFeedback(chosenApplicantAllJobApplicationDetails) {
     useEffect(() => {
         if (interviewResponsesList[clickedVideo]) {
         const videoElement = document.getElementById("interviewVideo");
-        videoElement.src = `${process.env.REACT_APP_SYS_URL}/backend/files/interview-recordings/${chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0].firstNameM}-${chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0].lastNameM}-${chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0]._id}/${interviewResponsesList[clickedVideo]}`
+        videoElement.src = `${process.env.REACT_APP_SYS_URL}/${process.env.REACT_APP_INTERVIEW_STATIC}/${chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0].firstNameM}-${chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0].lastNameM}-${chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0]._id}/${interviewResponsesList[clickedVideo]}`
         setIsVideoLoading(false)
         } 
     }, [clickedVideo, interviewResponsesList, chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.applicantJoinedDetails]); 
@@ -88,9 +79,13 @@ function InterviewFeedback(chosenApplicantAllJobApplicationDetails) {
         minW='1000px'
         minH='350px'
         templateColumns='repeat(2, 1fr)'
-        mb='50px'
+        gap='5'
         >
-            <GridItem>
+            <GridItem
+            border='solid 0.5px lightgray'
+            borderRadius='10px'
+            padding='0px 10px 0px 10px'
+            >
                 <Text
                 mt='10px'
                 mb='20px'
@@ -124,68 +119,15 @@ function InterviewFeedback(chosenApplicantAllJobApplicationDetails) {
                  {interviewResponsesList[clickedVideo] &&
                  
                  <video id="interviewVideo" width='500px' controls>
-                    <source src={`${process.env.REACT_APP_SYS_URL}/backend/files/interview-recordings/${chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0].firstNameM}-${chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0].lastNameM}-${chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0]._id}/${interviewResponsesList[clickedVideo]}`} type="video/webm" />
+                    <source src={`${process.env.REACT_APP_SYS_URL}/${process.env.REACT_APP_INTERVIEW_STATIC}/${chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0].firstNameM}-${chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0].lastNameM}-${chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0]._id}/${interviewResponsesList[clickedVideo]}`} type="video/webm" />
                 </video>
                 }
             </GridItem>
             </Skeleton>
         </Grid>
-         
-        <Grid
-        templateColumns='repeat(2, 1fr)'
-        gap={5}
-        >
-            <GridItem
-            >
-                <Flex
-                justify='center'
-                align='center'
-                height='100%'
-                >
-                    <Card
-                    width='200px'
-                    >
-                        <CardBody>
-                            Score: Potential Fit
-                        </CardBody>
-                    </Card>
-                </Flex>
-            </GridItem>
-            <GridItem
-            >
-                <Flex
-                direction='column'
-                gap={3}
-                width='100%'
-                align='center'
-                >
-                    <Button
-                    borderRadius='0px'
-                    fontSize='12px'
-                    width='270px'
-                    height='40px'
-                    backgroundColor='#DBF6E5'
-                    fontWeight='300'
-                    color='black'
-                    _hover={{color: 'white', bg:'green'}}
-                    >Send &nbsp;<Text fontWeight='600' display='inline-block'>Teaching Demo Invitation</Text>&nbsp;Email</Button>
-
-                    <Button
-                    variant='outline'
-                    colorScheme="red"
-                    borderRadius='0px'
-                    fontSize='12px'
-                    width='270px'
-                    height='40px'
-                    fontWeight='300'
-                     _hover={{color: 'white', bg:'darkred'}}
-                    >Send &nbsp;<Text fontWeight='600' display='inline-block'>Interview Rejection</Text>&nbsp;Email</Button>
-                </Flex>
-            </GridItem>
-        </Grid>
 
         <Text
-        mt='40px'
+        mt='20px'
         mb='20px'
         fontWeight='600'
         color='black'
@@ -235,6 +177,45 @@ function InterviewFeedback(chosenApplicantAllJobApplicationDetails) {
                 
             </Grid>
         })}
+        <Grid
+        templateColumns='repeat(1, 1fr)'
+        gap={5}
+        mb='100px'
+        >
+            <GridItem
+            >
+                <Flex
+                justify='center'
+                direction='row'
+                gap={3}
+                width='100%'
+                align='center'
+                >
+                     <Button
+                    variant='outline'
+                    colorScheme="red"
+                    borderRadius='0px'
+                    fontSize='12px'
+                    width='270px'
+                    height='40px'
+                    fontWeight='300'
+                     _hover={{color: 'white', bg:'darkred'}}
+                    >Send &nbsp;<Text fontWeight='600' display='inline-block'>Interview Rejection</Text>&nbsp;Email</Button>
+                    <Button
+                    borderRadius='0px'
+                    fontSize='12px'
+                    width='270px'
+                    height='40px'
+                    backgroundColor='#DBF6E5'
+                    fontWeight='300'
+                    color='black'
+                    _hover={{color: 'white', bg:'green'}}
+                    >Send &nbsp;<Text fontWeight='600' display='inline-block'>Teaching Demo Invitation</Text>&nbsp;Email</Button>
+
+                   
+                </Flex>
+            </GridItem>
+        </Grid>
         </>
     )
 }

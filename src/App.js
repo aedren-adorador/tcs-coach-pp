@@ -22,6 +22,7 @@ import Finish from './applicant-views/video-interview/Finish';
 import ForgotPassword from './forgot password/ForgotPassword';
 import SetNewPassword from './forgot password/SetNewPassword';
 import JobPortal from './applicant-views/job-portal/JobPortal';
+import PublicJobPortal from './applicant-views/job-portal/PublicJobPortal';
 
 
 function App() {
@@ -53,7 +54,8 @@ function App() {
     <ChakraProvider theme={theme}>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Login onLoginSuccess={handleLoginSuccess}/>}/>
+          <Route path="/login" element={<Login onLoginSuccess={handleLoginSuccess}/>}/>
+          <Route path="/" element={<PublicJobPortal/>}/>
           <Route path="/register-email" element={<RegisterApplicantEmail/>}/>
           <Route path="/create-applicant-account" element={<CreateApplicantAccount/>}/>
           <Route path="/create-admin-account" element={<CreateAdminAccount/>}/>

@@ -139,6 +139,10 @@ function Interview() {
         start()
     }, [])
 
+    useEffect(() => {
+
+   }, [questions])
+
     return(
         <>
         {activeRecordings?.map((recording, index) => (
@@ -204,7 +208,6 @@ function Interview() {
                                     >
                                         {recording.status === 'RECORDING' ? answerTimer :prepTimer}
                                     </Text>
-
                                 </Flex>
                                 
                                 <Progress
@@ -219,7 +222,7 @@ function Interview() {
                             width='50%'
                             fontSize='12px'
                             borderRadius='0px'
-                            display={recording.status === 'STOPPED' && questions[questionCounter] > 0 ? '' : 'none'}
+                            display={recording.status === 'STOPPED' ? '' : 'none'}
                             onClick={() => {
                                 startRecording(recording.id)
                                 setAnswerTime(180)
@@ -227,11 +230,10 @@ function Interview() {
                                 setAnswerTimerProgress(0)
                                 setQuestions(prevQs => {
                                     const currentQuestion = prevQs[questionCounter]
-                                    const updatedQuestions = { ...prevQs }
+                                    const updatedQuestions = [...prevQs]
                                     updatedQuestions[currentQuestion] = Math.max(0, updatedQuestions[currentQuestion] - 1)
                                     return updatedQuestions
                                 })
-                            
                              }}
                             >
                                 <RedoOutlined/>
@@ -255,7 +257,7 @@ function Interview() {
                                 setAnswerTimerProgress(0)
                                 setQuestions(prevQs => {
                                     const currentQuestion = prevQs[questionCounter]
-                                    const updatedQuestions = { ...prevQs }
+                                    const updatedQuestions = [...prevQs]
                                     updatedQuestions[currentQuestion] = Math.max(0, updatedQuestions[currentQuestion] - 1)
                                     return updatedQuestions
                                 })
@@ -300,18 +302,20 @@ function Interview() {
                             key={recording.id}
                             display={recording.status === 'STOPPED' ? 'none' : ''}
                             >
-                                <video ref={recording.webcamRef} loop autoPlay playsInline style={{width:'100%', height:'100%', minWidth: '400px', minHeight: '300px'}}/>
+                                <video ref={recording.webcamRef} playsInline
+                                style={{width:'100%', height:'100%', minWidth: '400px', minHeight: '300px', transform: 'rotateY(180deg)', WebkitTransform: 'rotateY(180deg)', MozTransform: 'rotateY(180deg)'}} muted
+                                />
                             </Flex>
 
                             <Box
                             key={recording.id}
                             display={recording.status === 'STOPPED' ? '' : 'none'}
                             >
-                                <video ref={recording.previewRef}  loop autoPlay playsInline style={{width:'100%', height:'100%', minWidth: '400px', minHeight: '300px'}}/>
+                                <video controls ref={recording.previewRef} playsInline style={{width:'100%', height:'100%', minWidth: '400px', minHeight: '300px'}}/>
                             </Box>
                         </Box>
                     </GridItem>
-                    
+                             
                     
                     <GridItem
                     minW='400px'
