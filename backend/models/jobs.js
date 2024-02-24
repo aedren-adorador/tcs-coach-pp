@@ -7,6 +7,7 @@ const jobSchema = mongoose.Schema({
     jobResponsibilitiesM: {type: String, required: true},
     jobQualificationsM: {type: String, required: true},
     jobSegmentationM: {type: String, required: true},
+    jobEnlistedM: {type: Boolean, required: true, default: true},
     jobCreatedAt: {type: Date, default: Date.now()}
 })
 

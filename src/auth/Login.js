@@ -8,6 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import AuthHeader from "./AuthHeader";
 import AuthFooter from "./AuthFooter";
+import { ExternalLinkIcon } from "@chakra-ui/icons";
 
 
 function Login({onLoginSuccess}) {
@@ -61,7 +62,7 @@ function Login({onLoginSuccess}) {
         }
         setRevealed(true);
     }, [navigate, onLoginSuccess]);
-    return (   
+    return (
         <>
         <AuthHeader/>
         <Formik
@@ -70,6 +71,7 @@ function Login({onLoginSuccess}) {
         onSubmit={handleSubmit}
         >
         {(formikProps) => (
+            
             <Form>
                 <Box className={`auth-big-container page-reveal ${revealed ? 'reveal' : ''}`}>
                     <Box
@@ -78,11 +80,13 @@ function Login({onLoginSuccess}) {
                     borderRadius='5px'
                     padding='20px 50px 50px 50px'
                     >
-                        <Text
-                        textAlign='center'
-                        fontWeight='600'
-                        mb='30px'
-                        >Sign In</Text>
+                        <Flex justify='flex-end'>
+                             
+                        <Link to='/'>
+                        <Button  bg='white' size='xs' variant='ghost' colorScheme='green'>See Job Portal &nbsp;<ExternalLinkIcon/></Button>
+                        </Link>
+                        </Flex>
+                       
                         <FormControl isInvalid={isInvalidCredentials}>
                         {isInvalidCredentials && 
                         <FormErrorMessage
@@ -135,7 +139,7 @@ function Login({onLoginSuccess}) {
                         type='submit'
                         fontWeight='600'
                         
-                        >Sign In</Button> :
+                        >Sign In </Button> :
 
                         <Button
                             isLoading

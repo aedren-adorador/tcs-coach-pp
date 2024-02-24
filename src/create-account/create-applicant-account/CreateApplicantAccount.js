@@ -27,7 +27,7 @@ function CreateApplicantAccount() {
                 setTimeout(() => {
                     setIsAccountCreated(true)
                     setTimeout(() => {
-                        navigate('/')
+                        navigate('/login')
                     }, 2000)
                 }, 2200)
             )

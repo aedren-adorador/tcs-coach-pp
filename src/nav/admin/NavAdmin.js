@@ -1,17 +1,17 @@
 import { Box, Button, Divider, Flex, Image} from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { FolderFilled, FolderOutlined, HomeFilled, HomeOutlined, IdcardFilled, IdcardOutlined, LogoutOutlined, UserAddOutlined, UserOutlined } from "@ant-design/icons";
+import { FolderFilled, FolderOutlined, HomeFilled, HomeOutlined, IdcardFilled, IdcardOutlined, LogoutOutlined, SettingFilled, SettingOutlined, UserAddOutlined, UserOutlined } from "@ant-design/icons";
 import tcsLogo from '../../tcs-logo.png'
 
 function NavAdmin({persistentButton, getActiveNavButton}) {
-    const navButtons = ['Dashboard', 'Applicants', 'Job Portal']
+    const navButtons = ['Dashboard', 'Applicants', 'Job Portal', 'Account']
     const iconSize = {fontSize: '20px', marginBottom:'8px'}
     const navButtonSVGs = [
-        <HomeOutlined style={iconSize}/>,  <UserAddOutlined style={iconSize}/>, <FolderOutlined style={iconSize}/>
+        <HomeOutlined style={iconSize}/>,  <UserAddOutlined style={iconSize}/>, <FolderOutlined style={iconSize}/>, <SettingOutlined style={iconSize}/>
 
     ]
     const navClickedButtonSVGs = [
-        <HomeFilled style={iconSize}/> , <UserOutlined style={iconSize}/>, <FolderFilled style={iconSize}/>
+        <HomeFilled style={iconSize}/> , <UserOutlined style={iconSize}/>, <FolderFilled style={iconSize}/>, <SettingFilled style={iconSize}/>
     ]
     const [clickedNavButton, setClickedNavButton] = useState(persistentButton || 'Dashboard')
     

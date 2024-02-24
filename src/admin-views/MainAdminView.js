@@ -7,6 +7,8 @@ import NavAdmin from "../nav/admin/NavAdmin";
 import Dashboard from "./dashboard/Dashboard";
 import Applicants from "./applicants/Applicants";
 import JobPortal from "../applicant-views/job-portal/JobPortal";
+import Account from "../applicant-views/account/Account";
+import AdminAccount from "./account/AdminAccount";
 function MainAdminView() {
     const navigate = useNavigate();
     const [adminData, setAdminData] = useState({});
@@ -20,7 +22,7 @@ function MainAdminView() {
         localStorage.removeItem('applicantID')
         localStorage.removeItem('isAuthenticated')
         localStorage.removeItem('token')
-        navigate('/');
+        navigate('/login');
     }
     const getActiveNavButton = (navButton) => {
         setObtainedActiveNavButton(navButton)
@@ -108,6 +110,7 @@ function MainAdminView() {
                 {obtainedActiveNavButton === 'Dashboard' && <Dashboard/>}
                 {obtainedActiveNavButton === 'Applicants' && <Applicants/>}
                 {obtainedActiveNavButton === 'Job Portal' && <JobPortal isAdmin={true}/>}
+                {obtainedActiveNavButton === 'Account' && <AdminAccount adminData={adminData}/>}
             </GridItem>
             </Grid>
         </>

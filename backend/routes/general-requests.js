@@ -6,12 +6,32 @@ const Applicant = require('../models/applicants');
 const jwt = require('jsonwebtoken')
 const {generateNewPasswordToken, sendNewPasswordVerification, generateNewEmailToken, sendNewEmailVerification} = require('../configs/email-config');
 const {jwtDecode} = require('jwt-decode');
+const JobApplication = require('../models/jobApplications');
 
 
-router.get('/fetch-jobs-list', (req, res, next) => {
+router.get('/fetch-jobs-list-applicant/:id', (req, res, next) => {
+  JobApplication.find({applicantIDForeignKeyM: req.params.id})
+    .then(jobApplication => {
+      Job.find({jobEnlistedM: true})
+        .then(jobsList => {
+          const newJobsList = jobsList.filter((i, index) => i._id.toString() !== jobApplication[0].jobIDForeignKeyM)
+          res.json({jobs: newJobsList})
+        })
+    })
+    
+
+})
+
+router.get('/fetch-jobs-list-admin', (req, res, next) => {
   Job.find()
     .then(jobsList => res.json({jobs: jobsList}))
 })
+
+router.get('/fetch-jobs-list', (req, res, next) => {
+  Job.find({jobEnlistedM: true})
+    .then(jobsList => res.json({jobs: jobsList}))
+})
+
 
 router.post('/set-new-password', (req, res, next) => {
   const token = generateNewPasswordToken(req.body.applicantID, req.body.newPassword)
@@ -70,5 +90,13 @@ router.get('/verify-new-email', (req, res, next) => {
     })
 })
 
+router.post('/delist-job', (req, res, next) => {
+  Job.updateOne({_id: req.body.jobID}, {jobEnlistedM: false})
+    .then(res.send({success: 'successfully delisted'}))
+})
 
+router.post('/enlist-job', (req, res, next) => {
+  Job.updateOne({_id: req.body.jobID}, {jobEnlistedM: true})
+    .then(res.send({success: 'successfully enlisted'}))
+})
 module.exports = router;

@@ -22,7 +22,7 @@ function MainApplicantView() {
         localStorage.removeItem('isAuthenticated')
         localStorage.removeItem('token')
         localStorage.removeItem('currentStep')
-        navigate('/');
+        navigate('/login');
     }
     const getActiveNavButton = (navButton) => {
         setObtainedActiveNavButton(navButton)

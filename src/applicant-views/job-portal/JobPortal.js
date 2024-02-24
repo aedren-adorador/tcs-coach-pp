@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, InputGroup, Input, Flex, Button, Select, Grid, GridItem, Box, Image, Skeleton, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter} from "@chakra-ui/react";
+import { Text, InputGroup, Input, Flex, Button, Select, Grid, GridItem, Box, Image, Skeleton, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Badge} from "@chakra-ui/react";
 import { Search2Icon } from "@chakra-ui/icons";
 import { AppstoreOutlined, ClockCircleOutlined, DeleteOutlined, FileOutlined, HomeOutlined } from "@ant-design/icons";
 import tcsDarkLogo  from '../../tcs-dark-logo.png'
@@ -39,16 +39,36 @@ function JobPortal({isAdmin, applicantData}) {
     }
 
     const fetchJobsList = () => {
-        axios.get(`${process.env.REACT_APP_SYS_URL}/api/general-request/fetch-jobs-list`)
+        if (!isAdmin && applicantData._id) {
+                axios.get(`${process.env.REACT_APP_SYS_URL}/api/general-request/fetch-jobs-list-applicant/${applicantData._id}`)
+                .then(response => {
+                    setJobsList(response.data.jobs)
+                    setIsLoading(false)
+                })
+        } else {
+            console.log(isAdmin, 'hoy')
+            axios.get(`${process.env.REACT_APP_SYS_URL}/api/general-request/fetch-jobs-list-admin`)
             .then(response => {
                 setJobsList(response.data.jobs)
-                    setIsLoading(false)
-            })
+                setIsLoading(false)
+            }
+            )
+        }
+    }
+
+    const delist = (id) => {
+        axios.post(`${process.env.REACT_APP_SYS_URL}/api/general-request/delist-job`, {jobID: id})
+            .then(response => window.location.reload())
+    }
+
+    const enlist = (id) => {
+        axios.post(`${process.env.REACT_APP_SYS_URL}/api/general-request/enlist-job`, {jobID: id})
+            .then(response => window.location.reload())
     }
 
     useEffect(() => {
         fetchJobsList()
-    }, [])
+    }, [fetchJobsList])
 
     useEffect(() => {
     }, [jobsList])
@@ -97,7 +117,7 @@ function JobPortal({isAdmin, applicantData}) {
             ''}
         </InputGroup>
          
-        <Flex
+        {/* <Flex
         mt='20px'
         ml='20px'
         mb='10px'
@@ -119,7 +139,7 @@ function JobPortal({isAdmin, applicantData}) {
                 <option value='option3'>Option 3</option>
             </Select>
             ))}
-        </Flex>
+        </Flex> */}
         </Box>
 
         {!clickedJob ?
@@ -137,19 +157,21 @@ function JobPortal({isAdmin, applicantData}) {
             overflowY='scroll'
             maxHeight={`calc(100vh - 200px)`} 
             >
-
-                {jobsList.map((job, index) => (
-                    
+                {jobsList.map((job, index) => {
+                    return <>
                     <Box
                     key={index}
                     padding='20px'
                     borderBottom='solid 0.2px lightgray'
                     onClick={() => clickJob(index+1)}
-                    >
+                    >   
                         <Text
                         textDecoration='underline'
                         fontWeight='600'
-                        >{job.jobTitleM}</Text>
+                        >{job.jobTitleM}
+                         {isAdmin && job.jobEnlistedM.toString() === 'true' && <Badge ml='5px' colorScheme='green'>Enlisted</Badge>}
+                        {isAdmin && job.jobEnlistedM.toString() === 'false' && <Badge ml='5px' colorScheme='red'>Delisted</Badge>}
+                        </Text>
                         <Text
                         margin='5px 0px 5px 0px'
                         fontSize='12px'
@@ -168,8 +190,11 @@ function JobPortal({isAdmin, applicantData}) {
                             }
                         </Text>
                     </Box>
+                        </>
+                    }
                     
-                ))}
+                        
+                )}
                 
             </GridItem>
             </Skeleton>
@@ -211,6 +236,7 @@ function JobPortal({isAdmin, applicantData}) {
             >
 
                 {jobsList.map((job, index) => (
+                    
                     <Box
                     backgroundColor={index === clickedJob-1 ? '#E5ECF9' : ''}
                     key={index}
@@ -221,7 +247,10 @@ function JobPortal({isAdmin, applicantData}) {
                         <Text
                         textDecoration='underline'
                         fontWeight='600'
-                        >{job.jobTitleM}</Text>
+                        >{job.jobTitleM}
+                        {isAdmin && job.jobEnlistedM.toString() === 'true' && <Badge ml='5px' colorScheme='green'>Enlisted</Badge>}
+                        {isAdmin && job.jobEnlistedM.toString() === 'false' && <Badge ml='5px' colorScheme='red'>Delisted</Badge>}
+                        </Text>
                         <Text
                         margin='5px 0px 5px 0px'
                         fontSize='12px'
@@ -289,6 +318,13 @@ function JobPortal({isAdmin, applicantData}) {
                     id={jobsList[clickedJob-1]._id}
                     fetchJobsList={fetchJobsList}
                     />
+                    <Button display={jobsList[clickedJob-1].jobEnlistedM.toString() === 'false' ? '' : 'none'} mt='10px' size='sm' borderRadius='2px' colorScheme='green' ml='2'
+                    onClick={() => enlist(jobsList[clickedJob-1]._id)} boxShadow='5px 5px 5px lightgreen'
+                    >Enlist</Button>
+
+                    <Button display={jobsList[clickedJob-1].jobEnlistedM.toString() === 'true' ? '' : 'none'} mt='10px' size='sm' borderRadius='2px' colorScheme='red' ml='2'
+                    onClick={() => delist(jobsList[clickedJob-1]._id)} boxShadow='5px 5px 5px pink'
+                    >Delist</Button>
                     </>
                     :
                     <Link

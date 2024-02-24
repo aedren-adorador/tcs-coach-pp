@@ -1,6 +1,7 @@
 import React from "react";
-import { Flex, Image } from "@chakra-ui/react";
+import { Button, Flex, Image } from "@chakra-ui/react";
 import tcsLogo from '../tcs-logo.png'
+import { ExternalLinkIcon } from "@chakra-ui/icons";
 
 function AuthHeader() {
     return(
@@ -11,6 +12,7 @@ function AuthHeader() {
         width='100%'
         height='80px'
         backgroundColor='tcs.main'
+        justify='space-between'
         >
             <Image
             src={tcsLogo}
