@@ -7,7 +7,7 @@ const path = require('path');
 // Multer configuration for saving resumes
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, process.env.MULTER_DEPLOYMENT_URL_RESUME)
+    cb(null, process.env.MULTER__URL_RESUME)
   },
   filename: function (req, file, cb) {
     cb(null, 'TCS-Resume-'+Math.round(Math.random() * 1E9)+'-'+file.originalname)
@@ -20,15 +20,15 @@ const upload = multer({ storage: storage })
 const interviewStorage = multer.diskStorage({
   destination: function (req, file, cb) {
     const directoryName = `${req.body.applicantFirstName}-${req.body.applicantLastName}-${req.body.applicantID}`
-    if (fs.existsSync(`files/interview-recordings/${directoryName}`)) {
-      cb(null, `files/interview-recordings/${directoryName}`)
+    if (fs.existsSync(`${process.env.MULTER__URL_INTERVIEW}/${directoryName}`)) {
+      cb(null, `${process.env.MULTER__URL_INTERVIEW}/${directoryName}`)
     } else {
-      fs.mkdir(`files/interview-recordings/${directoryName}`,
+      fs.mkdir(`${process.env.MULTER__URL_INTERVIEW}/${directoryName}`,
         (err) => {
             if (err) {
                 return console.error(err);
             }
-            cb(null, `files/interview-recordings/${directoryName}`)
+            cb(null, `${process.env.MULTER__URL_INTERVIEW}/${directoryName}`)
         });
       }
   }, 

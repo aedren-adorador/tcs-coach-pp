@@ -9,7 +9,7 @@ router.post('/upload-resume', upload.single('resume'), (req, res, next)  => {
   Resume.findOne({applicantIDForeignKeyM: req.body.id, jobIDForeignKeyM: req.body.jobID})
     .then(record => {
       if (record) {
-        const filePath = 'files/resumes/'+record.resumeFileNameM
+        const filePath = `${process.env.RESUME_STATIC}/`+record.resumeFileNameM
         fs.unlink(filePath, (err) => {
           if (err) {
             console.error('Error deleting file:', err);
@@ -22,7 +22,7 @@ router.post('/upload-resume', upload.single('resume'), (req, res, next)  => {
             console.log("Updated Resume for " + req.body.firstName + ' ' + req.body.lastName)
             Resume.findOne({applicantIDForeignKeyM: req.body.id, jobIDForeignKeyM: req.body.jobID})
               .then(result => {
-                const resumeLink = `${process.env.REACT_APP_SYS_URL}/files/resumes/${result.resumeFileNameM}`
+                const resumeLink = `${process.env.REACT_APP_SYS_URL}/${process.env.RESUME_STATIC}/${result.resumeFileNameM}`
                 JobApplication.updateOne({applicantIDForeignKeyM: req.body.id, jobIDForeignKeyM: req.body.jobID}, {resumeM:resumeLink})
                   .then(()=>{
                     console.log('Updated Job Application Resume Link in Backend')
@@ -39,7 +39,7 @@ router.post('/upload-resume', upload.single('resume'), (req, res, next)  => {
         newResume.save()
           .then(result => {
             console.log('Resume saved!')
-            const resumeLink = `${process.env.REACT_APP_SYS_URL}/files/resumes/${result.resumeFileNameM}`
+            const resumeLink = `${process.env.REACT_APP_SYS_URL}/${process.env.RESUME_STATIC}/${result.resumeFileNameM}`
             JobApplication.updateOne({applicantIDForeignKeyM: req.body.id, jobIDForeignKeyM: req.body.jobID}, {resumeM:resumeLink})
               .then(()=>{
                 console.log('Updated Job Application Resume Link in Backend')

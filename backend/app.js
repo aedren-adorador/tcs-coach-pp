@@ -16,8 +16,8 @@ const generalRequestsRoutes = require('./routes/general-requests');
 // Mandatory Settings
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
-app.use('/files/resumes', express.static('files/resumes'));
-app.use('/files/interview-recordings', express.static('files/interview-recordings'));
+app.use(`/${process.env.RESUME_STATIC}`, express.static(`${process.env.RESUME_STATIC}`));
+app.use(`/${process.env.INTERVIEW_STATIC}`, express.static(`${process.env.INTERVIEW_STATIC}`));
 
 
 app.use((req, res, next) => {

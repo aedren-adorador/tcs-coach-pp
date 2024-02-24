@@ -53,7 +53,7 @@ router.post('/send-interview-invite', async (req, res, next) => {
   const filteredUpdate = update.filter(jobApp => jobApp._id.toString() === req.body.jobApplicationID)
   const filteredUpdateLevel2 = [{...filteredUpdate[0], currentStepM: 'waitingForInterviewSubmission'}]
   const token = generateInterviewToken(req.body.applicantID, req.body.jobApplicationID)
-  JobApplication.updateOne({_id: req.body.jobApplicationID}, {currentStepM: 'waitingForInterviewSubmission', interviewTokenM: token})
+  JobApplication.updateOne({_id: req.body.jobApplicationID}, {currentStepM: 'waitingForInterviewSubmission', interviewTokenM: token, interviewQuestionsM: details.jobQuestions})
     .then(
       sendInterviewInvite(details.emailAddress, details.position, stringifiedDeadline, details.firstName)
         .then(result => {
@@ -108,4 +108,6 @@ router.post('/supply-criteria', (req, res, next) => {
     })
 })
 
+router.get('/get-questions-for-job', (req, res, next) => {
+})
 module.exports = router;

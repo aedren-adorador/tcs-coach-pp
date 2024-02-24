@@ -284,10 +284,13 @@ function JobPortal({isAdmin, applicantData}) {
                 </Flex>
                
                     {isAdmin ?
+                    <>
                     <EditDetailsButton
                     id={jobsList[clickedJob-1]._id}
                     fetchJobsList={fetchJobsList}
-                    />:
+                    />
+                    </>
+                    :
                     <Link
                      to={{ pathname: `/application-progress/${applicantData._id}/${jobsList[clickedJob-1].jobTitleM}`}}
                      state={{applicantData: applicantData, jobData: jobsList[clickedJob-1]}}

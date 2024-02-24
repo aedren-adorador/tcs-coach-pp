@@ -81,6 +81,7 @@ function MainAdminView() {
                     margin='10px'
                     float='right'
                     onClick={logOut}
+                    borderRadius='0'
                     >Logout</Button>
                 </Box>
             </GridItem>

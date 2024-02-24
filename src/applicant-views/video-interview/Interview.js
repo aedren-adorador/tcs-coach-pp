@@ -33,16 +33,7 @@ function Interview() {
     
     const [questionCounter, setQuestionCounter] = useState(location.state.questionCounter+1 || 0)
 
-    const [questions, setQuestions] = useState({
-        'Tell us about yourself.': 2,
-        'Why did you apply to TCS?': 2,
-        'What are your strenghts?': 2,
-        'Tell about a time where you had a conflict with a group.': 2,
-        'How would you explain a complex topic to an audience?': 2,
-        'What do you think is the future of technology?': 2,
-        'In a collaborative environment, who are you in the group?': 2,
-        'State one important mistake that has shaped you for the better.': 2,
-        })
+    const [questions, setQuestions] = useState(submittedJobApplicationDetails.interviewQuestionsM)
 
     const {
     activeRecordings,
@@ -228,14 +219,14 @@ function Interview() {
                             width='50%'
                             fontSize='12px'
                             borderRadius='0px'
-                            display={recording.status === 'STOPPED' && questions[Object.keys(questions)[questionCounter]] > 0 ? '' : 'none'}
+                            display={recording.status === 'STOPPED' && questions[questionCounter] > 0 ? '' : 'none'}
                             onClick={() => {
                                 startRecording(recording.id)
                                 setAnswerTime(180)
                                 setAnswerTimer('00:00')
                                 setAnswerTimerProgress(0)
                                 setQuestions(prevQs => {
-                                    const currentQuestion = Object.keys(prevQs)[questionCounter]
+                                    const currentQuestion = prevQs[questionCounter]
                                     const updatedQuestions = { ...prevQs }
                                     updatedQuestions[currentQuestion] = Math.max(0, updatedQuestions[currentQuestion] - 1)
                                     return updatedQuestions
@@ -263,7 +254,7 @@ function Interview() {
                                 setAnswerTimer('00:00')
                                 setAnswerTimerProgress(0)
                                 setQuestions(prevQs => {
-                                    const currentQuestion = Object.keys(prevQs)[questionCounter]
+                                    const currentQuestion = prevQs[questionCounter]
                                     const updatedQuestions = { ...prevQs }
                                     updatedQuestions[currentQuestion] = Math.max(0, updatedQuestions[currentQuestion] - 1)
                                     return updatedQuestions
@@ -319,15 +310,6 @@ function Interview() {
                                 <video ref={recording.previewRef}  loop autoPlay playsInline style={{width:'100%', height:'100%', minWidth: '400px', minHeight: '300px'}}/>
                             </Box>
                         </Box>
-
-                            <Button
-                            onClick={() => download(recording.id)}
-                            bg='tcs.mongo'
-                            color='white'
-                            colorScheme='green'
-                            borderRadius='0px'
-                            display={recording.status === 'STOPPED' ? '' : 'none'}
-                            >Download</Button>
                     </GridItem>
                     
                     
@@ -337,16 +319,11 @@ function Interview() {
                          <Text
                          fontWeight='700'
                          fontSize='18px'
-                         >Question {questionCounter+1} of {Object.keys(questions).length}</Text>
+                         >Question {questionCounter+1} of {questions.length}</Text>
                          <Flex
                          gap='10'
                          fontSize='12px'
                          >
-                            <Box>
-                                <RepeatClockIcon/>
-                                &nbsp;
-                                <strong>{Object.values(questions)[questionCounter]}</strong> Tries
-                            </Box>
                              <Box>
                                 <TimeIcon></TimeIcon>
                                 &nbsp;
@@ -359,7 +336,7 @@ function Interview() {
                          mt='30px'
                          fontSize='20px'
                          >
-                            {Object.keys(questions)[questionCounter]}
+                            {questions[questionCounter]}
                          </Text>
                     </GridItem>
 
@@ -505,7 +482,7 @@ function Interview() {
                                 width='150px'
                                 colorScheme='facebook'
                                 onClick={()=>{                                       
-                                    if ( questionCounter+1 === Object.keys(questions).length) {
+                                    if ( questionCounter+1 === questions.length) {
                                         submitInterviewResponse(recording.previewRef.current.currentSrc)
                                         console.log(submittedJobApplicationDetails, "AHTGAA")
                                         navigate('/video-interview/submission-complete',

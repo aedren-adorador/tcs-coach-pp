@@ -1,13 +1,17 @@
-import {Grid, GridItem, Flex, Box, Text, Accordion, AccordionButton, AccordionItem, AccordionIcon, AccordionPanel, Link, Button, Badge} from "@chakra-ui/react";
+import {Grid, GridItem, Flex, Box, Text, Accordion, AccordionButton, AccordionItem, AccordionIcon, AccordionPanel, Link, Button, Badge, Modal, ModalOverlay, ModalHeader, ModalContent, ModalCloseButton, ModalBody, ModalFooter, useDisclosure, Input, InputGroup, InputLeftAddon, InputRightAddon} from "@chakra-ui/react";
 import { ThunderboltOutlined, BulbOutlined, FireOutlined, CalendarOutlined} from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { CloseIcon } from "@chakra-ui/icons";
 
 function ReviewApplication({chosenApplicantAllJobApplicationDetails, setChosenApplicantAllJobApplicationDetails}) {
+    const { isOpen, onOpen, onClose } = useDisclosure()
+    const finalRef = React.useRef(null)
     useEffect(() => {
     }, [chosenApplicantAllJobApplicationDetails])
     
     const [isSending, setIsSending] = useState(false);
+    const [questions, setQuestions] = useState(chosenApplicantAllJobApplicationDetails.interviewQuestionsM)
 
     const sendInterviewInvite = () => {
         setIsSending(true)
@@ -19,7 +23,8 @@ function ReviewApplication({chosenApplicantAllJobApplicationDetails, setChosenAp
             emailAddress: chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0].emailM,
             firstName: chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0].firstNameM,
             jobApplicationID: chosenApplicantAllJobApplicationDetails._id,
-            applicantID: chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0]._id
+            applicantID: chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0]._id,
+            jobQuestions: questions
         }
         axios.post(`${process.env.REACT_APP_SYS_URL}/api/admin/applicant-screening/send-interview-invite`, details)
             .then(response => {
@@ -29,10 +34,21 @@ function ReviewApplication({chosenApplicantAllJobApplicationDetails, setChosenAp
             })
     }
 
-    useEffect(() => {
+    const addQuestion = () => {
+        const newQuestions = [...questions, '']
+        setQuestions(newQuestions)
+    }
+    const deleteQuestion = (index) => {
+    const newQuestions = questions.filter((_, i) => i !== index);
+    setQuestions(newQuestions);
+    };
+
+     useEffect(() => {
     }, [chosenApplicantAllJobApplicationDetails])
 
-    
+    useEffect(() => {
+        console.log(questions)
+    }, [questions])
     return(
         <>
         <Grid
@@ -265,13 +281,57 @@ function ReviewApplication({chosenApplicantAllJobApplicationDetails, setChosenAp
                 color='white'
                 colorScheme='green'
                 borderRadius='0px'
-                onClick={sendInterviewInvite}
+                onClick={onOpen}
                 >
                     Send Interview Invite
                 </Button>
                 }
                
             </Flex>
+            <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
+                <ModalOverlay />
+                <ModalContent
+                borderRadius='0'
+                maxW='600px'
+                >
+                <ModalHeader>Set Interview Questions</ModalHeader>
+                <ModalCloseButton />
+                <ModalBody>
+                    <Flex
+                    direction='column'
+                    gap='2'
+                    >
+                    {questions.map((question, index) => (
+                        <InputGroup>
+                        <InputLeftAddon width='120px'>Question {index+1}</InputLeftAddon>
+                        <Input placeholder='Input question here...'
+                        onChange={(e) => {
+                            const newQuestions = [...questions]
+                            newQuestions[index] = e.target.value
+                            setQuestions(newQuestions)
+                        }}
+                        value={questions[index]}
+                        ></Input>
+                        <Button variant='ghost' size='md' colorScheme="red" ml='2'
+                        onClick={()=>deleteQuestion(index)}
+                        ><CloseIcon fontSize='10px'></CloseIcon></Button>
+                        </InputGroup>
+                    ))}
+                    </Flex>
+                    <Button borderRadius='0' colorScheme="green" mt='2' size='xs' onClick={addQuestion}>+ Add Question</Button>
+                </ModalBody>
+
+                <ModalFooter>
+                    <Button colorScheme='red' mr={3} onClick={onClose} borderRadius='0' size='sm' variant='outline'>
+                    Cancel
+                    </Button>
+                    <Button variant='ghost' size='sm' borderRadius='0' colorScheme="green" onClick={() => {
+                        onClose()
+                        sendInterviewInvite()
+                    }}>Confirm Invite</Button>
+                </ModalFooter>
+                </ModalContent>
+            </Modal>
 
         </>
     )
