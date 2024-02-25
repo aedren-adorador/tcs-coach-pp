@@ -55,7 +55,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<Login onLoginSuccess={handleLoginSuccess}/>}/>
-          <Route path="/" element={<PublicJobPortal/>}/>
+          <Route path="/" element={<PublicJobPortal onLoginSuccess={handleLoginSuccess}/>}/>
           <Route path="/register-email" element={<RegisterApplicantEmail/>}/>
           <Route path="/create-applicant-account" element={<CreateApplicantAccount/>}/>
           <Route path="/create-admin-account" element={<CreateAdminAccount/>}/>

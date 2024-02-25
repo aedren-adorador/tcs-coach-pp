@@ -1,45 +1,26 @@
-import { Box, Button, Card, CardBody, Flex, Grid, GridItem, Link, Skeleton, Text, Textarea, VStack } from "@chakra-ui/react";
+import { Box, Button, Card, CardBody, Flex, Grid, GridItem, Input, Link, Select, Skeleton, Table, TableCaption, TableContainer, Tbody, Td, Text, Textarea, Tfoot, Th, Thead, Tr, VStack } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { StarOutlined, StarFilled } from "@ant-design/icons";
 import axios from "axios";
+import { EditIcon } from "@chakra-ui/icons";
+import { Form, Formik } from "formik";
 
 function InterviewFeedback(chosenApplicantAllJobApplicationDetails) {
    
     const [interviewQuestions, setInterviewQuestions] = useState(chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.interviewQuestionsM)
 
     const [interviewCriteriaScores, setInterviewCriteriaScores] = useState({})
-    
-    const handleRating = (starIndex, criterion) => {
-        setInterviewCriteriaScores(prevState => ({
-            ...prevState,
-             [criterion]: [String(starIndex), prevState[criterion][1]]
-        })
-        )
-    }
-
-    const handleFeedback = (criterion, e) => {
-        setInterviewCriteriaScores(prevState => ({
-            ...prevState,
-            [criterion]: [prevState[criterion][0], e.target.value]
-        }
-        ))
-    }
 
     const perfectScore = 5;
 
     const [clickedVideo, setClickedVideo] = useState(0)
     const [interviewResponsesList, setInterviewResponsesList] = useState([])
     const [isVideoLoading, setIsVideoLoading] = useState(false);
+    const [editCriterionScore, setCriterionScore] = useState(false);
+    
 
     useEffect(() => {
     }, [interviewResponsesList])
-
-    useEffect(() => {
-        const details = {interviewCriteriaScores: interviewCriteriaScores, jobApplicationID: chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails._id}
-        axios.post(`${process.env.REACT_APP_SYS_URL}/api/admin/applicant-screening/update-interview-scores/${encodeURIComponent(JSON.stringify(details))}`)
-            .then(response => console.log(response.data))
-
-    }, [interviewCriteriaScores, chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails._id])
 
     useEffect(() => {
         if (interviewResponsesList[clickedVideo]) {
@@ -62,16 +43,27 @@ function InterviewFeedback(chosenApplicantAllJobApplicationDetails) {
         }, [chosenApplicantAllJobApplicationDetails])
 
     useEffect(() => {
-        if (chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.interviewCriteriaScoresM) { 
-            setInterviewCriteriaScores(chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.interviewCriteriaScoresM)
-        } else {
-            const details = { jobApplicationID: chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails._id}
-            axios.post(`${process.env.REACT_APP_SYS_URL}/api/admin/applicant-screening/supply-criteria`, details)
+        if (Object.keys(chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.interviewCriteriaScoresM).length === 0) {
+            axios.get(`${process.env.REACT_APP_SYS_URL}/api/admin/applicant-screening/populate-criteria`)
                 .then(response => {
-                    setInterviewCriteriaScores(response.data)
+                    const criteria = {};
+                    response.data.forEach(criterion => {
+                        criteria[criterion.criterionM] = 0;
+                    });
+                    axios.post(`${process.env.REACT_APP_SYS_URL}/api/admin/applicant-screening/save-initial-criteria`, [criteria, chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails._id])
+                        .then(response => setInterviewCriteriaScores(criteria))
+                    
                 })
+        } else {
+            console.log('haha')
+            setInterviewCriteriaScores(chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.interviewCriteriaScoresM)
         }
-    }, [chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.interviewCriteriaScoresM, chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails._id])
+    }, [])
+
+    useEffect(() => {
+    }, [interviewCriteriaScores])
+
+
 
     return(
         <>
@@ -106,7 +98,6 @@ function InterviewFeedback(chosenApplicantAllJobApplicationDetails) {
                                 }, 1000)
                                 }}
                             }
-                           
                     >Question {index+1}</Button>
                     <Box>{question}</Box>
                     </Flex>
@@ -132,51 +123,47 @@ function InterviewFeedback(chosenApplicantAllJobApplicationDetails) {
         fontWeight='600'
         color='black'
         >Interview Feedback Criteria</Text>
-        {Object.keys(interviewCriteriaScores).map((criterion, index) => {
-            return <Grid
-            key={index}
-            gap={1}
-            templateColumns='repeat(3, 1fr)'
-            mb='50px'
-            >
-               <Box>
-                    <Text
-                    key={Math.floor(1000000000 + Math.random() * 9000000000)}
-                    >{criterion}</Text>
-                </Box>
-                <Flex>
-                    {Array.from({length: perfectScore}, (_, starIndex) => (
-                        <>
-                       {starIndex + 1 <= Number(interviewCriteriaScores[criterion][0]) ? (
-                            <StarFilled
-                            key={Math.floor(1000000000 + Math.random() * 9000000000)}
-                            style={{ fontSize: '30px', marginLeft: '10px',color:'gold' }}
-                            
-                            onClick={() => {
-                                handleRating(starIndex + 1, criterion)
-                            }}
-                            />
-                        ) : (
-                            <StarOutlined
-                            key={Math.floor(1000000000 + Math.random() * 9000000000)}
-                            style={{ fontSize: '30px', marginLeft: '10px'}}
-                            onClick={() => handleRating(starIndex + 1, criterion)}
-                            />
-                        )}
-                       </>
-    
-                    ))}
-                </Flex>
-                <Textarea
-                    key={index}
-                    placeholder='Add comment'
-                    size='xs'
-                    value={interviewCriteriaScores[criterion][1]}
-                    onChange={(e) => handleFeedback(criterion, e)}
-                />
+        <TableContainer>
+        <Table colorScheme='blue'>
+            <Thead>
+            <Tr>
+                <Th>Criterion</Th>
+                <Th>Rating</Th>
+                <Th>Comments</Th>
+            </Tr>
+            </Thead>
+            <Tbody>
+            {Object.keys(interviewCriteriaScores).map(key => (
+                <Tr key={key}>
+                    <Td>{key}</Td>
+                    <Td>
+                        {editCriterionScore ? 
+                        <Select size='sm' maxW='60px' display='inline-block'>
+                            <option value='1'>1</option>
+                            <option value='2'>2</option>
+                            <option value='3'>3</option>
+                            <option value='4'>4</option>
+                            <option value='5'>5</option>
+                        </Select>
+                        
+                        : interviewCriteriaScores[key]}  /5
+                        &nbsp;
+                        <EditIcon _hover={{color: 'lightblue'}} onClick={()=>setCriterionScore(curr => !curr)}/>
+                    </Td>
+                    <Td><Textarea fontSize='12px'></Textarea></Td>
+                </Tr>
+            ))}
                 
-            </Grid>
-        })}
+
+            </Tbody>
+
+        </Table>
+        <Flex justify='flex-end'>
+            <Button size='md' borderRadius='0px' float='right' mb='50px' colorScheme='green'>Save Interview Review</Button>
+        </Flex>
+        </TableContainer>
+        
+        
         <Grid
         templateColumns='repeat(1, 1fr)'
         gap={5}
@@ -211,8 +198,6 @@ function InterviewFeedback(chosenApplicantAllJobApplicationDetails) {
                     color='black'
                     _hover={{color: 'white', bg:'green'}}
                     >Send &nbsp;<Text fontWeight='600' display='inline-block'>Teaching Demo Invitation</Text>&nbsp;Email</Button>
-
-                   
                 </Flex>
             </GridItem>
         </Grid>

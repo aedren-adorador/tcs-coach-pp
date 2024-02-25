@@ -23,7 +23,7 @@ function AllApplicants({applicants, updateChosenApplicantToReview, handleButtonC
     }, [allJobApplications])
     return(
         <>
-        <HStack
+        {/* <HStack
         margin='0'
         padding='0'
         mt='40px'
@@ -69,12 +69,13 @@ function AllApplicants({applicants, updateChosenApplicantToReview, handleButtonC
                         />
                     </InputGroup>
             </Flex>
-        </HStack>
+        </HStack> */}
         
         <TableContainer
         border='solid 0.5px lightgray'
         borderRadius='20px'
-        padding='30px 10px'        
+        padding='30px 10px'
+        mt='50px'   
         >
             <Table
             variant='simple'

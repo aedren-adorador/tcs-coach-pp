@@ -6,10 +6,12 @@ import tcsDarkLogo  from '../../tcs-dark-logo.png'
 import CreateJobButton from "./admin/CreateJobButton";
 import axios from "axios";
 import EditDetailsButton from "./admin/EditDetailsButton";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import tcsLogo from '../../tcs-logo.png'
+import { jwtDecode } from "jwt-decode";
 
-function PublicJobPortal({applicantData}) {
+function PublicJobPortal({applicantData, onLoginSuccess}) {
+    const navigate = useNavigate();
     const jobFilters = ['Categories', 'Posting Dates', 'Job Types'];
     const [jobsList, setJobsList] = useState([]);
     const [clickedJob, setClickedJob] = useState(null);
@@ -59,6 +61,23 @@ function PublicJobPortal({applicantData}) {
 
     useEffect(() => {
     }, [applicantData])
+
+    useEffect(() => {
+        const isStillAuthenticated = localStorage.getItem('isAuthenticated')
+        if (isStillAuthenticated) {
+            console.log(localStorage.getItem('token'))
+            onLoginSuccess();
+            const decodedUserToken = jwtDecode(localStorage.getItem('token'))
+            const loggedInUserID = decodedUserToken.userID
+            const isAdmin =  decodedUserToken.admin                   
+            if (isAdmin === true) {
+                navigate(`/admin-home/${loggedInUserID}`)
+            } else if (isAdmin === 'false'){
+                navigate(`/applicant-home/${loggedInUserID}`)
+            }
+        }
+        // setRevealed(true);
+    }, [navigate, onLoginSuccess]);
 
     return(
         <>

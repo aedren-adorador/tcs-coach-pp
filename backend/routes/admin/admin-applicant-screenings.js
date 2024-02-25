@@ -65,7 +65,6 @@ router.post('/send-interview-invite', async (req, res, next) => {
     )
 })
 
-
 router.get('/get-applicants', (req, res, next) => {
   Applicant.find()
     .then(applicants => {
@@ -81,33 +80,17 @@ router.get('/get-interview-responses/:details', (req, res, next) => {
   })
 })
 
-router.post('/update-interview-scores/:details', (req, res, next) => {
-  const details = JSON.parse(req.params.details)
-  JobApplication.findOne({_id: details.jobApplicationID})
-    .then(record => {
-       JobApplication.updateOne({_id: details.jobApplicationID}, {interviewCriteriaScoresM: details.interviewCriteriaScores})
-        .then(res.send('success!'))
-    })
- 
-})
-
-
-router.post('/supply-criteria', (req, res, next) => {
-  const details = req.body
-  const toMapObject = {}
+router.get('/populate-criteria', (req, res, next) => {
   Criteria.find()
-    .then(result => {
-      result.forEach(criterion => {
-        toMapObject[criterion.criterionM] = ['0', ''];
-      });
-      console.log(toMapObject)
-      JobApplication.updateOne({_id: details.jobApplicationID}, {interviewCriteriaScoresM: toMapObject})
-        .then(result => {
-          res.send(toMapObject)
-        })
-    })
+    .then(result => res.send(result))
 })
 
-router.get('/get-questions-for-job', (req, res, next) => {
+router.post('/save-initial-criteria', (req, res, next) => {
+  console.log(req.body[0])
+  
+  JobApplication.updateOne({_id: req.body[1]}, {interviewCriteriaScoresM: req.body[0]})
+    .then(result => res.send(result))
 })
+
+
 module.exports = router;
