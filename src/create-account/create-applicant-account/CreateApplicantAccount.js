@@ -172,6 +172,7 @@ function CreateApplicantAccount() {
                             {
                                 isCreatingAccount ?
                                  <Button
+                                 mt='10px'
                                 isLoading
                                 loadingText='Creating Account'
                                 colorScheme='blue'

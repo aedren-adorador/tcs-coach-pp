@@ -1,5 +1,5 @@
 import { WarningIcon } from "@chakra-ui/icons";
-import { Td, Table, TableContainer, Tr, Th, Tbody, Thead, Button, Badge, Text, Image, Flex, Skeleton, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter} from "@chakra-ui/react";
+import { Td, Table, TableContainer, Tr, Th, Tbody, Thead, Button, Badge, Text, Image, Flex, Skeleton, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, VStack} from "@chakra-ui/react";
 import suitcase from '../../admin-views/admin-view-imgs/suitcase.png'
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -21,6 +21,15 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
         }
     }
 
+    const handleWithdrawApplication = (jobApplicationID, applicantID) => {
+        const details = {jobApplicationID, applicantID}
+        axios.post(`${process.env.REACT_APP_SYS_URL}/api/general-request/withdraw-application`, details)
+            .then(response => {
+                 window.location.reload()
+            })
+       
+    }
+
     useEffect(() => {
         if (applicantData.jobApplicationsM && applicantData.jobApplicationsM.length !== 0) {
             axios.get(`${process.env.REACT_APP_SYS_URL}/api/applicant/general-request/get-job-application/${applicantData.jobApplicationsM}`)
@@ -28,7 +37,7 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                     setSubmittedJobApplicatioDetails(response.data.submittedApplicationDetails)
                     setIsLoading(false);
                 })
-        }     
+        } 
     }, [applicantData])
 
     useEffect(() => {
@@ -59,6 +68,7 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                     <Th>Position Applied To</Th>
                     <Th>Application Date</Th>
                     <Th>Application Status</Th>
+                    <Th>Action</Th>
                 </Tr>
                 </Thead>
                 <Tbody>
@@ -123,7 +133,14 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                         padding='5px'
                         >Active: Video Interview Under Review</Badge>}
                         </Skeleton>
-                    </Td>   
+                    </Td>
+                    <Td>
+                        <Flex direction='column' gap='2'>
+                            <Button size='xs' borderRadius='0px' colorScheme='blue'>View Application</Button>
+                            <Button size='xs' colorScheme='red' variant='outline' borderRadius='0px'onClick={()=>handleWithdrawApplication(submittedJobApplicationDetails._id, applicantData._id)}>Withdraw Application</Button>
+                        </Flex>
+                        
+                    </Td>
                 </Tr>
                 
                 

@@ -9,7 +9,7 @@ const {jwtDecode} = require('jwt-decode');
 const JobApplication = require('../models/jobApplications');
 const Admin = require('../models/admins');
 const Resume = require('../models/resumes');
-
+const ObjectId = require('mongodb').ObjectID;
 
 router.get('/fetch-jobs-list-applicant/:id', (req, res, next) => {
   JobApplication.find({applicantIDForeignKeyM: req.params.id})
@@ -132,5 +132,21 @@ router.post('/delete-account', (req, res, next) => {
         .then(res.json({deletionSuccess: 'account successfully deleted!'}))
 
 })})
+
+
+router.post('/withdraw-application', (req, res, next) => {
+  console.log(req.body)
+  Applicant.find({_id: req.body.applicantID})
+    .then(applicant => {
+      const copy = [...applicant[0].jobApplicationsM]
+      const newArrayOfJobApplications = copy.filter((jobApp, index) => (jobApp.toString() !== req.body.jobApplicationID.toString()))
+      Applicant.updateOne({_id: req.body.applicant.ID}, newArrayOfJobApplications)
+        .then(result => console.log(result))
+    })
+  JobApplication.deleteOne({_id: req.body.jobApplicationID})
+    .then(result => console.log(result))
+
+  res.json({success: 'Withdrawn Application'})
+})
 
 module.exports = router;
