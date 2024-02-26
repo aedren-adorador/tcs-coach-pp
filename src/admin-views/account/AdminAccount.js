@@ -45,18 +45,18 @@ function AdminAccount({adminData}) {
 
     const handleFirstNameChange = (firstName) => {
         const details = {applicantID: adminData._id, applicantFirstName: firstName}
-        axios.post(`${process.env.REACT_APP_SYS_URL}/api/general-request/set-new-first-name`, details)
+        axios.post(`${process.env.REACT_APP_SYS_URL}/api/general-request/set-new-first-name-admin`, details)
             .then(response => {
                 setTimeout(() => {
                     setIsEditingFirstName(false)
                 }, 1000)
-                    window.location.reload()                
+                    window.location.reload() 
             })
     }
 
     const handleLastNameChange = (lastName) => {
         const details = {applicantID: adminData._id, applicantLastName: lastName}
-        axios.post(`${process.env.REACT_APP_SYS_URL}/api/general-request/set-new-last-name`, details)
+        axios.post(`${process.env.REACT_APP_SYS_URL}/api/general-request/set-new-last-name-admin`, details)
             .then(response => {
                 setTimeout(() => {
                     setIsEditingLastName(false)
@@ -66,25 +66,25 @@ function AdminAccount({adminData}) {
     }
 
     const handleEmailChange = (email) => {
-        setIsSettingNewEmail(true)
-        const details = {applicantID: adminData._id, applicantEmail: email, applicantFirstName: adminData.firstNameM}
-        axios.post(`${process.env.REACT_APP_SYS_URL}/api/general-request/set-new-email`, details)
-            .then(response => {
-                setIsEditingEmail(false)
-                toast({
-                    title: 'Verification link sent to new email.',
-                    description: "Check email to activate your new email.",
-                    status: 'success',
-                    duration: 9000,
-                    isClosable: true,
-                    position: 'top',
-                    containerStyle: {
-                        fontWeight: '400px'
-                    }
-                    })
-                setIsSettingNewEmail(false)
+        // setIsSettingNewEmail(true)
+        // const details = {applicantID: adminData._id, applicantEmail: email, applicantFirstName: adminData.firstNameM}
+        // axios.post(`${process.env.REACT_APP_SYS_URL}/api/general-request/set-new-email`, details)
+        //     .then(response => {
+        //         setIsEditingEmail(false)
+        //         toast({
+        //             title: 'Verification link sent to new email.',
+        //             description: "Check email to activate your new email.",
+        //             status: 'success',
+        //             duration: 9000,
+        //             isClosable: true,
+        //             position: 'top',
+        //             containerStyle: {
+        //                 fontWeight: '400px'
+        //             }
+        //             })
+        //         setIsSettingNewEmail(false)
                            
-            })
+        //     })
     }
 
     useEffect(() => {

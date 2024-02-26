@@ -83,7 +83,7 @@ function Login({onLoginSuccess}) {
                         <Flex justify='flex-end'>
                              
                         <Link to='/'>
-                        <Button  bg='white' size='xs' variant='ghost' colorScheme='green'>See Job Portal &nbsp;<ExternalLinkIcon/></Button>
+                        <Button  bg='white' size='xs' variant='ghost' colorScheme='green'>Navigate Job Portal &nbsp;<ExternalLinkIcon/></Button>
                         </Link>
                         </Flex>
                        
@@ -137,9 +137,8 @@ function Login({onLoginSuccess}) {
                         width='100%'
                         size='sm'
                         type='submit'
-                        fontWeight='600'
-                        
-                        >Sign In </Button> :
+                        fontWeight='700'
+                        >Sign In</Button> :
 
                         <Button
                             isLoading

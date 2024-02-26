@@ -7,19 +7,24 @@ const jwt = require('jsonwebtoken')
 const {generateNewPasswordToken, sendNewPasswordVerification, generateNewEmailToken, sendNewEmailVerification} = require('../configs/email-config');
 const {jwtDecode} = require('jwt-decode');
 const JobApplication = require('../models/jobApplications');
+const Admin = require('../models/admins');
+const Resume = require('../models/resumes');
 
 
 router.get('/fetch-jobs-list-applicant/:id', (req, res, next) => {
   JobApplication.find({applicantIDForeignKeyM: req.params.id})
     .then(jobApplication => {
-      Job.find({jobEnlistedM: true})
+      if (jobApplication.length === 0) {
+        Job.find({jobEnlistedM: true})
+          .then(result => res.json({jobs: result}))
+      } else {
+        Job.find({jobEnlistedM: true})
         .then(jobsList => {
           const newJobsList = jobsList.filter((i, index) => i._id.toString() !== jobApplication[0].jobIDForeignKeyM)
           res.json({jobs: newJobsList})
         })
+      }
     })
-    
-
 })
 
 router.get('/fetch-jobs-list-admin', (req, res, next) => {
@@ -62,8 +67,18 @@ router.post('/set-new-first-name', (req, res, next) => {
     .then(result => res.send(result))
 })
 
+router.post('/set-new-first-name-admin', (req, res, next) => {
+  Admin.updateOne({_id: req.body.applicantID}, {firstNameM: req.body.applicantFirstName})
+    .then(result => res.send(result))
+})
+
 router.post('/set-new-last-name', (req, res, next) => {
   Applicant.updateOne({_id: req.body.applicantID}, {lastNameM: req.body.applicantLastName})
+    .then(result => res.send(result))
+})
+
+router.post('/set-new-last-name-admin', (req, res, next) => {
+  Admin.updateOne({_id: req.body.applicantID}, {lastNameM: req.body.applicantLastName})
     .then(result => res.send(result))
 })
 
@@ -99,4 +114,23 @@ router.post('/enlist-job', (req, res, next) => {
   Job.updateOne({_id: req.body.jobID}, {jobEnlistedM: true})
     .then(res.send({success: 'successfully enlisted'}))
 })
+
+
+router.post('/delete-account', (req, res, next) => {
+  console.log(req.body)
+  Applicant.findOne({_id: req.body.applicantID})
+    .then(applicant => {
+      console.log(applicant)
+      applicant.jobApplicationsM.map((jobApplicationID, index) => (
+        JobApplication.deleteOne({_id: jobApplicationID})
+          .then(result => console.log(result, 'job app deletion'))))
+        
+      Resume.deleteOne({applicantIDForeignKeyM: applicant._id})
+            .then(result => console.log(result, 'resume deletion'))
+            
+      Applicant.deleteOne({_id: applicant._id})
+        .then(res.json({deletionSuccess: 'account successfully deleted!'}))
+
+})})
+
 module.exports = router;

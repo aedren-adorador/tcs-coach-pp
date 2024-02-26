@@ -18,7 +18,6 @@ function InterviewFeedback(chosenApplicantAllJobApplicationDetails) {
     const [isVideoLoading, setIsVideoLoading] = useState(false);
     const [editCriterionScore, setCriterionScore] = useState(false);
     
-
     useEffect(() => {
     }, [interviewResponsesList])
 
@@ -30,6 +29,7 @@ function InterviewFeedback(chosenApplicantAllJobApplicationDetails) {
         } 
     }, [clickedVideo, interviewResponsesList, chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.applicantJoinedDetails]); 
 
+
     useEffect(() => {
         const details = {
         applicantID: chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0]._id,
@@ -40,10 +40,9 @@ function InterviewFeedback(chosenApplicantAllJobApplicationDetails) {
             .then(response => {
                 setInterviewResponsesList(response.data)
             })
-        }, [chosenApplicantAllJobApplicationDetails])
 
-    useEffect(() => {
-        if (Object.keys(chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.interviewCriteriaScoresM).length === 0) {
+        
+        if (chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.interviewCriteriaScoresM && Object.keys(chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.interviewCriteriaScoresM).length === 0) {
             axios.get(`${process.env.REACT_APP_SYS_URL}/api/admin/applicant-screening/populate-criteria`)
                 .then(response => {
                     const criteria = {};
@@ -55,7 +54,6 @@ function InterviewFeedback(chosenApplicantAllJobApplicationDetails) {
                     
                 })
         } else {
-            console.log('haha')
             setInterviewCriteriaScores(chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.interviewCriteriaScoresM)
         }
     }, [])
@@ -133,7 +131,7 @@ function InterviewFeedback(chosenApplicantAllJobApplicationDetails) {
             </Tr>
             </Thead>
             <Tbody>
-            {Object.keys(interviewCriteriaScores).map(key => (
+            {interviewCriteriaScores && Object.keys(interviewCriteriaScores).map(key => (
                 <Tr key={key}>
                     <Td>{key}</Td>
                     <Td>

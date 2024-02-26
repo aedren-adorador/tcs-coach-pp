@@ -11,9 +11,10 @@ const applicantWorkExperienceRequestsRoutes = require('./routes/applicant/step-1
 const applicantVideoInterviewRequestsRoutes = require('./routes/applicant/step-2-video-interview/applicant-video-interview-requests')
 const applicantGeneralRequestsRoutes = require('./routes/applicant/applicant-general-requests')
 const generalRequestsRoutes = require('./routes/general-requests');
-
+const cors = require('cors')
 
 // Mandatory Settings
+app.use(cors())
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(`/${process.env.RESUME_STATIC}`, express.static(`${process.env.RESUME_STATIC}`));
@@ -21,17 +22,20 @@ app.use(`/${process.env.INTERVIEW_STATIC}`, express.static(`${process.env.INTERV
 
 
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept"
   );
+
   res.setHeader(
     "Access-Control-Allow-Methods",
     "GET, POST, PATCH, DELETE, OPTIONS, PUT"
   );
   next();
 });
+
+ 
 
 mongoose.connect(process.env.MONGODB_CONNECT, {})
   .then(() => {console.log('Connected to TCS Coach++ Database!')})

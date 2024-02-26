@@ -25,7 +25,7 @@ const jobApplication = mongoose.Schema({
     deadlineDateInterviewM: {type: Date, required: false, default: ''},
     interviewTokenM: {type: String, required: false, default: ''},
     interviewCriteriaScoresM: {type: Object, required: false, default: {}},
-    interviewQuestionsM: {type: Array, required: false, default: ['q1', 'q2', 'q3', 'q4', 'q5']},
+    interviewQuestionsM: {type: Array, required: false, default: ['', '', '', '', '', '', '', '']},
 
     dateSubmittedTeachingDemoM: {type: Date, required: false, default: ''},
     deadlineDateTeachingDemoM: {type: Date, required: false, default: ''},

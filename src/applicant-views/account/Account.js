@@ -1,9 +1,11 @@
 import { CheckIcon, CloseIcon, DragHandleIcon, EditIcon } from "@chakra-ui/icons";
-import { Box, Button, Card, CardBody, CardHeader, Flex, Grid, GridItem, Input, Text, useToast } from "@chakra-ui/react";
+import { Box, Button, Card, CardBody, CardHeader, Flex, Grid, GridItem, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useDisclosure, useToast } from "@chakra-ui/react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Account({applicantData}) {
+    const navigate = useNavigate();
     const toast = useToast();
     const [firstName, setFirstName] = useState(applicantData.firstNameM);
     const [lastName, setLastName] = useState(applicantData.lastNameM);
@@ -16,6 +18,8 @@ function Account({applicantData}) {
     const [isEditingLastName, setIsEditingLastName] = useState(false);
     const [isEditingEmail, setIsEditingEmail] = useState(false);
     const [isSettingNewEmail, setIsSettingNewEmail] =useState(false);
+    const { isOpen, onOpen, onClose } = useDisclosure()
+    const finalRef = React.useRef(null)
 
     const setNewPassword = (newPassword) => {
         setIsSettingNewPassword(true)
@@ -87,6 +91,18 @@ function Account({applicantData}) {
             })
     }
 
+    const handleDeleteAccount = () => {
+        const details = {applicantID: applicantData._id}
+        axios.post(`${process.env.REACT_APP_SYS_URL}/api/general-request/delete-account`, details)
+            .then(response => console.log(response))
+        localStorage.removeItem('activeNavButton')
+        localStorage.removeItem('applicantID')
+        localStorage.removeItem('isAuthenticated')
+        localStorage.removeItem('token')
+        localStorage.removeItem('currentStep')
+        navigate('/login');
+    }
+
     useEffect(() => {
         console.log(email)
     }, [firstName, lastName, applicantData, email])
@@ -94,7 +110,26 @@ function Account({applicantData}) {
     return(
         <>
         <Card margin='40px' maxW='600px' minW='600px'>
-            <CardHeader>Account Information</CardHeader>
+            <CardHeader>Account Information
+                <Button size='xs' variant='outline' colorScheme='red' float='right' onClick={onOpen}>Delete Account</Button>
+                <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
+                    <ModalOverlay />
+                    <ModalContent>
+                    <ModalHeader>Delete Account Confirmation</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody>
+                        Are you sure you want to delete your account? This action cannot be undone.
+                    </ModalBody>
+
+                    <ModalFooter>
+                        <Button colorScheme='blue' mr={3} onClick={onClose} borderRadius='0' size='sm'>
+                        Cancel
+                        </Button>
+                        <Button variant='ghost' borderRadius='0' colorScheme='red' size='sm' onClick={handleDeleteAccount}>Yes, delete my account.</Button>
+                    </ModalFooter>
+                    </ModalContent>
+                </Modal>
+            </CardHeader>
             <CardBody>
                 <Grid
                 mb='3'
@@ -360,6 +395,7 @@ function Account({applicantData}) {
                 borderRadius='0px'
                 float='right'
                 >Save new password</Button>
+                
                 </>
                 }
 

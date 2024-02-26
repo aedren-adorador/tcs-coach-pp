@@ -28,7 +28,7 @@ function ReviewApplication({chosenApplicantAllJobApplicationDetails, setChosenAp
         }
         axios.post(`${process.env.REACT_APP_SYS_URL}/api/admin/applicant-screening/send-interview-invite`, details)
             .then(response => {
-                console.log(response.data.joinedApplicantAndJobApplicationDetails[0])
+                // console.log(response.data.joinedApplicantAndJobApplicationDetails[0])
                 setChosenApplicantAllJobApplicationDetails(response.data.joinedApplicantAndJobApplicationDetails[0])
                 setIsSending(false)
             })
@@ -47,7 +47,7 @@ function ReviewApplication({chosenApplicantAllJobApplicationDetails, setChosenAp
     }, [chosenApplicantAllJobApplicationDetails])
 
     useEffect(() => {
-        console.log(questions)
+        // console.log(questions)
     }, [questions])
     return(
         <>

@@ -74,7 +74,7 @@ router.get('/get-applicants', (req, res, next) => {
 
 router.get('/get-interview-responses/:details', (req, res, next) => {
   const details = JSON.parse(req.params.details)
-  fs.readdir(`./backend/files/interview-recordings/${details.applicantFirstName}-${details.applicantLastName}-${details.applicantID}`, (err, files) => {
+  fs.readdir(`${process.env.INTERVIEW_STATIC}/${details.applicantFirstName}-${details.applicantLastName}-${details.applicantID}`, (err, files) => {
     const filteredFiles = files.filter(file => file !== '.DS_Store')
     res.send(filteredFiles);
   })

@@ -31,7 +31,7 @@ function Interview() {
     const [answerTimerProgress, setAnswerTimerProgress] = useState(0)
     const answerTimeTarget = 180;
     
-    const [questionCounter, setQuestionCounter] = useState(location.state.questionCounter+1 || 0)
+    const [questionCounter, setQuestionCounter] = useState(location.state.questionCounter+1||0)
 
     const [questions, setQuestions] = useState(submittedJobApplicationDetails.interviewQuestionsM)
 
@@ -140,8 +140,8 @@ function Interview() {
     }, [])
 
     useEffect(() => {
-
-   }, [questions])
+        console.log(questions)
+   }, [questions, questionCounter])
 
     return(
         <>
@@ -255,12 +255,17 @@ function Interview() {
                                 setAnswerTime(180)
                                 setAnswerTimer('00:00')
                                 setAnswerTimerProgress(0)
-                                setQuestions(prevQs => {
-                                    const currentQuestion = prevQs[questionCounter]
-                                    const updatedQuestions = [...prevQs]
-                                    updatedQuestions[currentQuestion] = Math.max(0, updatedQuestions[currentQuestion] - 1)
-                                    return updatedQuestions
-                                })
+                                // setQuestions(prevQs => {
+                                //     const currentQuestion = prevQs[questionCounter]
+                                //     console.log(currentQuestion)
+                                //     const updatedQuestions = [...prevQs]
+                                //     console.log(updatedQuestions, 'nice')
+                                //     console.log('hooray')
+                                //     console.log(updatedQuestions[currentQuestion], 'gago')
+                                //     updatedQuestions[currentQuestion] = Math.max(0, updatedQuestions[currentQuestion] - 1)
+                                //     console.log(updatedQuestions)
+                                //     return updatedQuestions
+                                // })
                              }}
                             >Start Recording</Button>
 
@@ -485,7 +490,9 @@ function Interview() {
                                 fontSize='14px'
                                 width='150px'
                                 colorScheme='facebook'
-                                onClick={()=>{                                       
+                                onClick={()=>{
+                                     console.log('questionCounter: ', questionCounter+1)
+                                     console.log('questionsLength', questions.length)                                  
                                     if ( questionCounter+1 === questions.length) {
                                         submitInterviewResponse(recording.previewRef.current.currentSrc)
                                         console.log(submittedJobApplicationDetails, "AHTGAA")
