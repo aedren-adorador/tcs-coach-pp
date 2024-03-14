@@ -83,7 +83,7 @@ function Login({onLoginSuccess}) {
                         <Flex justify='flex-end'>
                              
                         <Link to='/'>
-                        <Button  bg='white' size='xs' variant='ghost' colorScheme='green'>Navigate Job Portal &nbsp;<ExternalLinkIcon/></Button>
+                        <Button  bg='white' size='xs' variant='ghost' colorScheme='green'>Explore Job Portal &nbsp;<ExternalLinkIcon/></Button>
                         </Link>
                         </Flex>
                        

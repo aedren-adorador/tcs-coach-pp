@@ -54,22 +54,41 @@ function Interview() {
 
 
     const submitInterviewResponse = (recordingSource) => {
-        let xhr = new XMLHttpRequest();
-        xhr.open("GET", recordingSource, true);
-        xhr.responseType = "blob";
+        // let xhr = new XMLHttpRequest();
+        // xhr.open("GET", recordingSource, true);
+        // xhr.responseType = "blob";
         
-        xhr.onload = function() {
-        const blobData = xhr.response;
-        const interviewResponse = new FormData()
-        interviewResponse.append('applicantFirstName', applicantData.firstNameM)
-        interviewResponse.append('applicantLastName', applicantData.lastNameM)
-        interviewResponse.append('applicantID', applicantData._id)
-        interviewResponse.append('questionNumber', questionCounter+1)
-        interviewResponse.append('interview', blobData, {type: 'video/webm'})
-        axios.post(`${process.env.REACT_APP_SYS_URL}/api/applicant/video-interview-request/submit-interview`, interviewResponse)
+        // xhr.onload = function() {
+        // const blobData = xhr.response;
+        // const interviewResponse = new FormData()
+        // interviewResponse.append('applicantFirstName', applicantData.firstNameM)
+        // interviewResponse.append('applicantLastName', applicantData.lastNameM)
+        // interviewResponse.append('applicantID', applicantData._id)
+        // interviewResponse.append('questionNumber', questionCounter+1)
+        // interviewResponse.append('interview', blobData, {type: 'video/webm'})
+        // axios.post(`${process.env.REACT_APP_SYS_URL}/api/applicant/video-interview-request/submit-interview`, interviewResponse)
+        //     .then(response => console.log(response.data.success))
+        // }
+        // xhr.send()
+        axios.get(recordingSource, { responseType: 'blob' })
+        .then(response => {
+            const blobData = response.data;
+            const interviewResponse = new FormData();
+            interviewResponse.append('applicantFirstName', applicantData.firstNameM);
+            interviewResponse.append('applicantLastName', applicantData.lastNameM);
+            interviewResponse.append('applicantID', applicantData._id);
+            interviewResponse.append('questionNumber', questionCounter + 1);
+            interviewResponse.append('interview', blobData, { type: 'video/webm' });
+
+            axios.post(`${process.env.REACT_APP_SYS_URL}/api/applicant/video-interview-request/submit-interview`, interviewResponse, {
+                headers: {
+                    'Content-Type': 'multipart/form-data' // Adjust content type if needed
+                }
+            })
             .then(response => console.log(response.data.success))
-        }
-        xhr.send()
+            .catch(error => console.error('Error submitting interview:', error));
+        })
+        .catch(error => console.error('Error fetching recording:', error));
     }
 
     const handleSelect = async (event) => {

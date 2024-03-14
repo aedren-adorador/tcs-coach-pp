@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure, FormControl, FormLabel, Input, Button, Select, Textarea } from '@chakra-ui/react'
+import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, useDisclosure, FormControl, FormLabel, Input, Button, Select, Textarea, useRadio, useRadioGroup, HStack, RadioGroup } from '@chakra-ui/react'
 import { Formik, Form } from "formik";
 import axios from "axios";
 
@@ -25,12 +25,14 @@ function CreateJobButton({fetchJobsList}) {
         <ModalOverlay/>
         <ModalContent
         maxW='600px'
+        margin='15px 5% 0px 5%'
         >
           <ModalHeader>Create Job</ModalHeader>
           <ModalCloseButton />
-          <ModalBody pb={3}>
+          <ModalBody>
+
             <Formik
-            initialValues={{jobTitle:'', jobLocation: '', jobDescription: '', jobResponsibilities: '', jobQualifications: '', jobSegmentation:''}}
+            initialValues={{jobTitle:'', jobLocation: '', jobDescription: '', jobResponsibilities: '', jobQualifications: '', jobSegmentation:'', jobCategory: ''}}
             onSubmit={handleCreateJobSubmit}
             >
             {(formikProps) => (
@@ -38,17 +40,19 @@ function CreateJobButton({fetchJobsList}) {
               <FormControl>
                 <FormLabel fontSize='12px'>Job Title</FormLabel>
                 <Input
+                required
                 size='sm'
                 fontSize='12px'
                 {...formikProps.getFieldProps('jobTitle')}
                 />
               </FormControl>
-              <FormControl mt={4}>
+              <FormControl mt={2}>
                 <FormLabel fontSize='12px'>Job Location</FormLabel>
                 <Select
                 placeholder='Select job location'
                 size='sm'
                 fontSize='12px'
+                required
                 {...formikProps.getFieldProps('jobLocation')}
                 >
                   <option value="Online/Remote">Online/Remote</option>
@@ -56,36 +60,40 @@ function CreateJobButton({fetchJobsList}) {
                   <option value="Hybrid">Hybrid</option>
                 </Select>
               </FormControl>
-              <FormControl mt={4}>
+              <FormControl mt={2}>
                 <FormLabel fontSize='12px'>Job Description</FormLabel>
                 <Textarea
+                required
                 size='sm'
                 minH='50px'
                 fontSize='12px'
                 {...formikProps.getFieldProps('jobDescription')}
                 />
               </FormControl>
-              <FormControl mt={4}>
+              <FormControl mt={2}>
                 <FormLabel fontSize='12px'>Responsibilities</FormLabel>
                 <Textarea
+                required
                 size='sm'
                 minH='50px'
                 fontSize='12px'
                 {...formikProps.getFieldProps('jobResponsibilities')}
                 />
               </FormControl>
-              <FormControl mt={4}>
+              <FormControl mt={2}>
                 <FormLabel fontSize='12px'>Qualifications</FormLabel>
                 <Textarea
+                required
                 size='sm'
                 minH='50px'
                 fontSize='12px'
                 {...formikProps.getFieldProps('jobQualifications')}
                 />
               </FormControl>
-              <FormControl mt={4}>
+              <FormControl mt={2}>
                 <FormLabel fontSize='12px'>Job Segmentation</FormLabel>
                 <Select
+                required
                 placeholder='Select expertise level'
                 size='sm'
                 fontSize='12px'
@@ -96,11 +104,29 @@ function CreateJobButton({fetchJobsList}) {
                   <option value="Senior Level">Senior Level</option>
                   </Select>
               </FormControl>  
+              <FormControl mt={2}>
+                <FormLabel fontSize='12px'>Job Category</FormLabel>
+                <Select
+                required
+                placeholder='Select job category'
+                size='sm'
+                fontSize='12px'
+                {...formikProps.getFieldProps('jobCategory')}
+                >
+                  <option value="Web Development">Web Development</option>
+                  <option value="Mobile Development">Mobile Development</option>
+                  <option value="SEO Marketing">SEO Marketing</option>
+                  <option value="Data Structures and Algorithms">Data Structures and Algorithms</option>
+                  <option value="Data Structures and Algorithms">Artificial Intelligence</option>
+                  <option value="Data Analytics">Data Analytics</option>
+                  </Select>
+              </FormControl>  
               <ModalFooter>
-              <Button colorScheme='blue' mr={3} size='sm' type='submit'>
+              <Button onClick={onClose} size='sm' borderRadius='0' mr={3}>Cancel</Button>
+              <Button colorScheme='blue' size='sm' type='submit' borderRadius='0'>
                 Create Job
               </Button>
-              <Button onClick={onClose} size='sm'>Cancel</Button>
+              
             </ModalFooter>
               </Form>
             )}

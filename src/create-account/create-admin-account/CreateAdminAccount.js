@@ -10,7 +10,7 @@ function CreateApplicantAccount() {
     
     const handleSubmit = (adminDetails) => {
         setIsCreatingAccount(true);
-        axios.post(`${process.env.REACT_APP_SYS_URL}/api/create-account/admin`, adminDetails)
+        axios.post(`${process.env.REACT_APP_SYS_URL}/api/general-request/create-account-admin`, adminDetails)
             .then(result => {
                 console.log(result)
                 setTimeout(() => {

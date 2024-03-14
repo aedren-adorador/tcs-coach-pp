@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Text, InputGroup, Input, Flex, Button, Select, Grid, GridItem, Box, Image, Skeleton, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, InputLeftAddon, InputRightAddon} from "@chakra-ui/react";
 import { ExternalLinkIcon, Search2Icon } from "@chakra-ui/icons";
-import { AppstoreOutlined, ClockCircleOutlined, DeleteOutlined, FacebookFilled, FileOutlined, HomeOutlined, LinkedinFilled } from "@ant-design/icons";
+import { AppstoreOutlined, ClockCircleOutlined, FacebookFilled, FileOutlined, HomeOutlined, LinkedinFilled } from "@ant-design/icons";
 import tcsDarkLogo  from '../../tcs-dark-logo.png'
-import CreateJobButton from "./admin/CreateJobButton";
 import axios from "axios";
-import EditDetailsButton from "./admin/EditDetailsButton";
 import { Link, useNavigate } from "react-router-dom";
 import tcsLogo from '../../tcs-logo.png'
 import { jwtDecode } from "jwt-decode";
@@ -108,7 +106,7 @@ function PublicJobPortal({applicantData, onLoginSuccess}) {
                 borderRadius='0px'
                 borderLeftRadius='5px'
                 height='40px'
-                onKeyDown={handleSearch}
+                onKeyUp={handleSearch}
                 />
             
                     <InputRightAddon
@@ -145,6 +143,8 @@ function PublicJobPortal({applicantData, onLoginSuccess}) {
             <GridItem
 
             border='solid 0.2px'
+            borderTop='0px'
+            borderBottom='0px'
             colSpan={2}
             bg='white'
             minW='500px'
@@ -217,7 +217,10 @@ function PublicJobPortal({applicantData, onLoginSuccess}) {
         gap={5}
         >
             <GridItem
+
             border='solid 0.2px'
+            borderTop='0px'
+            borderBottom='0px'
             bg='white'
             minW='500px'
             overflowY='scroll'
@@ -259,9 +262,7 @@ function PublicJobPortal({applicantData, onLoginSuccess}) {
             </GridItem>
 
             <GridItem
-            border='solid 0.2px'
             minW='500px'
-            bg='white'
             overflowY='scroll'
             height={`calc(100vh - 165px)`} 
             >
@@ -348,7 +349,6 @@ function PublicJobPortal({applicantData, onLoginSuccess}) {
            
 
             </GridItem>
-
         </Grid>
         }
         <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>

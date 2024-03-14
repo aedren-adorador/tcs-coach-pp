@@ -10,7 +10,8 @@ router.post('/create-job', (req, res, next) => {
     jobDescriptionM: req.body.jobDescription,
     jobResponsibilitiesM: req.body.jobResponsibilities,
     jobQualificationsM: req.body.jobQualifications,
-    jobSegmentationM: req.body.jobSegmentation
+    jobSegmentationM: req.body.jobSegmentation,
+    jobCategoryM: req.body.jobCategory
   })
   newJob.save()
     .then(res.json({result: newJob}))
@@ -39,10 +40,33 @@ router.put('/update-job', (req, res, next) => {
     jobDescriptionM: req.body.jobDescription,
     jobResponsibilitiesM: req.body.jobResponsibilities,
     jobQualificationsM: req.body.jobQualifications,
-    jobSegmentationM: req.body.jobSegmentation
+    jobSegmentationM: req.body.jobSegmentation,
+    jobCategoryM: req.body.jobCategory
   }
   Job.updateOne({_id: req.body.jobId}, updatedJob)
     .then(result => res.json({success: 'updated!'}))
 })
 
+router.get('/category-filter/:id', (req, res, next) => {
+  if (req.params.id !== 'All') {
+    Job.find({jobCategoryM: req.params.id})
+    .then(result => res.send(result))
+  } else {
+    Job.find()
+      .then(result => res.send(result))
+  }
+})
+
+router.get('/work-setup-filter/:id', (req, res, next) => {
+  if (req.params.id === 'Online'){
+    Job.find({jobLocationM: 'Online/Remote'})
+      .then(result => res.send(result))
+  } else if (req.params.id === 'All'){
+    Job.find()
+      .then(result => res.send(result))
+  } else {
+     Job.find({jobLocationM: req.params.id})
+      .then(result => res.send(result))
+  }
+})
 module.exports = router;

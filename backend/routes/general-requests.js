@@ -14,7 +14,7 @@ const ObjectId = require('mongodb').ObjectID;
 router.get('/fetch-jobs-list-applicant/:id', (req, res, next) => {
   JobApplication.find({applicantIDForeignKeyM: req.params.id})
     .then(jobApplication => {
-      if (jobApplication.length === 0) {
+      if (jobApplication.length === 0 || jobApplication[0].currentStepM.length === 0) {
         Job.find({jobEnlistedM: true})
           .then(result => res.json({jobs: result}))
       } else {
@@ -117,8 +117,7 @@ router.post('/enlist-job', (req, res, next) => {
 
 
 router.post('/delete-account', (req, res, next) => {
-  console.log(req.body)
-  Applicant.findOne({_id: req.body.applicantID})
+   Applicant.findOne({_id: req.body.applicantID})
     .then(applicant => {
       console.log(applicant)
       applicant.jobApplicationsM.map((jobApplicationID, index) => (
@@ -140,13 +139,31 @@ router.post('/withdraw-application', (req, res, next) => {
     .then(applicant => {
       const copy = [...applicant[0].jobApplicationsM]
       const newArrayOfJobApplications = copy.filter((jobApp, index) => (jobApp.toString() !== req.body.jobApplicationID.toString()))
-      Applicant.updateOne({_id: req.body.applicant.ID}, newArrayOfJobApplications)
+      console.log('NEW ARRAY ', newArrayOfJobApplications)
+      Applicant.updateOne({_id: req.body.applicantID}, {jobApplicationsM: newArrayOfJobApplications})
         .then(result => console.log(result))
     })
   JobApplication.deleteOne({_id: req.body.jobApplicationID})
     .then(result => console.log(result))
 
+  Resume.deleteOne({applicantIDForeignKeyM: req.body.applicantID })
+    .then(result => console.log(result))
+
   res.json({success: 'Withdrawn Application'})
+})
+
+router.post('/create-account-admin', (req, res, next) => {
+  bcrypt.hash(req.body.confirmPasswordAdmin, 10).then(hash => {
+    const newAdmin = new Admin({
+    emailM: req.body.emailAdmin,
+    firstNameM: req.body.firstNameAdmin,
+    lastNameM: req.body.lastNameAdmin,
+    passwordM: hash,
+    admin: 'true'
+  })
+    newAdmin.save()
+  })
+  res.json({success: 'succeeded!'})
 })
 
 module.exports = router;

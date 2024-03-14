@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Text, InputGroup, Input, Flex, Button, Select, Grid, GridItem, Box, Image, Skeleton, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Badge} from "@chakra-ui/react";
 import { Search2Icon } from "@chakra-ui/icons";
 import { AppstoreOutlined, ClockCircleOutlined, DeleteOutlined, FileOutlined, HomeOutlined } from "@ant-design/icons";
@@ -9,11 +9,12 @@ import EditDetailsButton from "./admin/EditDetailsButton";
 import { Link } from "react-router-dom";
 
 function JobPortal({isAdmin, applicantData}) {
-    const jobFilters = ['Categories', 'Posting Dates', 'Job Types'];
+    const jobFilters = ['Categories', 'Posting Dates', 'Work Setup'];
     const [jobsList, setJobsList] = useState([]);
     const [clickedJob, setClickedJob] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const { isOpen, onOpen, onClose } = useDisclosure()
+    const [filters, setFilters] = useState({category: '', postingDate: '', workSetup: ''});
   const finalRef = React.useRef(null)
 
 
@@ -38,23 +39,29 @@ function JobPortal({isAdmin, applicantData}) {
         }
     }
 
-    const fetchJobsList = () => {
+    const fetchJobsList = useCallback(() => {
         if (!isAdmin && applicantData._id) {
-                axios.get(`${process.env.REACT_APP_SYS_URL}/api/general-request/fetch-jobs-list-applicant/${applicantData._id}`)
+            axios.get(`${process.env.REACT_APP_SYS_URL}/api/general-request/fetch-jobs-list-applicant/${applicantData._id}`)
                 .then(response => {
-                    setJobsList(response.data.jobs)
-                    setIsLoading(false)
+                    setJobsList(response.data.jobs);
+                    setIsLoading(false);
                 })
+                .catch(error => {
+                    console.error("Error fetching jobs list:", error);
+                    setIsLoading(false);
+                });
         } else {
-            console.log(isAdmin, 'hoy')
             axios.get(`${process.env.REACT_APP_SYS_URL}/api/general-request/fetch-jobs-list-admin`)
-            .then(response => {
-                setJobsList(response.data.jobs)
-                setIsLoading(false)
-            }
-            )
+                .then(response => {
+                    setJobsList(response.data.jobs);
+                    setIsLoading(false);
+                })
+                .catch(error => {
+                    console.error("Error fetching jobs list:", error);
+                    setIsLoading(false);
+                });
         }
-    }
+    }, [isAdmin, applicantData?._id]);
 
     const delist = (id) => {
         axios.post(`${process.env.REACT_APP_SYS_URL}/api/general-request/delist-job`, {jobID: id})
@@ -65,10 +72,19 @@ function JobPortal({isAdmin, applicantData}) {
         axios.post(`${process.env.REACT_APP_SYS_URL}/api/general-request/enlist-job`, {jobID: id})
             .then(response => window.location.reload())
     }
-
+    
+    const handleFilters = (filter, type) => {
+        setFilters(prev => ({ ...prev, [type]: filter }));
+        // setClickedJob(null)
+        // axios.get(`${process.env.REACT_APP_SYS_URL}/api/admin/job-portal-action/category-filter/${filter}`)
+        //     .then(response => setJobsList(response.data))
+    }
+    useEffect(() => {
+        console.log('done', filters)
+    }, [filters])
     useEffect(() => {
         fetchJobsList()
-    }, [fetchJobsList])
+    }, [])
 
     useEffect(() => {
     }, [jobsList])
@@ -96,7 +112,7 @@ function JobPortal({isAdmin, applicantData}) {
             borderRadius='0px'
             borderLeftRadius='5px'
             height='50px'
-            onKeyDown={handleSearch}
+            onKeyUp={handleSearch}
             />
            
                 <Button
@@ -117,7 +133,7 @@ function JobPortal({isAdmin, applicantData}) {
             ''}
         </InputGroup>
          
-        {/* <Flex
+        <Flex
         mt='20px'
         ml='20px'
         mb='10px'
@@ -125,31 +141,74 @@ function JobPortal({isAdmin, applicantData}) {
         gap={5}
         >
             {jobFilters.map((filterSetting, index) => (
-            <Select
-            bg='white'
-            key={index}
-           fontSize='12px'
-           fontWeight='600'
-           placeholder={filterSetting}  
-           size='sm'
-           border='solid 0.2px black'
-           >
-                <option value='option1'>Option 1</option>
-                <option value='option2'>Option 2</option>
-                <option value='option3'>Option 3</option>
-            </Select>
+                filterSetting === 'Categories' ? (
+                    <Select
+                        bg='white'
+                        key={index}
+                        fontSize='12px'
+                        fontWeight='600'
+                        size='sm'
+                        border='solid 0.2px black'
+                        onChange={(e) => handleFilters(e.target.value, 'category')}
+                    >
+                        <option disabled selected>Categories</option>
+                        <option value='All'>All Categories</option>
+                        <option value='Web Development'>Web Development</option>
+                        <option value='Mobile Development'>Mobile Development</option>
+                        <option value='SEO Marketing'>SEO Marketing</option>
+                        <option value='Data Structures and Algorithms'>Data Structures and Algorithms</option>
+                        <option value='Artificial Intelligence'>Artificial Intelligence</option>
+                        <option value='Data Analytics'>Data Analytics</option>
+                    </Select>
+                ) : filterSetting === 'Posting Dates' ? (
+                    <Select
+                        bg='white'
+                        key={index}
+                        fontSize='12px'
+                        fontWeight='600'
+                        placeholder={filterSetting}  
+                        size='sm'
+                        border='solid 0.2px black'
+                    >
+                        <option value='option1'>Last 1 week</option>
+                        <option value='option2'>Last 1 month</option>
+                        <option value='option3'>Last 3 months</option>
+                        <option value='option4'>Last 6 months</option>
+                        <option value='option5'>Last 9 months</option>
+                        <option value='option6'>Last 12 months</option>
+                        <option value='option7'>All</option>      
+                    </Select>
+                ) : filterSetting === 'Work Setup' ? (
+                    <Select
+                        bg='white'
+                        key={index} 
+                        fontSize='12px'
+                        fontWeight='600'
+                        size='sm'
+                        border='solid 0.2px black'
+                        onChange={(e) => handleFilters(e.target.value, 'postingDate')}
+                    >
+                        <option disabled selected>Work Setup</option>
+                        <option value='All'>All Setups</option>
+                        <option value='Onsite'>Onsite</option>
+                        <option value='Online'>Online/Remote</option>
+                        <option value='Hybrid'>Hybrid</option>
+                    </Select>
+                ) : null
             ))}
-        </Flex> */}
+        </Flex>
         </Box>
 
         {!clickedJob ?
         <Grid
+        
         margin='20px 10% 0px 10%'
         templateColumns='repeat(3, 1fr)'
         gap={10}
         >
-            <Skeleton isLoaded={!isLoading}>
+            <Skeleton isLoaded={!isLoading} key='skeleton1'>
             <GridItem
+            key='gridItemClicked1'
             border={isAdmin ? 'solid 0.2px' : ''}
             colSpan={2}
             bg='white'
@@ -157,6 +216,7 @@ function JobPortal({isAdmin, applicantData}) {
             overflowY='scroll'
             maxHeight={`calc(100vh - 200px)`} 
             >
+                {jobsList.length === 0 && <Text padding='5'>No Jobs Found</Text>}
                 {jobsList.map((job, index) => {
                     return <>
                     <Box
@@ -200,6 +260,8 @@ function JobPortal({isAdmin, applicantData}) {
             </Skeleton>
 
             <GridItem
+            
+            key='gridItemClicked2'
             border={isAdmin ? 'solid 0.2px' : ''}
             minW='300px'
             height='300px'
@@ -227,15 +289,17 @@ function JobPortal({isAdmin, applicantData}) {
         templateColumns='repeat(2, 1fr)'
         gap={10}
         >
+            
             <GridItem
+            key='gridItemUnclicked1'
             border={isAdmin ? 'solid 0.2px' : ''}
             bg='white'
             minW='500px'
             overflowY='scroll'
             maxHeight={`calc(100vh - 200px)`}
             >
-
-                {jobsList.map((job, index) => (
+                
+                {jobsList && jobsList.map((job, index) => (
                     
                     <Box
                     backgroundColor={index === clickedJob-1 ? '#E5ECF9' : ''}
@@ -244,6 +308,7 @@ function JobPortal({isAdmin, applicantData}) {
                     borderBottom={index === clickedJob-1 ? '' :'solid 0.1px lightgray'}
                     onClick={() => clickJob(index+1)}
                     >
+                        
                         <Text
                         textDecoration='underline'
                         fontWeight='600'
@@ -269,11 +334,13 @@ function JobPortal({isAdmin, applicantData}) {
                             }
                         </Text>
                     </Box>
+                
                 ))}
                 
             </GridItem>
 
             <GridItem
+            key='gridItemUnclicked2'
             border={isAdmin ? 'solid 0.2px' : ''}
             minW='500px'
             bg='white'

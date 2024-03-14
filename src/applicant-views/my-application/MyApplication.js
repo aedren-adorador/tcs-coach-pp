@@ -1,15 +1,19 @@
 import { WarningIcon } from "@chakra-ui/icons";
 import { Td, Table, TableContainer, Tr, Th, Tbody, Thead, Button, Badge, Text, Image, Flex, Skeleton, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, VStack} from "@chakra-ui/react";
 import suitcase from '../../admin-views/admin-view-imgs/suitcase.png'
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import Summary from "./applicant-steps/Summary";
 
 function MyApplication({applicantData, setObtainedActiveNavButton}) {
     const navigate = useNavigate();
     const [submittedJobApplicationDetails, setSubmittedJobApplicatioDetails] = useState({});
     const [isLoading, setIsLoading] = useState(true);
     const { isOpen, onOpen, onClose } = useDisclosure()
+    const { isOpen: isOpenInterview, onOpen:onOpenInterview, onClose: onCloseInterview } = useDisclosure()
+    const { isOpen: isOpenViewApplication, onOpen:onOpenViewApplication, onClose: onCloseViewApplication } = useDisclosure()
+    const finalRef = useRef(null)
 
     const redirectToVideoInterview = () => {
         if (applicantData.jobApplicationsM.length === 1) {
@@ -123,7 +127,7 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                         color='black'
                         fontWeight='500'
                         padding='5px'
-                        >Active: Waiting for Interview Submission</Badge>}
+                        >Active: Waiting for <br></br> Interview Submission</Badge>}
 
                         {submittedJobApplicationDetails.currentStepM === 'submittedVideoInterview' &&
                         <Badge
@@ -131,13 +135,74 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                         color='black'
                         fontWeight='500'
                         padding='5px'
-                        >Active: Video Interview Under Review</Badge>}
+                        >Active: Video Interview <br></br> Under Review</Badge>}
                         </Skeleton>
                     </Td>
                     <Td>
                         <Flex direction='column' gap='2'>
-                            <Button size='xs' borderRadius='0px' colorScheme='blue'>View Application</Button>
-                            <Button size='xs' colorScheme='red' variant='outline' borderRadius='0px'onClick={()=>handleWithdrawApplication(submittedJobApplicationDetails._id, applicantData._id)}>Withdraw Application</Button>
+                            <Button size='xs' borderRadius='0px' colorScheme='blue' onClick={onOpenViewApplication}>View Application </Button>
+                            <Modal isOpen={isOpenViewApplication} onClose={onCloseViewApplication}>
+                                <ModalOverlay />
+                                <ModalContent borderRadius='0px' maxW='800px'>
+                                <ModalHeader>View Application</ModalHeader>
+                                <ModalCloseButton />
+                                <ModalBody borderRadius='0'>
+                                    <Flex gap='2' mb='2'>
+                                        <Text fontWeight='500' color='tcs.mongo'>Job Title:</Text>
+                                        <Text>{submittedJobApplicationDetails.positionAppliedToM}</Text>
+                                    </Flex>
+                                     <Flex gap='2' mb='3'>
+                                        <Text fontWeight='500' color='tcs.mongo'>Availabilities:</Text>
+                                        {submittedJobApplicationDetails.availabilityM && submittedJobApplicationDetails.availabilityM.map((i, index) => {
+                                            return <Text mr='1px'>{i}</Text>
+                                        })
+                                        }
+                                    </Flex>
+                                    <Flex gap='2' mb='3'>
+                                        <Text fontWeight='500' color='tcs.mongo'>Skills:</Text>
+                                        {submittedJobApplicationDetails.areasOfExpertiseM && submittedJobApplicationDetails.areasOfExpertiseM.map((i, index) => {
+                                            return <Text mr='1px'>{i},</Text>
+                                        })
+                                        }
+                                    </Flex>
+                                    <Flex gap='2'>
+                                        <Text fontWeight='500' color='tcs.mongo'>Resume:</Text>
+                                        <a href={submittedJobApplicationDetails.resumeM} target="_blank" rel='noreferrer'><Button borderRadius='0px' variant='outline' colorScheme='blue' size='xs'>View Resume</Button></a>
+                                    </Flex>
+                                </ModalBody>
+                                <ModalFooter>
+                                    <Button borderRadius='0px' colorScheme='blue' mr={3} onClick={() => {
+                                        onCloseViewApplication()
+                                    }}>
+                                    Close
+                                    </Button>
+                                </ModalFooter>
+                                </ModalContent>
+                            </Modal>
+
+
+                            <Button size='xs' colorScheme='red' variant='outline' borderRadius='0px'onClick={onOpen}>Withdraw Application</Button>
+                            <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
+                                <ModalOverlay />
+                                <ModalContent borderRadius='0px'>
+                                <ModalHeader>Withdraw Application Confirmation</ModalHeader>
+                                <ModalCloseButton />
+                                <ModalBody borderRadius='0'>
+                                    Are you sure you are withdrawing your application? This action cannot be undone.
+                                </ModalBody>
+                                <ModalFooter>
+                                    <Button borderRadius='0px' colorScheme='blue' mr={3} onClick={() => {
+                                        onClose()
+                                    }}>
+                                    Cancel
+                                    </Button>
+                                    <Button variant='ghost' colorScheme='red' borderRadius='0px' onClick={() => {
+                                        onClose()
+                                        handleWithdrawApplication(applicantData.jobApplicationsM[0], applicantData._id)
+                                    }}>Withdraw</Button>
+                                </ModalFooter>
+                                </ModalContent>
+                            </Modal>
                         </Flex>
                         
                     </Td>
@@ -166,7 +231,7 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                         —
                     </Td>
                     <Td>
-                        -
+                        —
                     </Td>
                 </Tr>
                 }
@@ -225,14 +290,14 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                        {submittedJobApplicationDetails.currentStepM === 'waitingForInterviewSubmission' &&
                        <>
                        <Button
-                       onClick={onOpen}
+                       onClick={onOpenInterview}
                        bg='tcs.mongo'
                        color='white'
                        colorScheme="green"
                        size='sm'
                        borderRadius='0px'
                        >Take Video Interview</Button>
-                       <Modal isOpen={isOpen} onClose={onClose}>
+                       <Modal isOpen={isOpenInterview} onClose={onCloseInterview}>
                             <ModalOverlay />
                             <ModalContent>
                             <ModalHeader fontWeight='700'>Video Interview Confirmation</ModalHeader>
@@ -244,7 +309,7 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                             <ModalFooter>
                                 <Button
                                 colorScheme='red'
-                                mr={3} onClick={onClose}
+                                mr={3} onClick={onCloseInterview}
                                 borderRadius='0px'
                                 >
                                 Cancel

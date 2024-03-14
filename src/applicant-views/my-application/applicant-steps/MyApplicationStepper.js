@@ -242,11 +242,12 @@ function MyApplicationStepper() {
 
                     <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
                         <ModalOverlay />
-                        <ModalContent>
+                        <ModalContent borderRadius='0px'>
                         <ModalBody 
                         fontWeight='300'
                         fontSize='15px'
                         padding='40px 40px 0px 40px'
+                        
                         >
                             You are now about to submit your application.
                             Make sure all the details you have inputted are as accurate as possible before confirming.
@@ -254,6 +255,7 @@ function MyApplicationStepper() {
 
                         <ModalFooter>
                             <Button
+                            borderRadius='0px'
                             bg='tcs.mongo'
                             color='white'
                             colorScheme='green'

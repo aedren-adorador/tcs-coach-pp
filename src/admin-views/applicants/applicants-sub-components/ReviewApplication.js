@@ -155,7 +155,7 @@ function ReviewApplication({chosenApplicantAllJobApplicationDetails, setChosenAp
                 </Accordion> :
                 <Text
                 mb='4'
-                >{chosenApplicantAllJobApplicationDetails.educationM[0].university} <br></br>{chosenApplicantAllJobApplicationDetails.educationM[0].degreeProgram}</Text>
+                >{chosenApplicantAllJobApplicationDetails.educationM[0]?.university} <br></br>{chosenApplicantAllJobApplicationDetails.educationM[0].degreeProgram}</Text>
                 }
 
                  <Text color='gray'>Coaching/Tutoring Experience</Text>
@@ -207,7 +207,7 @@ function ReviewApplication({chosenApplicantAllJobApplicationDetails, setChosenAp
                 </Accordion> :
                 <Text
                 mb='4'
-                >{chosenApplicantAllJobApplicationDetails.areasOfExpertise[0]}</Text>
+                >{chosenApplicantAllJobApplicationDetails.areasOfExpertise && chosenApplicantAllJobApplicationDetails.areasOfExpertise[0]}</Text>
                 }
 
                 <Text color='gray'>Availability</Text>
@@ -233,7 +233,7 @@ function ReviewApplication({chosenApplicantAllJobApplicationDetails, setChosenAp
                 </Accordion> :
                 <Text
                 mb='4'
-                >{chosenApplicantAllJobApplicationDetails.availabilityM[0]}</Text>
+                >{chosenApplicantAllJobApplicationDetails.availabilityM && chosenApplicantAllJobApplicationDetails.availabilityM[0]}</Text>
                 }
                 
             </GridItem>

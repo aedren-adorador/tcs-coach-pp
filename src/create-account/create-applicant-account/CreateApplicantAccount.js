@@ -48,6 +48,7 @@ function CreateApplicantAccount() {
         <>
             <AuthHeader/>
              <div className={`auth-big-container page-reveal ${revealed ? 'reveal' : ''}`}>
+                <Box maxH='500px'>
                 <Formik
                 initialValues={{email: email, firstName:firstName, lastName:lastName, setPassword: password, confirmPassword: confirmPassword}}
                 onSubmit={handleSubmit}
@@ -55,9 +56,11 @@ function CreateApplicantAccount() {
                 {(formikProps) => (
                     <Form>
                         <Card
+                        margin='0px 2% 0px 2%'
+                        maxH='100%'
                         maxW='500px'
                         border='solid 0.2px black'
-                        padding='20px 50px 50px 50px'
+                        padding='0px 10px 0px 10px'
                         >
                             <CardBody>
                             {isAccountCreated ?
@@ -67,9 +70,9 @@ function CreateApplicantAccount() {
                             </Alert>
                             :
                             <FormControl isRequired>
-                            <Alert status='success' mb='5' fontSize='12px'>
+                            <Alert status='success' mb='5' fontSize='10px'>
                                 <AlertIcon />
-                                Verification Success! Your email address ({email}) is now verified.
+                                Verification Success! Your email is now verified.
                             </Alert>
                             <Flex
                             justify='space-evenly'
@@ -218,6 +221,16 @@ function CreateApplicantAccount() {
                                 fontWeight='600'
                                 >Create Account</Button>
                             
+                            <Box
+                            fontSize='10px'
+                            mt='10px'
+                            align='justify'
+                            border='solid red 2px'
+                            padding='2'
+                            >
+                                By creating an account, you agree to our <span style={{color:'darkblue', textDecoration: 'underline'}}>Terms</span> and have read and acknowledge the <span style={{color:'darkblue', textDecoration: 'underline'}}>Global Privacy Statement</span>.
+                            </Box>
+                            
                             </FormControl>
                             }
                             
@@ -226,6 +239,7 @@ function CreateApplicantAccount() {
                     </Form>
                 )}
                 </Formik>
+                </Box>
              </div>
             <AuthFooter/>
         </>
