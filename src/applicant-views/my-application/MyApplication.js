@@ -3,12 +3,11 @@ import { Td, Table, TableContainer, Tr, Th, Tbody, Thead, Button, Badge, Text, I
 import suitcase from '../../admin-views/admin-view-imgs/suitcase.png'
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
-import Summary from "./applicant-steps/Summary";
+import { useNavigate } from "react-router-dom";
 
 function MyApplication({applicantData, setObtainedActiveNavButton}) {
     const navigate = useNavigate();
-    const [submittedJobApplicationDetails, setSubmittedJobApplicatioDetails] = useState({});
+    const [submittedJobApplicationDetails, setSubmittedJobApplicatioDetails] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const { isOpen, onOpen, onClose } = useDisclosure()
     const { isOpen: isOpenInterview, onOpen:onOpenInterview, onClose: onCloseInterview } = useDisclosure()
@@ -36,15 +35,19 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
 
     useEffect(() => {
         if (applicantData.jobApplicationsM && applicantData.jobApplicationsM.length !== 0) {
-            axios.get(`${process.env.REACT_APP_SYS_URL}/api/applicant/general-request/get-job-application/${applicantData.jobApplicationsM}`)
+            axios.get(`${process.env.REACT_APP_SYS_URL}/api/applicant/general-request/get-job-application/${applicantData._id}`)
                 .then(response => {
-                    setSubmittedJobApplicatioDetails(response.data.submittedApplicationDetails)
-                    setIsLoading(false);
+                    if (response.data[0]) {
+                        setSubmittedJobApplicatioDetails(response.data[0])
+                        setIsLoading(false);
+                    }
+                    
                 })
         } 
     }, [applicantData])
 
     useEffect(() => {
+        console.log(submittedJobApplicationDetails)
     }, [submittedJobApplicationDetails])
     return (
         <> 
@@ -52,6 +55,7 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
             minW='900px'
             margin='20px 5% 20px 5%'
             >
+                
             <Text
             fontSize='sm'
             fontWeight='300'
@@ -76,10 +80,11 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                 </Tr>
                 </Thead>
                 <Tbody>
-                {applicantData.jobApplicationsM && applicantData.jobApplicationsM.length !==0 ?
+                {applicantData.jobApplicationsM && applicantData.jobApplicationsM.length !==0 && submittedJobApplicationDetails ?
                
-                <Tr>
-                     
+                submittedJobApplicationDetails && submittedJobApplicationDetails.map((i) => (
+
+                <Tr >
                     <Td textAlign='center'>
                         <Flex
                         justify='center'
@@ -97,7 +102,7 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                         <Skeleton
                         height='50px'
                         isLoaded={!isLoading}
-                        >{submittedJobApplicationDetails.positionAppliedToM}</Skeleton>
+                        >{i.positionAppliedToM}</Skeleton>
                     </Td>
                    
                     <Td>
@@ -105,7 +110,7 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                         isLoaded={!isLoading}
                         height='50px'
                         >
-                        {new Date(submittedJobApplicationDetails.dateSubmittedApplicationM).toDateString()}
+                        {new Date(i.dateSubmittedApplicationM).toDateString()}
                         </Skeleton>
                     </Td>
                     <Td>
@@ -113,7 +118,7 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                         height='50px'
                         isLoaded={!isLoading}
                         >
-                        {submittedJobApplicationDetails.currentStepM === 'submittedInitialApplication' &&
+                        {i.currentStepM === 'submittedInitialApplication' &&
                         <Badge
                         bg='tcs.mongo'
                         color='white'
@@ -121,7 +126,7 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                         padding='5px'
                         >Active: Application Received</Badge>}
 
-                        {submittedJobApplicationDetails.currentStepM === 'waitingForInterviewSubmission' &&
+                        {i.currentStepM === 'waitingForInterviewSubmission' &&
                         <Badge
                         bg='tcs.limey'
                         color='black'
@@ -129,7 +134,7 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                         padding='5px'
                         >Active: Waiting for <br></br> Interview Submission</Badge>}
 
-                        {submittedJobApplicationDetails.currentStepM === 'submittedVideoInterview' &&
+                        {i.currentStepM === 'submittedVideoInterview' &&
                         <Badge
                         bg='tcs.limey'
                         color='black'
@@ -149,25 +154,27 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                                 <ModalBody borderRadius='0'>
                                     <Flex gap='2' mb='2'>
                                         <Text fontWeight='500' color='tcs.mongo'>Job Title:</Text>
-                                        <Text>{submittedJobApplicationDetails.positionAppliedToM}</Text>
+                                        <Text>{i.positionAppliedToM}</Text>
                                     </Flex>
                                      <Flex gap='2' mb='3'>
                                         <Text fontWeight='500' color='tcs.mongo'>Availabilities:</Text>
-                                        {submittedJobApplicationDetails.availabilityM && submittedJobApplicationDetails.availabilityM.map((i, index) => {
-                                            return <Text mr='1px'>{i}</Text>
+                                        {i.availabilityM && i.availabilityM?.map((z, index) => {
+                                            return <Text mr='1px'>{z}</Text>
                                         })
                                         }
                                     </Flex>
                                     <Flex gap='2' mb='3'>
                                         <Text fontWeight='500' color='tcs.mongo'>Skills:</Text>
-                                        {submittedJobApplicationDetails.areasOfExpertiseM && submittedJobApplicationDetails.areasOfExpertiseM.map((i, index) => {
-                                            return <Text mr='1px'>{i},</Text>
+                                        {i.areasOfExpertiseM && i.areasOfExpertiseM?.map((z, index) => {
+                                            return <Text mr='1px'>{z},</Text>
                                         })
                                         }
                                     </Flex>
-                                    <Flex gap='2'>
+                                   <Flex gap='2'>
                                         <Text fontWeight='500' color='tcs.mongo'>Resume:</Text>
-                                        <a href={submittedJobApplicationDetails.resumeM} target="_blank" rel='noreferrer'><Button borderRadius='0px' variant='outline' colorScheme='blue' size='xs'>View Resume</Button></a>
+                                        <a href={`${process.env.REACT_APP_RESUME_STATIC}/${i.resumeM}`} target="_blank" rel='noreferrer'>
+                                            <Button borderRadius='0px' variant='outline' colorScheme='blue' size='xs'>View Resume</Button>
+                                        </a>
                                     </Flex>
                                 </ModalBody>
                                 <ModalFooter>
@@ -207,8 +214,7 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                         
                     </Td>
                 </Tr>
-                
-                
+                ))
                 :
                 <Tr>
                     <Td textAlign='center'>

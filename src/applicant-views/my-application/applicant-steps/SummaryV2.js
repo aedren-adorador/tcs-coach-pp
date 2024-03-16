@@ -27,6 +27,7 @@ function SummaryV2() {
     const applicantData = state.state.applicantData
     const jobData = state.state.jobData.jobData
     const [allDetails, setAllDetails] = useState({});
+    const [applicantDetails, setApplicantDetails] = useState({});
 
 
     
@@ -43,16 +44,16 @@ function SummaryV2() {
             })
     }
     useEffect(() => {
-        axios.get(`${process.env.REACT_APP_SYS_URL}/api/applicant/application-stepper-request/get-updated-details/${encodeURIComponent(JSON.stringify(applicantData))}`)
+        axios.get(`${process.env.REACT_APP_SYS_URL}/api/applicant/application-stepper-request/get-updated-details-summary/${encodeURIComponent(JSON.stringify(applicantData))}`)
             .then(response => {
-                if (response.data[0]) {
-                    setAllDetails(response.data[0])
+                if (response.data.result[0]) {
+                    setAllDetails(response.data.result[0])
+                    setApplicantDetails(response.data.applicant[0])
                 }
             })
     }, [])
 
     useEffect(() => {
-        console.log('nice ', allDetails)
     }, [allDetails])
     return (
         <> 
@@ -77,11 +78,7 @@ function SummaryV2() {
                     &nbsp;Back to Job Portal
                 </Button>
                 </Link>
-                <Flex
-                textAlign='center'
-                fontWeight='600'
-                mb='20px'
-                >{jobData.jobTitleM} Position</Flex>
+                
                 <Stepper
                 minW='900px'
                 index={activeStep}
@@ -110,6 +107,7 @@ function SummaryV2() {
                 {/* //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
                 {allDetails._id &&
                 <Grid
+                mt='20px'
                 gridTemplateColumns='repeat(2, 1fr)'
                 gap={5}
                 minW='1000px'
@@ -122,18 +120,18 @@ function SummaryV2() {
                                 <Text
                                 fontSize='30px'
                                 fontWeight='600'
-                                ></Text>
+                                >{applicantDetails.firstNameM}</Text>
                             </Box>
                             <Box>
                                 <Text color='gray'>First Name</Text>
                                 <Text
                                 fontSize='30px'
                                 fontWeight='600'
-                                ></Text>
+                                >{applicantDetails.lastNameM}</Text>
                             </Box>
                         </Flex>
                         <Text color='gray'>Email Address</Text>
-                        <Text mb='4'>{allDetails.emailM}</Text>
+                        <Text mb='4'>{applicantDetails.emailM}</Text>
 
                         <Text color='gray'>Contact Number</Text>
                         <Text mb='4'>{allDetails.contactNumberM}</Text>
@@ -157,7 +155,7 @@ function SummaryV2() {
                                 fontSize='30px'
                                 fontWeight='600'
                                 color='tcs.linky'
-                                ></Text>
+                                >{jobData.jobTitleM}</Text>
                             </Box>
                         </Flex>
                         {/* <Text color='gray'>Resume Attachment</Text>
@@ -191,7 +189,7 @@ function SummaryV2() {
                         </Accordion> :
                         <Text
                         mb='4'
-                        >{allDetails.educationM?.university} <br></br>{allDetails.educationM[0].degreeProgram}</Text>
+                        >{allDetails.educationM[0].university} <br></br>{allDetails.educationM[0].degreeProgram}</Text>
                         }
 
                         <Text color='gray'>Coaching/Tutoring Experience</Text>
@@ -243,7 +241,7 @@ function SummaryV2() {
                         </Accordion> :
                         <Text
                         mb='4'
-                        >{allDetails.areasOfExpertise[0]}</Text>
+                        >{allDetails.areasOfExpertiseM[0]}</Text>
                         }
 
                         <Text color='gray'>Availability</Text>
@@ -269,7 +267,7 @@ function SummaryV2() {
                         </Accordion> :
                         <Text
                         mb='4'
-                        >{allDetails.availability[0]}</Text>
+                        >{allDetails.availabilityM[0]}</Text>
                         }
                         
                     </GridItem>
@@ -338,10 +336,9 @@ function SummaryV2() {
                             colorScheme='green'
                             mr={3}
                             onClick={() => {
-                                const details = {applicantID: applicantData._id, jobID: jobData._id, position: jobData.jobTitleM, currentStep: 'submittedInitialApplication'}
+                                const details = {applicantID: applicantDetails._id, jobID: allDetails.jobIDForeignKeyM, position: jobData.jobTitleM, currentStep: 'submittedInitialApplication'}
                                 axios.post(`${process.env.REACT_APP_SYS_URL}/api/applicant/application-stepper-request/save-job-application-id-to-applicant`, details)
                                     .then(response => {
-                                        console.log(response.data.result)
                                         localStorage.removeItem('activeNavButton')
                                         localStorage.setItem('activeNavButton', 'My Application')
                                         navigate(`/applicant-home/${applicantData._id}`)

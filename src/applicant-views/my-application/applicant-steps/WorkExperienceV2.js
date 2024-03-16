@@ -71,15 +71,15 @@ function WorkExperienceV2() {
             .then(response => {
                 if (response.data[0]){
                     setLinkedInLink(response.data[0].linkedInM)
-                    setResumeLink(`${process.env.REACT_APP_RESUME_STATIC}/${response.data[0].resumeM}`)
-
+                    if (response.data[0].resumeM) {
+                        setResumeLink(`${process.env.REACT_APP_RESUME_STATIC}/${response.data[0].resumeM}`)
+                    }
                 }
             })
     }, [])
 
     useEffect(() => {
-        console.log('linkedinLink: ', linkedInLink)
-        console.log('resumeLink: ', resumeLink)
+        // console.log(resumeLink)
     }, [linkedInLink, resumeLink])
 
 
@@ -145,7 +145,7 @@ function WorkExperienceV2() {
                 {/* //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
                 <Box margin='10px 0px 10px 0px'> 
                     <Text color='gray'>Resume</Text>
-                        {isFileAttached || resumeLink ?
+                        {resumeLink ?
                         <>
                         <Link to={resumeLink} target='_blank'>
                             <Button
@@ -220,6 +220,7 @@ function WorkExperienceV2() {
                 {/* //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/}
                 
                 <Flex
+                mb='20px'
                 bottom={0}
                 minW='1000px'
                 justify='center'

@@ -46,10 +46,6 @@ function JobPortal({isAdmin, applicantData}) {
                     setJobsList(response.data.jobs);
                     setIsLoading(false);
                 })
-                .catch(error => {
-                    console.error("Error fetching jobs list:", error);
-                    setIsLoading(false);
-                });
         } else {
             axios.get(`${process.env.REACT_APP_SYS_URL}/api/general-request/fetch-jobs-list-admin`)
                 .then(response => {
@@ -81,18 +77,13 @@ function JobPortal({isAdmin, applicantData}) {
         axios.get(`${process.env.REACT_APP_SYS_URL}/api/admin/job-portal-action/set-filters/${encodeURIComponent(JSON.stringify(filters))}`)
             .then(response => setJobsList(response.data))
     }, [filters])
+    
     useEffect(() => {
         fetchJobsList()
-    }, [])
+    }, [fetchJobsList])
 
     useEffect(() => {
-    }, [jobsList])
-
-    useEffect(() => {
-    }, [clickedJob])
-
-    useEffect(() => {
-    }, [applicantData])
+    }, [jobsList, clickedJob, applicantData])
 
     return(
         <>
@@ -148,9 +139,10 @@ function JobPortal({isAdmin, applicantData}) {
                         fontWeight='600'
                         size='sm'
                         border='solid 0.2px black'
+                        defaultValue='categories'
                         onChange={(e) => handleFilters(e.target.value, 'category')}
                     >
-                        <option disabled selected>Categories</option>
+                        <option disabled value='categories'>Categories</option>
                         <option value='All'>All Categories</option>
                         <option value='Web Development'>Web Development</option>
                         <option value='Mobile Development'>Mobile Development</option>
@@ -165,11 +157,12 @@ function JobPortal({isAdmin, applicantData}) {
                         key={index}
                         fontSize='12px'
                         fontWeight='600'
-                        placeholder={filterSetting}  
                         size='sm'
                         border='solid 0.2px black'
+                        defaultValue='postingdate'
                         onChange={(e) => handleFilters(e.target.value, 'postingDate')}
                     >
+                        <option value='postingdate'>Posting Date</option>      
                         <option value='All'>All Posting Dates</option>      
                         <option value='1week'>Last 1 week</option>
                         <option value='3'>Last 3 months</option>
@@ -184,9 +177,10 @@ function JobPortal({isAdmin, applicantData}) {
                         fontWeight='600'
                         size='sm'
                         border='solid 0.2px black'
+                        defaultValue='worksetup'
                         onChange={(e) => handleFilters(e.target.value, 'workSetup')}
                     >
-                        <option disabled selected>Work Setup</option>
+                        <option disabled value='worksetup'>Work Setup</option>
                         <option value='All'>All Setups</option>
                         <option value='Onsite'>Onsite</option>
                         <option value='Online'>Online/Remote</option>
@@ -199,14 +193,13 @@ function JobPortal({isAdmin, applicantData}) {
 
         {!clickedJob ?
         <Grid
-        
         margin='20px 10% 0px 10%'
         templateColumns='repeat(3, 1fr)'
         gap={10}
         >
-            <Skeleton isLoaded={!isLoading} key='skeleton1'>
+            <Skeleton isLoaded={!isLoading}>
             <GridItem
-            key='gridItemClicked1'
+            key='gridITEM1'
             border={isAdmin ? 'solid 0.2px' : ''}
             colSpan={2}
             bg='white'
@@ -218,7 +211,7 @@ function JobPortal({isAdmin, applicantData}) {
                 {jobsList.map((job, index) => {
                     return <>
                     <Box
-                    key={index}
+                    key={job._id}
                     padding='20px'
                     borderBottom='solid 0.2px lightgray'
                     onClick={() => clickJob(index+1)}
@@ -258,8 +251,7 @@ function JobPortal({isAdmin, applicantData}) {
             </Skeleton>
 
             <GridItem
-            
-            key='gridItemClicked2'
+            key='gridITEM2'
             border={isAdmin ? 'solid 0.2px' : ''}
             minW='300px'
             height='300px'
@@ -301,7 +293,7 @@ function JobPortal({isAdmin, applicantData}) {
                     
                     <Box
                     backgroundColor={index === clickedJob-1 ? '#E5ECF9' : ''}
-                    key={index}
+                    key={job._id}
                     padding='20px'
                     borderBottom={index === clickedJob-1 ? '' :'solid 0.1px lightgray'}
                     onClick={() => clickJob(index+1)}

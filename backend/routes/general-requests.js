@@ -11,21 +11,21 @@ const Admin = require('../models/admins');
 const Resume = require('../models/resumes');
 const ObjectId = require('mongodb').ObjectID;
 
-router.get('/fetch-jobs-list-applicant/:id', (req, res, next) => {
-  JobApplication.find({applicantIDForeignKeyM: req.params.id})
-    .then(jobApplication => {
-      if (jobApplication.length === 0 || jobApplication[0].currentStepM.length === 0) {
-        Job.find({jobEnlistedM: true})
-          .then(result => res.json({jobs: result}))
-      } else {
-        Job.find({jobEnlistedM: true})
-        .then(jobsList => {
-          const newJobsList = jobsList.filter((i, index) => i._id.toString() !== jobApplication[0].jobIDForeignKeyM)
-          res.json({jobs: newJobsList})
-        })
-      }
+router.get('/fetch-jobs-list-applicant/:id', async (req, res, next) => {
+    const result = await Applicant.find({_id: req.params.id});
+    const jobApplicationIds = result[0].jobApplicationsM.map(application => application.toString());
+    const toFilterJobs = [];
+    
+    for (let id of jobApplicationIds) {
+      const jobApp = await JobApplication.find({_id: id});
+      toFilterJobs.push(jobApp[0].jobIDForeignKeyM);
+    }
+    Job.find({jobEnlistedM: true, _id: {$nin: toFilterJobs}})
+    .then(result => {
+      res.json({jobs:result})
     })
-})
+});
+
 
 router.get('/fetch-jobs-list-admin', (req, res, next) => {
   Job.find()

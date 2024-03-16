@@ -4,10 +4,17 @@ const Admin = require('../../models/admins');
 const Applicant = require('../../models/applicants');
 const router = express.Router();
 
-router.get('/get-job-application/:details', (req, res, next) => {
-  const jobApplicationID = req.params.details
-  JobApplication.findOne({_id:jobApplicationID })
-    .then(record => res.json({submittedApplicationDetails: record}))
+router.get('/get-job-application/:details', async (req, res, next) => {
+  const applicantDetails = await Applicant.find({_id: req.params.details})
+  const jobApplicationIds = applicantDetails[0].jobApplicationsM.map(application => application.toString());
+
+  const allApplications = []
+  for (let jobApp of jobApplicationIds) {
+    const application = await JobApplication.find({_id: jobApp})
+    allApplications.push(application)
+  }
+  res.send(allApplications)
+
 })
 
 router.post('/get-user-info', (req, res, next) => {

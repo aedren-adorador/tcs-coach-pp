@@ -157,67 +157,53 @@ function QuestionsV2() {
                 </Stepper>
                 {/* //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// */}
                 <Text color='gray' mt='20px'>Coaching/Tutoring Experience</Text>
-                <Stack
-                mt='1'
-                ml='5'
-                spacing={1}
-                direction='column'
-                mb='4'
-                >
-                    {checkedCoachingExperience.length !== 0 && coachingExperience.map((coachingExperience, index) => {
-                    return <Checkbox
-                    defaultChecked={checkedCoachingExperience.includes(coachingExperience) ? true : false}
-                    colorScheme='facebook'
-                    onChange={handleClickedCoachingExperience}
-                    key={index}
-                    value={coachingExperience}
-                    >
-                        <Text fontSize='14px' key={index}>{coachingExperience}</Text>
-                    </Checkbox>
-                    })} 
+                <Stack mt='1' ml='5' spacing={1} direction='column' mb='4'>
+                    {coachingExperience.map((coachingExperience, index) => {
+                        return (
+                            <Checkbox
+                                key={index}
+                                colorScheme='facebook'
+                                value={coachingExperience}
+                                onChange={handleClickedCoachingExperience}
+                                isChecked={checkedCoachingExperience.includes(coachingExperience)}
+                            >
+                                <Text fontSize='14px' key={index}>{coachingExperience}</Text>
+                            </Checkbox>
+                        );
+                    })}
                 </Stack>
 
                 <Text color='gray'>Areas of Expertise</Text>
-                <Stack
-                mt='1'
-                ml='5'
-                spacing={1}
-                direction='column'
-                mb='4'
-                >
-                    {checkedAreasOfExpertise.length !== 0 && areasOfExpertise.map((area, index) => {
-                        return <Checkbox
-                        defaultChecked={checkedAreasOfExpertise.includes(area) ? true : false}
-                        checked
-                        key={index}
-                        colorScheme='facebook'
-                        value={area}
-                        onChange={handleClickedArea}
-                        >
-                        <Text fontSize='14px'>{area}</Text>
-                    </Checkbox>
+                <Stack mt='1' ml='5' spacing={1} direction='column' mb='4'>
+                    {areasOfExpertise.map((area, index) => {
+                        return (
+                            <Checkbox
+                                key={index}
+                                colorScheme='facebook'
+                                value={area}
+                                onChange={handleClickedArea}
+                                isChecked={checkedAreasOfExpertise.includes(area)}
+                            >
+                                <Text fontSize='14px'>{area}</Text>
+                            </Checkbox>
+                        );
                     })}
                 </Stack>
 
                 <Text color='gray'>Teaching Schedule Availability (Philippine Standard Time)</Text>
-                <Stack
-                mt='1'
-                ml='5'
-                spacing={1}
-                direction='row'
-                mb='4'
-                gap='5'
-                >
-                    {checkedAvailabilities.length !== 0 && availability.map((availability, index) => {
-                        return <Checkbox
-                        defaultChecked={checkedAvailabilities.includes(availability) ? true : false}
-                        key={index}
-                        colorScheme='facebook'
-                        value={availability}
-                        onChange={handleClickedAvailability}
-                        >
-                        <Text fontSize='14px'>{availability}</Text>
-                    </Checkbox>
+                <Stack mt='1' ml='5' spacing={1} direction='row' mb='4' gap='5'>
+                    {availability.map((availability, index) => {
+                        return (
+                            <Checkbox
+                                key={index}
+                                colorScheme='facebook'
+                                value={availability}
+                                onChange={handleClickedAvailability}
+                                isChecked={checkedAvailabilities.includes(availability)}
+                            >
+                                <Text fontSize='14px'>{availability}</Text>
+                            </Checkbox>
+                        );
                     })}
                 </Stack>
 
@@ -274,6 +260,7 @@ function QuestionsV2() {
                 bottom={0}
                 minW='1000px'
                 justify='center'
+                mb='20px'
                 mt='20px'
                 >
                     

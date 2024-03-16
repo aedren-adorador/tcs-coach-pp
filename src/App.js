@@ -9,8 +9,6 @@ import AuthPrivateRoute from './auth/auth-private-route/AuthPrivateRoute';
 import { useEffect, useState } from 'react';
 import CreateAdminAccount from './create-account/create-admin-account/CreateAdminAccount';
 import MainAdminView from './admin-views/MainAdminView';
-import MyApplicationStepper from './applicant-views/my-application/applicant-steps/MyApplicationStepper';
-import Video from './Video';
 import InterviewIntroduction from './applicant-views/video-interview/InterviewIntroduction'
 import WhatToExpect from './applicant-views/video-interview/WhatToExpect';
 import CameraAndMicrophoneSettings from './applicant-views/video-interview/CameraAndMicrophoneSettings';

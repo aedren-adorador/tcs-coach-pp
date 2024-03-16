@@ -135,4 +135,16 @@ router.get('/get-updated-details/:id', (req, res, next) => {
 })
 
 
+router.get('/get-updated-details-summary/:id', (req, res, next) => {
+  const details = JSON.parse(req.params.id)
+  JobApplication.find({applicantIDForeignKeyM: details.applicantIDForeignKeyM, jobIDForeignKeyM: details.jobIDForeignKeyM})
+    .then(result => {
+      Applicant.find({_id: result[0].applicantIDForeignKeyM})
+        .then(applicant => {
+          res.send({result, applicant})
+        })
+    })
+})
+
+
 module.exports = router;
