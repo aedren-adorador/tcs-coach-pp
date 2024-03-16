@@ -141,12 +141,14 @@ function Login({onLoginSuccess}) {
                         >Sign In</Button> :
 
                         <Button
+                            mt='10px'
                             isLoading
                             width='100%'
-                            loadingText='Logging in'
+                            loadingText='Signing in'
                             colorScheme='blue'
                             spinnerPlacement='start'
                             size='sm'
+                            borderRadius='0px'
                         ></Button>}
                         <Text
                         textAlign='center'

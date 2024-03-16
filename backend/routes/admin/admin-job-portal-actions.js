@@ -47,26 +47,46 @@ router.put('/update-job', (req, res, next) => {
     .then(result => res.json({success: 'updated!'}))
 })
 
-router.get('/category-filter/:id', (req, res, next) => {
-  if (req.params.id !== 'All') {
-    Job.find({jobCategoryM: req.params.id})
-    .then(result => res.send(result))
-  } else {
-    Job.find()
-      .then(result => res.send(result))
-  }
-})
+router.get('/set-filters/:id', (req, res, next) => {
+  const details = JSON.parse(req.params.id);
+  const query = {};
 
-router.get('/work-setup-filter/:id', (req, res, next) => {
-  if (req.params.id === 'Online'){
-    Job.find({jobLocationM: 'Online/Remote'})
-      .then(result => res.send(result))
-  } else if (req.params.id === 'All'){
-    Job.find()
-      .then(result => res.send(result))
-  } else {
-     Job.find({jobLocationM: req.params.id})
-      .then(result => res.send(result))
+  if (details.category && details.category !== 'All') {
+    query.jobCategoryM = details.category;
   }
-})
+
+  if (details.workSetup && details.workSetup !== 'All') {
+    if (details.workSetup === 'Online') {
+      query.jobLocationM = 'Online/Remote'; // Modify value if it's 'Online'
+    } else {
+      query.jobLocationM = details.workSetup;
+    }
+  }
+
+  if (details.postingDate && details.postingDate !== 'All') {
+    const currentDate = new Date();
+    let startDate;
+
+    // Calculate start date based on postingDate filter
+    if (details.postingDate === '3') {
+      startDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - 3, currentDate.getDate());
+    } else if (details.postingDate === '6') {
+      startDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - 6, currentDate.getDate());
+    } else if (details.postingDate === '12') {
+      startDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - 12, currentDate.getDate());
+    } else if (details.postingDate === '1week') {
+      startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() - 7);
+    }
+
+    // Add condition to query jobCreatedAt within the calculated date range
+    query.jobCreatedAt = { $gte: startDate };
+  }
+
+  Job.find(query)
+    .then(result => {
+      res.json(result);
+    })
+});
+
+
 module.exports = router;

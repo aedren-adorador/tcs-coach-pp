@@ -89,7 +89,7 @@ function MainAdminView() {
             </GridItem>
 
             <GridItem
-            bg='#0c3c55'
+            bg='tcs.main'
             area={'nav'}
             height='100%'
             position='fixed'

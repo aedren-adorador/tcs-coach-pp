@@ -2,7 +2,7 @@ import React from "react";
 import axios from "axios";
 import '../create-account.styles.css'
 import { Input, Button, FormControl, FormErrorMessage, Alert, AlertIcon, useToast, Box, Text } from "@chakra-ui/react";
-import { Formik, Form } from "formik";
+import { Formik, Form, ErrorMessage } from "formik";
 import { ArrowBackIcon } from '@chakra-ui/icons'
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -87,8 +87,8 @@ function RegisterApplicantEmail() {
                     const errors = {};
                     if (!values.email) {
                         errors.email = 'Field cannot be empty';
-                    } else if (!values.email.endsWith('@gmail.com')) {
-                        errors.email = 'Email should end with @gmail.com';
+                    } else if (!/^(.+)@(gmail\.com|coding\.ph)$/.test(values.email)) {
+                        errors.email = 'Email handle is not accepted';
                     }
                     return errors;
                 }}
@@ -99,6 +99,13 @@ function RegisterApplicantEmail() {
                             <Text
                             fontSize='12px'
                             >Enter Email</Text>
+                            <ErrorMessage name="email">
+                            {msg => (
+                                <FormErrorMessage fontSize='12px' mt='0'>
+                                {msg}
+                                </FormErrorMessage>
+                            )}
+                            </ErrorMessage>
                             <Input
                             variant='outline'
                             mb='2'

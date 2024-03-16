@@ -74,13 +74,12 @@ function JobPortal({isAdmin, applicantData}) {
     }
     
     const handleFilters = (filter, type) => {
-        setFilters(prev => ({ ...prev, [type]: filter }));
-        // setClickedJob(null)
-        // axios.get(`${process.env.REACT_APP_SYS_URL}/api/admin/job-portal-action/category-filter/${filter}`)
-        //     .then(response => setJobsList(response.data))
+        setFilters(prev => ({ ...prev, [type]: filter }))
     }
     useEffect(() => {
-        console.log('done', filters)
+        setClickedJob(null)
+        axios.get(`${process.env.REACT_APP_SYS_URL}/api/admin/job-portal-action/set-filters/${encodeURIComponent(JSON.stringify(filters))}`)
+            .then(response => setJobsList(response.data))
     }, [filters])
     useEffect(() => {
         fetchJobsList()
@@ -169,14 +168,13 @@ function JobPortal({isAdmin, applicantData}) {
                         placeholder={filterSetting}  
                         size='sm'
                         border='solid 0.2px black'
+                        onChange={(e) => handleFilters(e.target.value, 'postingDate')}
                     >
-                        <option value='option1'>Last 1 week</option>
-                        <option value='option2'>Last 1 month</option>
-                        <option value='option3'>Last 3 months</option>
-                        <option value='option4'>Last 6 months</option>
-                        <option value='option5'>Last 9 months</option>
-                        <option value='option6'>Last 12 months</option>
-                        <option value='option7'>All</option>      
+                        <option value='All'>All Posting Dates</option>      
+                        <option value='1week'>Last 1 week</option>
+                        <option value='3'>Last 3 months</option>
+                        <option value='6'>Last 6 months</option>
+                        <option value='12'>Last 12 months</option>
                     </Select>
                 ) : filterSetting === 'Work Setup' ? (
                     <Select
@@ -186,7 +184,7 @@ function JobPortal({isAdmin, applicantData}) {
                         fontWeight='600'
                         size='sm'
                         border='solid 0.2px black'
-                        onChange={(e) => handleFilters(e.target.value, 'postingDate')}
+                        onChange={(e) => handleFilters(e.target.value, 'workSetup')}
                     >
                         <option disabled selected>Work Setup</option>
                         <option value='All'>All Setups</option>
@@ -395,7 +393,7 @@ function JobPortal({isAdmin, applicantData}) {
                     </>
                     :
                     <Link
-                     to={{ pathname: `/application-progress/${applicantData._id}/${jobsList[clickedJob-1].jobTitleM}`}}
+                     to={{ pathname: `/application-progress/${applicantData._id}/${jobsList[clickedJob-1].jobTitleM}/personal-info`}}
                      state={{applicantData: applicantData, jobData: jobsList[clickedJob-1]}}
                     >
                         <Button

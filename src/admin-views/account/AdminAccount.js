@@ -66,25 +66,25 @@ function AdminAccount({adminData}) {
     }
 
     const handleEmailChange = (email) => {
-        // setIsSettingNewEmail(true)
-        // const details = {applicantID: adminData._id, applicantEmail: email, applicantFirstName: adminData.firstNameM}
-        // axios.post(`${process.env.REACT_APP_SYS_URL}/api/general-request/set-new-email`, details)
-        //     .then(response => {
-        //         setIsEditingEmail(false)
-        //         toast({
-        //             title: 'Verification link sent to new email.',
-        //             description: "Check email to activate your new email.",
-        //             status: 'success',
-        //             duration: 9000,
-        //             isClosable: true,
-        //             position: 'top',
-        //             containerStyle: {
-        //                 fontWeight: '400px'
-        //             }
-        //             })
-        //         setIsSettingNewEmail(false)
+        setIsSettingNewEmail(true)
+        const details = {applicantID: adminData._id, applicantEmail: email, applicantFirstName: adminData.firstNameM}
+        axios.post(`${process.env.REACT_APP_SYS_URL}/api/general-request/set-new-email`, details)
+            .then(response => {
+                setIsEditingEmail(false)
+                toast({
+                    title: 'Verification link sent to new email.',
+                    description: "Check email to activate your new email.",
+                    status: 'success',
+                    duration: 9000,
+                    isClosable: true,
+                    position: 'top',
+                    containerStyle: {
+                        fontWeight: '400px'
+                    }
+                    })
+                setIsSettingNewEmail(false)
                            
-        //     })
+            })
     }
 
     useEffect(() => {
@@ -207,7 +207,7 @@ function AdminAccount({adminData}) {
                         width='30px'
                         onClick={()=>setIsEditingEmail(current => !current)}
                         ><CloseIcon/></Button>
-                        {email && email.slice(-10) === "@gmail.com" ?
+                        {email && (email.slice(-10) === "@gmail.com" || email.slice(-10) === '@coding.ph')?
                         <Button
                         onClick={()=>handleEmailChange(email)}
                         bg='tcs.mongo'

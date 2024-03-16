@@ -23,6 +23,11 @@ import ForgotPassword from './forgot password/ForgotPassword';
 import SetNewPassword from './forgot password/SetNewPassword';
 import JobPortal from './applicant-views/job-portal/JobPortal';
 import PublicJobPortal from './applicant-views/job-portal/PublicJobPortal';
+import PersonalInformationV2 from './applicant-views/my-application/applicant-steps/PersonallInformationV2';
+import EducationV2 from './applicant-views/my-application/applicant-steps/EducationV2';
+import WorkExperienceV2 from './applicant-views/my-application/applicant-steps/WorkExperienceV2';
+import QuestionsV2 from './applicant-views/my-application/applicant-steps/QuestionsV2';
+import SummaryV2 from './applicant-views/my-application/applicant-steps/SummaryV2';
 
 
 function App() {
@@ -39,7 +44,9 @@ function App() {
   const theme = extendTheme({
   colors: {
     tcs: {
-      main: "#0C3C55",
+      // main: "#0C3C55",
+      main: "#02367e",
+      // main: "#0461e3",
       dirtywhite: '#F2F2F2',
       linky: '#0073DC',
       mongo: '#09A334',
@@ -81,14 +88,54 @@ function App() {
           />
 
           <Route
-          path='/application-progress/:id/:position'
+          path='/application-progress/:id/:position/personal-info'
           element={
             <AuthPrivateRoute
             isAuthenticated={isAuthenticated}
-            component={MyApplicationStepper}
+            component={PersonalInformationV2}
             />
           }
           />
+          <Route
+          path='/application-progress/:id/:position/education-info'
+          element={
+            <AuthPrivateRoute
+            isAuthenticated={isAuthenticated}
+            component={EducationV2}
+            />
+          }
+          />
+
+          <Route
+          path='/application-progress/:id/:position/work-info'
+          element={
+            <AuthPrivateRoute
+            isAuthenticated={isAuthenticated}
+            component={WorkExperienceV2}
+            />
+          }
+          />
+
+          <Route
+          path='/application-progress/:id/:position/questions-info'
+          element={
+            <AuthPrivateRoute
+            isAuthenticated={isAuthenticated}
+            component={QuestionsV2}
+            />
+          }
+          />
+
+          <Route
+          path='/application-progress/:id/:position/summary'
+          element={
+            <AuthPrivateRoute
+            isAuthenticated={isAuthenticated}
+            component={SummaryV2}
+            />
+          }
+          />
+
 
           <Route
           path='/video-interview/introduction'

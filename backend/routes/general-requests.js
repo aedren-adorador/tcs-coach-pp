@@ -90,6 +90,12 @@ router.post('/set-new-email', (req, res, next) => {
 })
 
 router.get('/verify-new-email', (req, res, next) => {
+//   {
+//   applicantID: '65dd72b804d5b587baf5a106',
+//   newEmail: 'itsaedren@gmail.com',
+//   exp: 1711017998,
+//   iat: 1710413198
+// }
     const obtainedToken = req.query.token
     const decodedToken = jwtDecode(obtainedToken)
     const newEmail = decodedToken.newEmail
@@ -98,9 +104,20 @@ router.get('/verify-new-email', (req, res, next) => {
         if (err) {
             res.status(400).send('Invalid or expired verification link.');
         } else {
-            const newCredential = {emailM: newEmail}
-            Applicant.updateOne({_id: applicantID}, newCredential)
-              .then(result => res.send(`email successfully changed!`))
+          Applicant.find({_id: applicantID})
+            .then(result => {
+              if (result.length > 0) {
+                console.log(result)
+                const newCredential = {emailM: newEmail}
+                Applicant.updateOne({_id: applicantID}, newCredential)
+                  .then(result => res.send(`applicant email successfully changed!`))
+                } else {
+                  const newCredential = {emailM: newEmail}
+                  Admin.updateOne({_id:applicantID}, newCredential)
+                    .then(result => res.send(`admin email successfully changed!`))
+                }
+            })
+            
         }
     })
 })

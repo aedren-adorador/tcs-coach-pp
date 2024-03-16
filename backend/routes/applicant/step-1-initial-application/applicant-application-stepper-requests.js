@@ -31,15 +31,63 @@ router.post('/save-job-application-progress', (req, res, next) => {
           finalVerdictM: req.body.finalVerdict
         }
         JobApplication.updateOne({applicantIDForeignKeyM:req.body.applicantIDForeignKey, jobIDForeignKeyM: req.body.jobIDForeignKey}, updatedJobApplication)
-          .then(() => (
+          .then(result => {
+            console.log(result)
             JobApplication.findOne({applicantIDForeignKeyM:req.body.applicantIDForeignKey, jobIDForeignKeyM: req.body.jobIDForeignKey})
-              .then(result => res.json({updatedJobApplication: result}))
-          ))
+              .then(result => {
+                res.json({updatedJobApplication: result})
+              })
+        })
       } else {
       }
     })
 })
 
+router.post('/save-job-application-progress-education-info', (req, res, next) => {
+  JobApplication.findOne({applicantIDForeignKeyM:req.body.applicantData.applicantIDForeignKeyM, jobIDForeignKeyM: req.body.applicantData.jobIDForeignKeyM})
+    .then(record => {
+      if(record) {
+        const updatedJobApplication = {
+          educationM: req.body.educationGroup,
+        }
+        JobApplication.updateOne({applicantIDForeignKeyM:req.body.applicantData.applicantIDForeignKeyM, jobIDForeignKeyM: req.body.applicantData.jobIDForeignKeyM}, updatedJobApplication)
+          .then(result => {
+            JobApplication.findOne({applicantIDForeignKeyM:req.body.applicantData.applicantIDForeignKeyM, jobIDForeignKeyM: req.body.applicantData.jobIDForeignKeyM})
+              .then(result => {
+                res.json({updatedJobApplication: result})
+              })
+        })
+      } else {
+      }
+    })
+})
+
+
+router.post('/save-job-application-progress-work-info', (req, res, next) => {
+  console.log(req.body)
+  JobApplication.updateOne({applicantIDForeignKeyM:req.body.applicantData.applicantIDForeignKeyM, jobIDForeignKeyM: req.body.applicantData.jobIDForeignKeyM}, {linkedInM: req.body.linkedInLink})
+    .then(result => {
+      JobApplication.findOne({applicantIDForeignKeyM:req.body.applicantData.applicantIDForeignKeyM, jobIDForeignKeyM: req.body.applicantData.jobIDForeignKeyM})
+        .then(result => {
+          res.json({updatedJobApplication: result})
+        })
+    })
+})
+
+router.post('/save-job-application-progress-questions-info', (req, res, next) => {
+  console.log(req.body)
+  const updatedDetails = {
+    areasOfExpertiseM: req.body.details.checkedAreasOfExpertise,
+    coachingExperienceM: req.body.details.checkedCoachingExperience,
+    availabilityM:req.body.details.checkedAvailabilities,
+    internetSpeedM: req.body.details.internetSpeed,
+    referredByM: req.body.details.referredBy
+  }
+  JobApplication.updateOne({applicantIDForeignKeyM:req.body.applicantData.applicantIDForeignKeyM, jobIDForeignKeyM: req.body.applicantData.jobIDForeignKeyM}, updatedDetails)
+    .then(result => {
+      res.json({updatedJobApplication: result})
+    })
+})
 
 router.get('/verify-application-if-continue-or-new/:details', (req, res, next) => {
    const details = JSON.parse(req.params.details);
@@ -78,6 +126,12 @@ router.post('/save-job-application-id-to-applicant', (req, res, next) => {
           }
         )
     )
+})
+
+router.get('/get-updated-details/:id', (req, res, next) => {
+  const details = JSON.parse(req.params.id)
+  JobApplication.find({applicantIDForeignKeyM: details.applicantIDForeignKeyM, jobIDForeignKeyM: details.jobIDForeignKeyM})
+    .then(result => res.send(result))
 })
 
 
