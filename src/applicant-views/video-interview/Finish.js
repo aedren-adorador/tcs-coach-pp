@@ -75,6 +75,7 @@ function Finish() {
               fontWeight='600'
               borderRadius='0px'
               onClick={() => {
+                console.log(submittedJobApplicationDetails)
                 axios.post(`${process.env.REACT_APP_SYS_URL}/api/applicant/video-interview-request/update-interview-to-finished`, submittedJobApplicationDetails)
                 navigate(`/applicant-home/${applicantData._id}`)
               }}

@@ -79,17 +79,32 @@ router.get('/get-interview-responses/:details', (req, res, next) => {
   })
 })
 
-router.get('/populate-criteria', (req, res, next) => {
-  Criteria.find()
-    .then(result => res.send(result))
-})
+router.get('/get-applicant-criteria-scores/:id', async (req, res, next) => {
+  const details = JSON.parse(req.params.id, 'ha')
+  const jobApplication = await JobApplication.find({_id: details.applicantID})
+  if (!Object.keys(jobApplication[0].interviewCriteriaScoresM)) {
+    const freshCriteria = {}
+    const criteria = await Criteria.find()
 
-router.post('/save-initial-criteria', (req, res, next) => {
-  console.log(req.body[0])
+    for (let criterion of criteria) {
+      freshCriteria[criterion.criterionM] = [0, '']
+    }
+    res.send(freshCriteria)
+
+  } else {
+    res.send(jobApplication[0].interviewCriteriaScoresM)
+  }
   
-  JobApplication.updateOne({_id: req.body[1]}, {interviewCriteriaScoresM: req.body[0]})
-    .then(result => res.send(result))
 })
 
+
+router.post('/save-interview-feedback', (req, res, next) => {
+  const interviewCriteriaScoresSave = {interviewCriteriaScoresM: req.body.interviewCriteriaScores}
+  JobApplication.updateOne({_id: req.body.chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails._id}, interviewCriteriaScoresSave)
+    .then(result => {
+      JobApplication.find({_id: req.body.chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails._id})
+        .then(updatedJobApplication => res.send(updatedJobApplication[0].interviewCriteriaScoresM)) 
+    })
+})
 
 module.exports = router;

@@ -5,7 +5,7 @@ const {uploadInterview} = require('../../../configs/multer-config');
 const jwt = require('jsonwebtoken');
 
 router.post('/update-interview-to-finished', (req, res, next) => {
-  JobApplication.updateOne({_id: req.body._id}, {dateSubmittedInterviewM: new Date(), currentStepM: 'submittedVideoInterview'})
+  JobApplication.updateOne({_id: req.body[0][0]._id}, {dateSubmittedInterviewM: new Date(), currentStepM: 'submittedVideoInterview'})
     .then(res.json({success: 'Successfully finished video interview!'}))
 })
 

@@ -172,7 +172,7 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                                     </Flex>
                                    <Flex gap='2'>
                                         <Text fontWeight='500' color='tcs.mongo'>Resume:</Text>
-                                        <a href={`${process.env.REACT_APP_RESUME_STATIC}/${i.resumeM}`} target="_blank" rel='noreferrer'>
+                                        <a href={`${process.env.REACT_APP_RESUME_STATIC}/${i[0].resumeM}`} target="_blank" rel='noreferrer'>
                                             <Button borderRadius='0px' variant='outline' colorScheme='blue' size='xs'>View Resume</Button>
                                         </a>
                                     </Flex>

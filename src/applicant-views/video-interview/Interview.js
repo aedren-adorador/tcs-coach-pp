@@ -33,7 +33,7 @@ function Interview() {
     
     const [questionCounter, setQuestionCounter] = useState(location.state.questionCounter+1||0)
 
-    const [questions, setQuestions] = useState(submittedJobApplicationDetails.interviewQuestionsM)
+    const [questions, setQuestions] = useState(submittedJobApplicationDetails[0][0].interviewQuestionsM)
 
     const {
     activeRecordings,
@@ -54,22 +54,6 @@ function Interview() {
 
 
     const submitInterviewResponse = (recordingSource) => {
-        // let xhr = new XMLHttpRequest();
-        // xhr.open("GET", recordingSource, true);
-        // xhr.responseType = "blob";
-        
-        // xhr.onload = function() {
-        // const blobData = xhr.response;
-        // const interviewResponse = new FormData()
-        // interviewResponse.append('applicantFirstName', applicantData.firstNameM)
-        // interviewResponse.append('applicantLastName', applicantData.lastNameM)
-        // interviewResponse.append('applicantID', applicantData._id)
-        // interviewResponse.append('questionNumber', questionCounter+1)
-        // interviewResponse.append('interview', blobData, {type: 'video/webm'})
-        // axios.post(`${process.env.REACT_APP_SYS_URL}/api/applicant/video-interview-request/submit-interview`, interviewResponse)
-        //     .then(response => console.log(response.data.success))
-        // }
-        // xhr.send()
         axios.get(recordingSource, { responseType: 'blob' })
         .then(response => {
             const blobData = response.data;
@@ -159,7 +143,6 @@ function Interview() {
     }, [])
 
     useEffect(() => {
-        console.log(questions)
    }, [questions, questionCounter])
 
     return(
@@ -347,7 +330,7 @@ function Interview() {
                          <Text
                          fontWeight='700'
                          fontSize='18px'
-                         >Question {questionCounter+1} of {questions.length}</Text>
+                         >Question {questionCounter+1} of {questions && questions.length}</Text>
                          <Flex
                          gap='10'
                          fontSize='12px'
@@ -364,7 +347,7 @@ function Interview() {
                          mt='30px'
                          fontSize='20px'
                          >
-                            {questions[questionCounter]}
+                            {questions && questions[questionCounter]}
                          </Text>
                     </GridItem>
 
@@ -511,8 +494,8 @@ function Interview() {
                                 colorScheme='facebook'
                                 onClick={()=>{
                                      console.log('questionCounter: ', questionCounter+1)
-                                     console.log('questionsLength', questions.length)                                  
-                                    if ( questionCounter+1 === questions.length) {
+                                     console.log('questionsLength', questions?.length)                                  
+                                    if ( questionCounter+1 === questions?.length) {
                                         submitInterviewResponse(recording.previewRef.current.currentSrc)
                                         console.log(submittedJobApplicationDetails, "AHTGAA")
                                         navigate('/video-interview/submission-complete',
