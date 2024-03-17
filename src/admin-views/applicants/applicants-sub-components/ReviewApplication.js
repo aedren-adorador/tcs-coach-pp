@@ -123,7 +123,7 @@ function ReviewApplication({chosenApplicantAllJobApplicationDetails, setChosenAp
                     </Box>
                 </Flex>
                  <Text color='gray'>Resume Attachment</Text>
-                 <Link href={chosenApplicantAllJobApplicationDetails.resumeM} target='_blank'>
+                 <Link href={`${process.env.REACT_APP_RESUME_STATIC}/${chosenApplicantAllJobApplicationDetails.resumeM}`} target='_blank'>
                      <Button
                     mb='4'
                     fontWeight='400'

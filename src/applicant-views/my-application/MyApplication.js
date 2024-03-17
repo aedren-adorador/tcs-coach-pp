@@ -38,7 +38,7 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
             axios.get(`${process.env.REACT_APP_SYS_URL}/api/applicant/general-request/get-job-application/${applicantData._id}`)
                 .then(response => {
                     if (response.data[0]) {
-                        setSubmittedJobApplicatioDetails(response.data[0])
+                        setSubmittedJobApplicatioDetails(response.data)
                         setIsLoading(false);
                     }
                     
@@ -82,7 +82,7 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                 <Tbody>
                 {applicantData.jobApplicationsM && applicantData.jobApplicationsM.length !==0 && submittedJobApplicationDetails ?
                
-                submittedJobApplicationDetails && submittedJobApplicationDetails.map((i) => (
+                submittedJobApplicationDetails && submittedJobApplicationDetails.map((i, index) => (
 
                 <Tr >
                     <Td textAlign='center'>
@@ -102,7 +102,7 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                         <Skeleton
                         height='50px'
                         isLoaded={!isLoading}
-                        >{i.positionAppliedToM}</Skeleton>
+                        >{i[0].positionAppliedToM}</Skeleton>
                     </Td>
                    
                     <Td>
@@ -110,7 +110,7 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                         isLoaded={!isLoading}
                         height='50px'
                         >
-                        {new Date(i.dateSubmittedApplicationM).toDateString()}
+                        {new Date(i[0].dateSubmittedApplicationM).toDateString()}
                         </Skeleton>
                     </Td>
                     <Td>
@@ -118,7 +118,7 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                         height='50px'
                         isLoaded={!isLoading}
                         >
-                        {i.currentStepM === 'submittedInitialApplication' &&
+                        {i[0].currentStepM === 'submittedInitialApplication' &&
                         <Badge
                         bg='tcs.mongo'
                         color='white'
@@ -126,7 +126,7 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                         padding='5px'
                         >Active: Application Received</Badge>}
 
-                        {i.currentStepM === 'waitingForInterviewSubmission' &&
+                        {i[0].currentStepM === 'waitingForInterviewSubmission' &&
                         <Badge
                         bg='tcs.limey'
                         color='black'
@@ -134,7 +134,7 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                         padding='5px'
                         >Active: Waiting for <br></br> Interview Submission</Badge>}
 
-                        {i.currentStepM === 'submittedVideoInterview' &&
+                        {i[0].currentStepM === 'submittedVideoInterview' &&
                         <Badge
                         bg='tcs.limey'
                         color='black'
@@ -154,18 +154,18 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                                 <ModalBody borderRadius='0'>
                                     <Flex gap='2' mb='2'>
                                         <Text fontWeight='500' color='tcs.mongo'>Job Title:</Text>
-                                        <Text>{i.positionAppliedToM}</Text>
+                                        <Text>{i[0].positionAppliedToM}</Text>
                                     </Flex>
                                      <Flex gap='2' mb='3'>
                                         <Text fontWeight='500' color='tcs.mongo'>Availabilities:</Text>
-                                        {i.availabilityM && i.availabilityM?.map((z, index) => {
+                                        {i[0].availabilityM && i[0].availabilityM?.map((z, index) => {
                                             return <Text mr='1px'>{z}</Text>
                                         })
                                         }
                                     </Flex>
                                     <Flex gap='2' mb='3'>
                                         <Text fontWeight='500' color='tcs.mongo'>Skills:</Text>
-                                        {i.areasOfExpertiseM && i.areasOfExpertiseM?.map((z, index) => {
+                                        {i[0].areasOfExpertiseM && i[0].areasOfExpertiseM?.map((z, index) => {
                                             return <Text mr='1px'>{z},</Text>
                                         })
                                         }
@@ -270,40 +270,48 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                 </Tr>
                 </Thead>
                 <Tbody>
-                <Tr>
+                {applicantData.jobApplicationsM && applicantData.jobApplicationsM.length !== 0 && submittedJobApplicationDetails ? (
+                submittedJobApplicationDetails.map((i, index) => (
+                    
+                    <Tr key={index}>
                     <Td textAlign='center'>
-                        <WarningIcon
-                        style={{fontSize: '45px', color:'red'}}
-                        
-                        />
+                        <WarningIcon style={{ fontSize: '45px', color: 'red' }} />
                     </Td>
                     <Td>
-                        {submittedJobApplicationDetails.currentStepM === '' && '—'}
-                        {submittedJobApplicationDetails.currentStepM === 'submittedInitialApplication' && 'No tasks yet'}
-                        {submittedJobApplicationDetails.currentStepM === 'waitingForInterviewSubmission' && 'Take Asynchronous Video Interview'}
-                        {submittedJobApplicationDetails.currentStepM === 'submittedVideoInterview' && 'No tasks yet'}
+                        {i[0].currentStepM === '' && '—'}
+                        {i[0].currentStepM === 'submittedInitialApplication' && 'No tasks yet'}
+                        {i[0].currentStepM === 'waitingForInterviewSubmission' && 'Take Asynchronous Video Interview'}
+                        {i[0].currentStepM === 'submittedVideoInterview' && 'No tasks yet'}
                     </Td>
                     <Td>
-                        {submittedJobApplicationDetails.currentStepM === '' && '—'}
-                        {submittedJobApplicationDetails.currentStepM === 'submittedInitialApplication' && '—'}
-                        {submittedJobApplicationDetails.currentStepM === 'waitingForInterviewSubmission' && new Date(submittedJobApplicationDetails.deadlineDateInterviewM).toDateString()}
-                        {submittedJobApplicationDetails.currentStepM === 'submittedVideoInterview' && '—'}
+                        {i[0].currentStepM === '' && '—'}
+                        {i[0].currentStepM === 'submittedInitialApplication' && '—'}
+                        {i[0].currentStepM === 'waitingForInterviewSubmission' && new Date(i[0].deadlineDateInterviewM).toDateString()}
+                        {i[0].currentStepM === 'submittedVideoInterview' && '—'}
+                    </Td>
+                    <Td>
+                        {i[0].currentStepM === '' && '—'}
+                        {i[0].currentStepM === 'submittedInitialApplication' && '—'}
+                        {i[0].currentStepM === 'waitingForInterviewSubmission' && (
+                        <Button
+                            onClick={onOpenInterview}
+                            bg='tcs.mongo'
+                            color='white'
+                            colorScheme="green"
+                            size='sm'
+                            borderRadius='0px'
+                        >
+                            Take Video Interview
+                        </Button>
+                        )}
+                        {i[0].currentStepM === 'submittedVideoInterview' && '—'}
+                    </Td>
+                    </Tr>
+                ))
+                ) : null}
 
-                    </Td>
-                    <Td>
-                        {submittedJobApplicationDetails.currentStepM === '' && '—'}
-                       {submittedJobApplicationDetails.currentStepM === 'submittedInitialApplication' && '—'}
-                       {submittedJobApplicationDetails.currentStepM === 'waitingForInterviewSubmission' &&
-                       <>
-                       <Button
-                       onClick={onOpenInterview}
-                       bg='tcs.mongo'
-                       color='white'
-                       colorScheme="green"
-                       size='sm'
-                       borderRadius='0px'
-                       >Take Video Interview</Button>
-                       <Modal isOpen={isOpenInterview} onClose={onCloseInterview}>
+                </Tbody>
+                <Modal isOpen={isOpenInterview} onClose={onCloseInterview}>
                             <ModalOverlay />
                             <ModalContent>
                             <ModalHeader fontWeight='700'>Video Interview Confirmation</ModalHeader>
@@ -329,12 +337,6 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                             </ModalFooter>
                             </ModalContent>
                         </Modal>
-                       </>
-                      }
-                      {submittedJobApplicationDetails.currentStepM === 'submittedVideoInterview' && '—'}
-                    </Td>
-                </Tr>
-                </Tbody>
             </Table>
             </TableContainer>
         </>
