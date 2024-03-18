@@ -159,6 +159,14 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                         fontWeight='500'
                         padding='5px'
                         >Active: Teaching Demo <br></br> Under Review</Badge>}
+
+                        {i[0].currentStepM === 'waitingForOnboardingRequirementsSubmission' &&
+                        <Badge
+                        bg='tcs.limey'
+                        color='black'
+                        fontWeight='500'
+                        padding='5px'
+                        >Active: Waiting for Onboarding <br></br> Requirements Submission</Badge>}
                         </Skeleton>
                     </Td>
                     <Td>
@@ -302,6 +310,7 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                         {i[0].currentStepM === 'submittedVideoInterview' && 'No tasks yet'}
                         {i[0].currentStepM === 'waitingForTeachingDemoSubmission' && 'Submit Teaching Demo Link'}
                         {i[0].currentStepM === 'submittedTeachingDemo' && `No tasks yet`}
+                        {i[0].currentStepM === 'waitingForOnboardingRequirementsSubmission' && `Submit Onboarding Requirements`}
                     </Td>
                     <Td>
                         {i[0].currentStepM === '' && '—'}
@@ -314,6 +323,12 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                         </>
                         }
                         {i[0].currentStepM === 'submittedTeachingDemo' && '—'}
+                        {i[0].currentStepM === 'waitingForOnboardingRequirementsSubmission' && 
+                        <>
+                        <Text fontSize='12px'>Please submit as soon as you can so we<br></br> can process your employe details faster <br></br></Text>
+                        </>
+                        }
+
                     </Td>
                     <Td>
                         {i[0].currentStepM === '' && '—'}
@@ -359,6 +374,34 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                             </>
                         )}
                         {i[0].currentStepM === 'submittedTeachingDemo' && '—'}
+
+                        {i[0].currentStepM === 'waitingForOnboardingRequirementsSubmission' && (
+                            <>
+                            <FormControl mb='2'>
+                            <FormHelperText>Submit Onboarding Reqs Link Here</FormHelperText>
+                            
+                            <Input
+                            placeholder="Paste link here..."
+                            required
+                            onChange={(e) => setDemoLink(e.target.value)}
+                            value={demoLink}
+                            border='0.2px solid'
+                            >
+                            </Input>
+                            </FormControl>
+                            <Flex justify='flex-end'>
+                            {!isSendingDemoLink ?
+                            <Button colorScheme='green' size='sm' borderRadius='0px' type='submit'
+                            display={demoLink.trim() ? '' : 'none'}
+                            onClick={() => {
+                                // axios.post(`${process.env.REACT_APP_SYS_URL}/api/applicant/demo-request/submit-demo-link`, {demoLink: demoLink, submittedJobApplicationDetails})
+                                //     .then(response => window.location.reload())
+                            }}
+                            >Submit</Button>:
+                            <Button isLoading loadingText='Submitting Demo' size='sm' colorScheme="green"  borderRadius='0px'></Button>}
+                            </Flex>
+                            </>
+                        )}
                     </Td>
                     </Tr>
                 ))

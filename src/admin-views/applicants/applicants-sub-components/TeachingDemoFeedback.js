@@ -7,8 +7,8 @@ import { LinkOutlined, UserOutlined } from "@ant-design/icons";
 function TeachingDemoFeedback(chosenApplicantAllJobApplicationDetails, setChosenApplicantAllJobApplicationDetails) {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [isMovingOn, setIsMovingOn] = useState(false);
-    const [isSendingDemoInvite, setIsSendingDemoInvite] = useState(false);
-    const [isEmailSent, setIsEmailSent] = useState(false);
+    const [isSendingOnboardingRequirementsChecklist, setIsSendingOnboardingRequirementsChecklist] = useState(false);
+    const [isOnboardingRequirementsEmailSent, setIsOnboardingRequirementsEmailSent] = useState(false);
     const finalRef = useRef(null)
 
     const [interviewCriteriaScores, setInterviewCriteriaScores] = useState({})
@@ -22,10 +22,20 @@ function TeachingDemoFeedback(chosenApplicantAllJobApplicationDetails, setChosen
             .then(response => {
                 setInterviewCriteriaScores(response.data)
             })
+        if (chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.currentStepM === 'waitingForOnboardingRequirementsSubmission') {
+            
+            setIsOnboardingRequirementsEmailSent(true);
+        } else {
+            setIsOnboardingRequirementsEmailSent(false)
+        }
+    
     }, [])
 
     useEffect(() => {
     }, [interviewCriteriaScores])
+
+    useEffect(() => {
+    }, [isOnboardingRequirementsEmailSent, chosenApplicantAllJobApplicationDetails])
 
 
 
@@ -58,7 +68,7 @@ function TeachingDemoFeedback(chosenApplicantAllJobApplicationDetails, setChosen
         mb='20px'
         fontWeight='600'
         color='black'
-        >Update Feedback Criteria</Text>
+        >Update Feedback</Text>
         <TableContainer>
         <Table colorScheme='blue'>
             <Thead>
@@ -167,63 +177,61 @@ function TeachingDemoFeedback(chosenApplicantAllJobApplicationDetails, setChosen
                 width='100%'
                 align='center'
                 >
-                   
-                    {/* <Button
-                    display={chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.currentStepM !== 'waitingForTeachingDemoSubmission' ? '' : 'none'}
+                   {!isOnboardingRequirementsEmailSent &&
+                    <Button
                     size='sm'
                     variant='outline'
                     colorScheme='red'
                     borderRadius='0px'
                     >
                         Send Rejection Email 
-                    </Button>
+                    </Button>}
                     
                    
-
+                    {isOnboardingRequirementsEmailSent &&
                     <Badge
-                    display={chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.currentStepM === 'waitingForTeachingDemoSubmission' ? '' : 'none'}
                     bg='tcs.creamy'
                     padding='5px'
                     fontWeight='500'
-                    >Teaching Demo Invite Sent. Waiting for applicant to submit video interview.
-                    </Badge>
+                    >Onboarding Requirements Checklist Sent to Applicant.
+                    </Badge>}
                      
-                  
+                   {!isSendingOnboardingRequirementsChecklist &&
                     <Button
+                    display={isOnboardingRequirementsEmailSent ? 'none' : ''}
                     size='sm'
-                    display={chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.currentStepM !== 'waitingForTeachingDemoSubmission' && !isSendingDemoInvite ? '' : 'none'}
                     bg='tcs.mongo'
                     color='white'
                     colorScheme='green'
                     borderRadius='0px'
                     onClick={onOpen}
-                    width='270px'
                     >
-                        Send Teaching Demo Invite
-                    </Button> 
-                    {isSendingDemoInvite &&
+                       Accept Applicant and Send Onboarding Requirements
+                    </Button>}
+
+                    {isSendingOnboardingRequirementsChecklist &&
                     <Button
                     isLoading
-                    loadingText='Sending Teaching Demo Invite'
+                    loadingText='Sending Onboarding Requirements Checklist'
                     size='sm'
                     bg='tcs.mongo'
                     color='white'
                     colorScheme='green'
                     borderRadius='0px'
                     onClick={onOpen}
-                    width='270px'
                     >
-                    </Button>} */}
+                    </Button>}
+
                      <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
                         <ModalOverlay />
                         <ModalContent
                         borderRadius='0'
                         maxW='500px'
                         >
-                        <ModalHeader>Confirm Teaching Demo Invite</ModalHeader>
+                        <ModalHeader>Send Onboarding Requirements</ModalHeader>
                         <ModalCloseButton />
                         <ModalBody>
-                            Are you sure you want to send teaching demo invite?
+                           Are you sure you want to send onboarding requirements checklist?
                         </ModalBody>
 
                         <ModalFooter>
@@ -232,14 +240,14 @@ function TeachingDemoFeedback(chosenApplicantAllJobApplicationDetails, setChosen
                             </Button>
                             <Button variant='ghost' size='sm' borderRadius='0' colorScheme="green" onClick={() => {
                                 onClose()
-                                setIsSendingDemoInvite(true)
-                                axios.post(`${process.env.REACT_APP_SYS_URL}/api/admin/applicant-screening/send-demo-invite`, chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails)
+                                setIsSendingOnboardingRequirementsChecklist(true)
+                                axios.post(`${process.env.REACT_APP_SYS_URL}/api/admin/applicant-screening/send-onboarding-invite`, chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails)
                                     .then(response => {
-                                        setIsSendingDemoInvite(false)
-                                        setIsEmailSent(true)
+                                        setIsSendingOnboardingRequirementsChecklist(false)
+                                        setIsOnboardingRequirementsEmailSent(true)
                                         window.location.reload()
                                     })
-                            }}>Confirm Invite</Button>
+                            }}>Confirm</Button>
                         </ModalFooter>
                         </ModalContent>
                     </Modal>

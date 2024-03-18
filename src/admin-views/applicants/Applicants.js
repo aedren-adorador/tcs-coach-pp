@@ -37,6 +37,10 @@ function Applicants() {
             setClickedButton('Interview Feedback')
         } else if (jobApp.currentStepM === 'submittedTeachingDemo') {
             setClickedButton('Teaching Demo Feedback')
+        } else if (jobApp.currentStepM === 'waitingForOnboardingRequirementsSubmission') {
+            setClickedButton('Teaching Demo Feedback')
+        } else if (jobApp.currentStepM === 'submittedOnboardingRequirements') {
+            setClickedButton('Teaching Demo Feedback')
         }
     }
 
@@ -64,6 +68,8 @@ function Applicants() {
         } else if (chosenApplicantAllJobApplicationDetails.currentStepM === 'waitingForTeachingDemoSubmission') {
             setApplicantButtons(['All Applicants', 'Review Application', 'Interview Feedback'])
         }  else if (chosenApplicantAllJobApplicationDetails.currentStepM === 'submittedTeachingDemo') {
+            setApplicantButtons(['All Applicants', 'Review Application', 'Interview Feedback', 'Teaching Demo Feedback'])
+        } else if (chosenApplicantAllJobApplicationDetails.currentStepM === 'waitingForOnboardingRequirementsSubmission') {
             setApplicantButtons(['All Applicants', 'Review Application', 'Interview Feedback', 'Teaching Demo Feedback'])
         }
     }, [chosenApplicantAllJobApplicationDetails])

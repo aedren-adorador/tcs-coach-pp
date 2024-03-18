@@ -110,6 +110,15 @@ function AllApplicants({applicants, updateChosenApplicantToReview, handleButtonC
                             fontSize='8px'
                             fontWeight='500'
                             >Submitted Teaching Demo (to review)</Badge>}
+
+                            {jobApp.currentStepM === 'waitingForOnboardingRequirementsSubmission' &&
+                            <Badge
+                            border='solid 0.2px lightgray'
+                            bg='tcs.creamy'
+                            padding='5px'
+                            fontSize='8px'
+                            fontWeight='500'
+                            >Waiting for Onboarding Requirements Submission</Badge>}
                         </Td>
                         <Td textAlign='center'>
                             {jobApp.currentStepM === 'submittedInitialApplication' && 'NA'}
@@ -117,6 +126,7 @@ function AllApplicants({applicants, updateChosenApplicantToReview, handleButtonC
                             {jobApp.currentStepM === 'submittedVideoInterview' && 'NA'}
                             {jobApp.currentStepM === 'waitingForTeachingDemoSubmission' && 'NA'}
                             {jobApp.currentStepM === 'submittedTeachingDemo' && 'NA'}
+                            {jobApp.currentStepM === 'waitingForOnboardingRequirementsSubmission' && 'NA'}
                         </Td>
                     </Tr>
                     }

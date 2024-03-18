@@ -120,4 +120,21 @@ router.post('/send-demo-invite', (req, res, next) => {
     })
 })
 
+router.post('/send-onboarding-invite', (req, res, next) => {
+  console.log('woah')
+  console.log(req.body)
+  JobApplication.updateOne({_id: req.body._id}, {currentStepM: 'waitingForOnboardingRequirementsSubmission'})
+    .then(result => res.send(result))
+  // sendDemoInvite(req.body.applicantJoinedDetails[0].emailM, req.body.positionAppliedToM, req.body.applicantJoinedDetails[0].firstNameM)
+  //   .then(() => {
+  //     JobApplication.updateOne({_id: req.body._id}, {currentStepM: 'waitingForTeachingDemoSubmission'})
+  //       .then(result => {
+  //         JobApplication.find({_id: req.body._id})
+  //           .then(result => {
+  //             res.send(result)
+  //           })
+  //       })
+  //   })
+})
+
 module.exports = router;
