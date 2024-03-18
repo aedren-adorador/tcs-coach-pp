@@ -1,7 +1,7 @@
 const express = require('express');
 const JobApplication = require('../../models/jobApplications');
 const router = express.Router();
-const {generateInterviewToken, sendInterviewInvite} = require('../../configs/email-config');
+const {generateInterviewToken, sendInterviewInvite, sendDemoInvite} = require('../../configs/email-config');
 const Applicant = require('../../models/applicants');
 const fs = require('fs');
 const Criteria = require('../../models/criteria');
@@ -104,6 +104,19 @@ router.post('/save-interview-feedback', (req, res, next) => {
     .then(result => {
       JobApplication.find({_id: req.body.chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails._id})
         .then(updatedJobApplication => res.send(updatedJobApplication[0].interviewCriteriaScoresM)) 
+    })
+})
+
+router.post('/send-demo-invite', (req, res, next) => {
+  sendDemoInvite(req.body.applicantJoinedDetails[0].emailM, req.body.positionAppliedToM, req.body.applicantJoinedDetails[0].firstNameM)
+    .then(() => {
+      JobApplication.updateOne({_id: req.body._id}, {currentStepM: 'waitingForTeachingDemoSubmission'})
+        .then(result => {
+          JobApplication.find({_id: req.body._id})
+            .then(result => {
+              res.send(result)
+            })
+        })
     })
 })
 

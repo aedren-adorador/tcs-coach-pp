@@ -5,7 +5,7 @@ import axios from "axios";
 
 
 function AllApplicants({applicants, updateChosenApplicantToReview, handleButtonClick}) {
-    const allApplicantsTableHeaders = ['Applicant ID', 'Date Submitted', 'Name', 'Position Applied', 'Application Status', 'Offer Status']
+    const allApplicantsTableHeaders = ['Applicant ID', 'Date Submitted', 'Applicant Name', 'Position Applied', 'Application Status', 'Offer Status']
     const [allJobApplications, setAllJobApplications] = useState([]);
 
     const goToApplicantProgress = (jobApp) => {
@@ -23,54 +23,6 @@ function AllApplicants({applicants, updateChosenApplicantToReview, handleButtonC
     }, [allJobApplications])
     return(
         <>
-        {/* <HStack
-        margin='0'
-        padding='0'
-        mt='40px'
-        mb='20px'
-        >
-            <Flex
-            align='center'
-            >
-                <Text  fontSize='12px'>Show &nbsp;</Text>
-                <Menu>
-                <MenuButton
-                as={Button}
-                rightIcon={<ChevronDownIcon />}
-                size='xs'
-                >
-                    10
-                </MenuButton>
-                <MenuList
-                size='xs'
-                >
-                    <MenuItem>10</MenuItem>
-                    <MenuItem>20</MenuItem>
-                    <MenuItem>30</MenuItem>
-                    <MenuItem>40</MenuItem>
-                    <MenuItem>50</MenuItem>
-                </MenuList>
-                </Menu>
-                <Text 
-                fontSize='12px'
-                mr='20px'
-                > &nbsp;entries...</Text>
-                  <InputGroup
-                    size='xs'
-                    width='150px'
-                    >    
-                        <InputLeftElement pointerEvents='none'>
-                            <Search2Icon color='gray.300' />
-                        </InputLeftElement>
-                        <Input 
-                        borderRadius='5px'
-                        type='text'
-                        placeholder='Search...'
-                        />
-                    </InputGroup>
-            </Flex>
-        </HStack> */}
-        
         <TableContainer
         border='solid 0.5px lightgray'
         borderRadius='20px'
@@ -116,6 +68,7 @@ function AllApplicants({applicants, updateChosenApplicantToReview, handleButtonC
                         <Td textAlign='center'>
                             {jobApp.currentStepM === 'submittedInitialApplication' &&
                             <Badge
+                            border='solid 0.2px lightgray'
                             bg='tcs.dirtywhite'
                             padding='5px'
                             fontSize='8px'
@@ -126,7 +79,7 @@ function AllApplicants({applicants, updateChosenApplicantToReview, handleButtonC
                             <Badge
                             bg='tcs.creamy'
                             padding='5px'
-                            border='solid 0px'
+                            border='solid 0.2px lightgray'
                             fontWeight='500'
                             fontSize='8px'
                             >Waiting for Interview Submission</Badge>}
@@ -135,15 +88,35 @@ function AllApplicants({applicants, updateChosenApplicantToReview, handleButtonC
                             <Badge
                             colorScheme='green'
                             padding='5px'
-                            border='solid 0px'
+                            border='solid 0.2px lightgray'
                             fontSize='8px'
                             fontWeight='500'
                             >Submitted Video Interview (to review)</Badge>}
+
+                            {jobApp.currentStepM === 'waitingForTeachingDemoSubmission' &&
+                            <Badge
+                            border='solid 0.2px lightgray'
+                            bg='tcs.creamy'
+                            padding='5px'
+                            fontSize='8px'
+                            fontWeight='500'
+                            >Waiting for Teaching Demo Submission</Badge>}
+
+                            {jobApp.currentStepM === 'submittedTeachingDemo' &&
+                            <Badge
+                            colorScheme='green'
+                            padding='5px'
+                            border='solid 0.2px lightgray'
+                            fontSize='8px'
+                            fontWeight='500'
+                            >Submitted Teaching Demo (to review)</Badge>}
                         </Td>
                         <Td textAlign='center'>
                             {jobApp.currentStepM === 'submittedInitialApplication' && 'NA'}
                             {jobApp.currentStepM === 'waitingForInterviewSubmission' && 'NA'}
                             {jobApp.currentStepM === 'submittedVideoInterview' && 'NA'}
+                            {jobApp.currentStepM === 'waitingForTeachingDemoSubmission' && 'NA'}
+                            {jobApp.currentStepM === 'submittedTeachingDemo' && 'NA'}
                         </Td>
                     </Tr>
                     }

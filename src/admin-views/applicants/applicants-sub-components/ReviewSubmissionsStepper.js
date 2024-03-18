@@ -63,8 +63,9 @@ function ReviewSubmissionsStepper({clickedButton, chosenApplicantAllJobApplicati
         ))}
         </Stepper>
         {clickedButton === 'Review Application' && <ReviewApplication chosenApplicantAllJobApplicationDetails={chosenApplicantAllJobApplicationDetails} setChosenApplicantAllJobApplicationDetails={setChosenApplicantAllJobApplicationDetails}/>}
+
         {clickedButton === 'Interview Feedback' && <InterviewFeedback chosenApplicantAllJobApplicationDetails={chosenApplicantAllJobApplicationDetails}/>}
-        {clickedButton === 'Teaching Demo Feedback' && <TeachingDemoFeedback/>}
+        {clickedButton === 'Teaching Demo Feedback' && <TeachingDemoFeedback chosenApplicantAllJobApplicationDetails={chosenApplicantAllJobApplicationDetails}/>}
         {clickedButton === 'Onboarding Requirements' && <OnboardingRequirements/>}
         </>
     )

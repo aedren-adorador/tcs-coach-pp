@@ -1,12 +1,15 @@
 import { WarningIcon } from "@chakra-ui/icons";
-import { Td, Table, TableContainer, Tr, Th, Tbody, Thead, Button, Badge, Text, Image, Flex, Skeleton, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, VStack} from "@chakra-ui/react";
+import { Td, Table, TableContainer, Tr, Th, Tbody, Thead, Button, Badge, Text, Image, Flex, Skeleton, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, VStack, Input, FormLabel, FormHelperText, FormControl, List, ListItem} from "@chakra-ui/react";
 import suitcase from '../../admin-views/admin-view-imgs/suitcase.png'
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Form } from "formik";
 
 function MyApplication({applicantData, setObtainedActiveNavButton}) {
     const navigate = useNavigate();
+    const [isSendingDemoLink, setIsSendingDemoLink] = useState(false)
+    const [demoLink, setDemoLink] = useState('')
     const [submittedJobApplicationDetails, setSubmittedJobApplicatioDetails] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -47,8 +50,7 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
     }, [applicantData])
 
     useEffect(() => {
-        console.log(submittedJobApplicationDetails)
-    }, [submittedJobApplicationDetails])
+    }, [submittedJobApplicationDetails, demoLink])
     return (
         <> 
             <TableContainer
@@ -141,6 +143,22 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                         fontWeight='500'
                         padding='5px'
                         >Active: Video Interview <br></br> Under Review</Badge>}
+
+                        {i[0].currentStepM === 'waitingForTeachingDemoSubmission' &&
+                        <Badge
+                        bg='tcs.limey'
+                        color='black'
+                        fontWeight='500'
+                        padding='5px'
+                        >Active: Waiting for <br></br> Teaching Demo Submission</Badge>}
+
+                         {i[0].currentStepM === 'submittedTeachingDemo' &&
+                        <Badge
+                        bg='tcs.limey'
+                        color='black'
+                        fontWeight='500'
+                        padding='5px'
+                        >Active: Teaching Demo <br></br> Under Review</Badge>}
                         </Skeleton>
                     </Td>
                     <Td>
@@ -279,15 +297,23 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                     </Td>
                     <Td>
                         {i[0].currentStepM === '' && '—'}
-                        {i[0].currentStepM === 'submittedInitialApplication' && 'No tasks yet'}
+                        {i[0].currentStepM === 'submittedInitialApplication' && `No tasks yet for ${submittedJobApplicationDetails[0][0].positionAppliedToM}`}
                         {i[0].currentStepM === 'waitingForInterviewSubmission' && 'Take Asynchronous Video Interview'}
                         {i[0].currentStepM === 'submittedVideoInterview' && 'No tasks yet'}
+                        {i[0].currentStepM === 'waitingForTeachingDemoSubmission' && 'Submit Teaching Demo Link'}
+                        {i[0].currentStepM === 'submittedTeachingDemo' && `No tasks yet`}
                     </Td>
                     <Td>
                         {i[0].currentStepM === '' && '—'}
                         {i[0].currentStepM === 'submittedInitialApplication' && '—'}
                         {i[0].currentStepM === 'waitingForInterviewSubmission' && new Date(i[0].deadlineDateInterviewM).toDateString()}
                         {i[0].currentStepM === 'submittedVideoInterview' && '—'}
+                        {i[0].currentStepM === 'waitingForTeachingDemoSubmission' &&
+                        <>
+                        <Text fontSize='12px'>Please submit as soon as you can <br/> as we review applicants on a rolling <br/>basis.</Text>
+                        </>
+                        }
+                        {i[0].currentStepM === 'submittedTeachingDemo' && '—'}
                     </Td>
                     <Td>
                         {i[0].currentStepM === '' && '—'}
@@ -305,6 +331,34 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                         </Button>
                         )}
                         {i[0].currentStepM === 'submittedVideoInterview' && '—'}
+                        {i[0].currentStepM === 'waitingForTeachingDemoSubmission' && (
+                            <>
+                            <FormControl mb='2'>
+                            <FormHelperText>Submit Teaching Demo Link Here</FormHelperText>
+                            
+                            <Input
+                            placeholder="Paste link here..."
+                            required
+                            onChange={(e) => setDemoLink(e.target.value)}
+                            value={demoLink}
+                            border='0.2px solid'
+                            >
+                            </Input>
+                            </FormControl>
+                            <Flex justify='flex-end'>
+                            {!isSendingDemoLink ?
+                            <Button colorScheme='green' size='sm' borderRadius='0px' type='submit'
+                            display={demoLink.trim() ? '' : 'none'}
+                            onClick={() => {
+                                axios.post(`${process.env.REACT_APP_SYS_URL}/api/applicant/demo-request/submit-demo-link`, {demoLink: demoLink, submittedJobApplicationDetails})
+                                    .then(response => window.location.reload())
+                            }}
+                            >Submit</Button>:
+                            <Button isLoading loadingText='Submitting Demo' size='sm' colorScheme="green"  borderRadius='0px'></Button>}
+                            </Flex>
+                            </>
+                        )}
+                        {i[0].currentStepM === 'submittedTeachingDemo' && '—'}
                     </Td>
                     </Tr>
                 ))

@@ -244,7 +244,7 @@ function ReviewApplication({chosenApplicantAllJobApplicationDetails, setChosenAp
             gap='5'
             mb='20px'
             >
-                {chosenApplicantAllJobApplicationDetails.currentStepM === 'waitingForInterviewSubmission' &&
+                {chosenApplicantAllJobApplicationDetails.currentStepM === 'submittedInitialApplication' &&
                 <Badge
                 bg='tcs.creamy'
                 padding='5px'
@@ -257,7 +257,7 @@ function ReviewApplication({chosenApplicantAllJobApplicationDetails, setChosenAp
                 variant='outline'
                 colorScheme='red'
                 borderRadius='0px'
-                display={chosenApplicantAllJobApplicationDetails.currentStepM === 'waitingForInterviewSubmission' || chosenApplicantAllJobApplicationDetails.currentStepM ==='submittedVideoInterview' ? 'none' : ''}
+                display={chosenApplicantAllJobApplicationDetails.currentStepM === 'submittedInitialApplication' || chosenApplicantAllJobApplicationDetails.currentStepM ==='submittedVideoInterview' || chosenApplicantAllJobApplicationDetails.currentStepM ==='waitingForTeachingDemoSubmission' || chosenApplicantAllJobApplicationDetails.currentStepM ==='submittedTeachingDemo' ? 'none' : ''}
                 >
                     Send Rejection Email
                 </Button>
@@ -275,7 +275,7 @@ function ReviewApplication({chosenApplicantAllJobApplicationDetails, setChosenAp
                 </Button>
                 :
                  <Button
-                display={chosenApplicantAllJobApplicationDetails.currentStepM === 'waitingForInterviewSubmission' || chosenApplicantAllJobApplicationDetails.currentStepM ==='submittedVideoInterview' ? 'none' : ''}
+                display={chosenApplicantAllJobApplicationDetails.currentStepM === 'waitingForInterviewSubmission' || chosenApplicantAllJobApplicationDetails.currentStepM ==='submittedVideoInterview' || chosenApplicantAllJobApplicationDetails.currentStepM ==='waitingForTeachingDemoSubmission' || chosenApplicantAllJobApplicationDetails.currentStepM ==='submittedTeachingDemo' ? 'none' : ''}
                 size='sm'
                 bg='tcs.mongo'
                 color='white'

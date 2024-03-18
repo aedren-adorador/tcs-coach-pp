@@ -12,6 +12,7 @@ const applicantWorkExperienceRequestsRoutes = require('./routes/applicant/step-1
 const applicantVideoInterviewRequestsRoutes = require('./routes/applicant/step-2-video-interview/applicant-video-interview-requests')
 const applicantGeneralRequestsRoutes = require('./routes/applicant/applicant-general-requests')
 const generalRequestsRoutes = require('./routes/general-requests');
+const applicantTeachingDemoRequestsRoutes = require('./routes/applicant/step-3-teaching-demo/applicant-teaching-demo-requests')
 
 // Mandatory Settings
 // app.use(bodyParser.json({limit: '100mb'}));
@@ -63,6 +64,7 @@ app.use('/api/applicant/application-stepper-request', applicantApplicationSteppe
 app.use('/api/applicant/work-experience-request', applicantWorkExperienceRequestsRoutes)
 app.use('/api/applicant/video-interview-request', applicantVideoInterviewRequestsRoutes)
 app.use('/api/applicant/general-request', applicantGeneralRequestsRoutes)
+app.use('/api/applicant/demo-request', applicantTeachingDemoRequestsRoutes)
 
 // CLEANED ROUTES FOR GENERAL REQUESTS (Both Admin and Applicant)
 app.use('/api/general-request', generalRequestsRoutes)

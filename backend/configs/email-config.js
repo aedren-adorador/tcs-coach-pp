@@ -92,5 +92,26 @@ async function sendForgotPasswordVerification(emailAddressInput, token) {
 }
 
 
-module.exports = {generateVerificationToken, generateInterviewToken, sendEmail, sendInterviewInvite, generateNewPasswordToken, sendNewPasswordVerification, generateNewEmailToken, sendNewEmailVerification,
-                  generateForgotPasswordToken, sendForgotPasswordVerification};
+async function sendDemoInvite(emailAddressInput, position, applicantName) {
+  await transporter.sendMail({
+      from: process.env.USER_EMAIL,
+      to: emailAddressInput,
+      subject: "Congratulations! The Coding School Application - Teaching Demo Submission",
+      html: `
+      <p'>Dear ${applicantName},</p><br />
+      <p>Congratulations for passing the interview process for the ${position} position! The final step for the screening process would be a teaching demonstration of any topic you would like to teach.</p>
+      <p>Here are some guidelines:</p>
+      <ol>
+          <li>Pick any topic you would like to demonstate teaching.</li>
+          <li>Record yourself for 20-30 minutes with a prepared slideset.</li>
+          <li>Upload your recording via Google Drive. Set the share settings to: "anyone with the link can view".</li>
+          <li>Log-in to your <a href=${process.env.MAIN_URL}>TCS Coach++ Account</a>  and paste the link of your uploaded demo.</li>
+          <li>Submit your link and wait for our team to reach out to you in a few days.</li>
+      </ol>
+
+      <p>Cheers and Goodluck!</p><br/>
+      <p>The Coding School Recruitment Team</p>
+      `
+    })
+}
+module.exports = {generateVerificationToken, generateInterviewToken, sendEmail, sendInterviewInvite, generateNewPasswordToken, sendNewPasswordVerification, generateNewEmailToken, sendNewEmailVerification, generateForgotPasswordToken, sendForgotPasswordVerification, sendDemoInvite};

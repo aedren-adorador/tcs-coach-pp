@@ -30,6 +30,7 @@ const jobApplication = mongoose.Schema({
     dateSubmittedTeachingDemoM: {type: Date, required: false, default: ''},
     deadlineDateTeachingDemoM: {type: Date, required: false, default: ''},
     teachingDemoTokenM: {type: String, required: false, default: ''},
+    teachingDemoM: {type: String, reuired: false, default: ''},
 
     dateSubmittedOnboardingRequirementsM: {type: Date, required: false, default: ''},
     deadlineDateOnboardingRequirementsM: {type: Date, required: false, default: ''},

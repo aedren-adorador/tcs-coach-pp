@@ -1,11 +1,14 @@
-import { Box, Button, Card, CardBody, Flex, Grid, GridItem, Input, Link, Modal, ModalContent, ModalOverlay, Select, Skeleton, Spinner, Table, TableCaption, TableContainer, Tbody, Td, Text, Textarea, Tfoot, Th, Thead, Tr, VStack, useDisclosure } from "@chakra-ui/react";
+import { Badge, Box, Button, Card, CardBody, Flex, Grid, GridItem, Input, InputGroup, Link, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Skeleton, Spinner, Table, TableCaption, TableContainer, Tbody, Td, Text, Textarea, Tfoot, Th, Thead, Tr, VStack, useDisclosure } from "@chakra-ui/react";
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { EditIcon } from "@chakra-ui/icons";
+import { UserOutlined } from "@ant-design/icons";
 
-function InterviewFeedback(chosenApplicantAllJobApplicationDetails) {
+function InterviewFeedback(chosenApplicantAllJobApplicationDetails, setChosenApplicantAllJobApplicationDetails) {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [isMovingOn, setIsMovingOn] = useState(false);
+    const [isSendingDemoInvite, setIsSendingDemoInvite] = useState(false);
+    const [isEmailSent, setIsEmailSent] = useState(false);
     const finalRef = useRef(null)
     const [interviewQuestions, setInterviewQuestions] = useState(chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.interviewQuestionsM)
 
@@ -49,13 +52,17 @@ function InterviewFeedback(chosenApplicantAllJobApplicationDetails) {
     }, [])
 
     useEffect(() => {
-        console.log('wahey', interviewCriteriaScores)
     }, [interviewCriteriaScores])
 
 
 
     return(
         <>
+        <Text fontSize='30px' color='black' fontWeight='500' mb='10px'>
+        <UserOutlined/>&nbsp;
+        {chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0].firstNameM}&nbsp;
+        {chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0].lastNameM}
+        </Text>
         <Grid
         minW='1000px'
         minH='400px'
@@ -172,16 +179,11 @@ function InterviewFeedback(chosenApplicantAllJobApplicationDetails) {
                     </Td>
                 </Tr>
             ))}
-
-
-                
-
             </Tbody>
 
         </Table>
         <Flex justify='flex-end'>
-            <Button size='md' borderRadius='0px' float='right' mb='50px' colorScheme='green'
-            
+            <Button size='md' borderRadius='0px' float='right' mb='30px' colorScheme='blue' mt='5px'
             onClick={() => {
                 setIsMovingOn(true)
                 axios.post(`${process.env.REACT_APP_SYS_URL}/api/admin/applicant-screening/save-interview-feedback`, {interviewCriteriaScores, chosenApplicantAllJobApplicationDetails})
@@ -223,32 +225,89 @@ function InterviewFeedback(chosenApplicantAllJobApplicationDetails) {
             <GridItem
             >
                 <Flex
-                justify='center'
+                justify='flex-end'
                 direction='row'
                 gap={3}
                 width='100%'
                 align='center'
                 >
-                     <Button
-                    variant='outline'
-                    colorScheme="red"
-                    borderRadius='0px'
-                    fontSize='12px'
-                    width='270px'
-                    height='40px'
-                    fontWeight='300'
-                     _hover={{color: 'white', bg:'darkred'}}
-                    >Send &nbsp;<Text fontWeight='600' display='inline-block'>Interview Rejection</Text>&nbsp;Email</Button>
+                   
                     <Button
+                    display={chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.currentStepM !== 'waitingForTeachingDemoSubmission' ? '' : 'none'}
+                    size='sm'
+                    variant='outline'
+                    colorScheme='red'
                     borderRadius='0px'
-                    fontSize='12px'
+                    >
+                        Send Rejection Email 
+                    </Button>
+                    
+                   
+
+                    <Badge
+                    display={chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.currentStepM === 'waitingForTeachingDemoSubmission' ? '' : 'none'}
+                    bg='tcs.creamy'
+                    padding='5px'
+                    fontWeight='500'
+                    >Teaching Demo Invite Sent. Waiting for applicant to submit video interview.
+                    </Badge>
+                     
+                  
+                    <Button
+                    size='sm'
+                    display={chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.currentStepM !== 'waitingForTeachingDemoSubmission' && !isSendingDemoInvite ? '' : 'none'}
+                    bg='tcs.mongo'
+                    color='white'
+                    colorScheme='green'
+                    borderRadius='0px'
+                    onClick={onOpen}
                     width='270px'
-                    height='40px'
-                    backgroundColor='#DBF6E5'
-                    fontWeight='300'
-                    color='black'
-                    _hover={{color: 'white', bg:'green'}}
-                    >Send &nbsp;<Text fontWeight='600' display='inline-block'>Teaching Demo Invitation</Text>&nbsp;Email</Button>
+                    >
+                        Send Teaching Demo Invite
+                    </Button> 
+                    {isSendingDemoInvite &&
+                    <Button
+                    isLoading
+                    loadingText='Sending Teaching Demo Invite'
+                    size='sm'
+                    bg='tcs.mongo'
+                    color='white'
+                    colorScheme='green'
+                    borderRadius='0px'
+                    onClick={onOpen}
+                    width='270px'
+                    >
+                    </Button>}
+                     <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
+                        <ModalOverlay />
+                        <ModalContent
+                        borderRadius='0'
+                        maxW='500px'
+                        >
+                        <ModalHeader>Confirm Teaching Demo Invite</ModalHeader>
+                        <ModalCloseButton />
+                        <ModalBody>
+                            Are you sure you want to send teaching demo invite?
+                        </ModalBody>
+
+                        <ModalFooter>
+                            <Button colorScheme='red' mr={3} onClick={onClose} borderRadius='0' size='sm' variant='outline'>
+                            Cancel
+                            </Button>
+                            <Button variant='ghost' size='sm' borderRadius='0' colorScheme="green" onClick={() => {
+                                onClose()
+                                setIsSendingDemoInvite(true)
+                                axios.post(`${process.env.REACT_APP_SYS_URL}/api/admin/applicant-screening/send-demo-invite`, chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails)
+                                    .then(response => {
+                                        setIsSendingDemoInvite(false)
+                                        setIsEmailSent(true)
+                                        window.location.reload()
+                                    })
+                            }}>Confirm Invite</Button>
+                        </ModalFooter>
+                        </ModalContent>
+                    </Modal>
+
                 </Flex>
             </GridItem>
         </Grid>

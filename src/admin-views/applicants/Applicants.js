@@ -13,13 +13,11 @@ function Applicants() {
     const [applicantsResult, setApplicantsResult] = useState([]);
     const [chosenApplicantToReview, setChosenApplicantToReview] = useState('');
     const [chosenApplicantAllJobApplicationDetails, setChosenApplicantAllJobApplicationDetails] = useState([]);
-    
     const getApplicants = async () => {
         const response = await axios.get(`${process.env.REACT_APP_SYS_URL}/api/admin/applicant-screening/get-applicants`);
         setApplicantsResult(response.data.applicants)
     }
-    
-    
+
     const handleButtonClick = (index) => {
         if (index===0) {
             setChosenApplicantToReview('');
@@ -35,9 +33,11 @@ function Applicants() {
             setClickedButton('Review Application')
         } else if (jobApp.currentStepM === 'submittedVideoInterview'){
             setClickedButton('Interview Feedback')
+        } else if (jobApp.currentStepM === 'waitingForTeachingDemoSubmission') {
+            setClickedButton('Interview Feedback')
+        } else if (jobApp.currentStepM === 'submittedTeachingDemo') {
+            setClickedButton('Teaching Demo Feedback')
         }
-        
-
     }
 
     useEffect(() => {
@@ -61,6 +61,10 @@ function Applicants() {
             setApplicantButtons(['All Applicants', 'Review Application'])
         } else if (chosenApplicantAllJobApplicationDetails.currentStepM === 'submittedVideoInterview') {
             setApplicantButtons(['All Applicants', 'Review Application', 'Interview Feedback'])
+        } else if (chosenApplicantAllJobApplicationDetails.currentStepM === 'waitingForTeachingDemoSubmission') {
+            setApplicantButtons(['All Applicants', 'Review Application', 'Interview Feedback'])
+        }  else if (chosenApplicantAllJobApplicationDetails.currentStepM === 'submittedTeachingDemo') {
+            setApplicantButtons(['All Applicants', 'Review Application', 'Interview Feedback', 'Teaching Demo Feedback'])
         }
     }, [chosenApplicantAllJobApplicationDetails])
    
