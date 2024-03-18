@@ -43,7 +43,9 @@ function Applicants() {
             setClickedButton('Onboarding Requirements')
         } else if (jobApp.currentStepM === 'finishedHiringApplicant') {
             setClickedButton('Review Application')
-        } 
+        } else if (jobApp.currentStepM === 'rejectedApplicant') {
+            setClickedButton('Review Application')
+        }
     }
 
     useEffect(() => {
@@ -76,6 +78,8 @@ function Applicants() {
         } else if (chosenApplicantAllJobApplicationDetails.currentStepM === 'submittedOnboardingRequirements') {
             setApplicantButtons(['All Applicants', 'Review Application', 'Interview Feedback', 'Teaching Demo Feedback', 'Onboarding Requirements', 'Finish Hiring'])
         } else if (chosenApplicantAllJobApplicationDetails.currentStepM === 'finishedHiringApplicant') {
+            setApplicantButtons(['All Applicants', 'Review Application', 'Interview Feedback', 'Teaching Demo Feedback', 'Onboarding Requirements'])
+        } else if (chosenApplicantAllJobApplicationDetails.currentStepM === 'rejectedApplicant') {
             setApplicantButtons(['All Applicants', 'Review Application', 'Interview Feedback', 'Teaching Demo Feedback', 'Onboarding Requirements'])
         }
     }, [chosenApplicantAllJobApplicationDetails])

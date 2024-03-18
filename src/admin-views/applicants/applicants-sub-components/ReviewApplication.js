@@ -6,11 +6,13 @@ import { CloseIcon } from "@chakra-ui/icons";
 
 function ReviewApplication({chosenApplicantAllJobApplicationDetails, setChosenApplicantAllJobApplicationDetails}) {
     const { isOpen, onOpen, onClose } = useDisclosure()
+    const { isOpen: isOpenRejection, onOpen: onOpenRejection, onClose: onCloseRejection } = useDisclosure()
     const finalRef = React.useRef(null)
     useEffect(() => {
     }, [chosenApplicantAllJobApplicationDetails])
     
     const [isSending, setIsSending] = useState(false);
+    const [isSendingRejection, setIsSendingRejection] = useState();
     const [questions, setQuestions] = useState(chosenApplicantAllJobApplicationDetails.interviewQuestionsM)
 
     const sendInterviewInvite = () => {
@@ -251,7 +253,9 @@ function ReviewApplication({chosenApplicantAllJobApplicationDetails, setChosenAp
                 >Interview Invite Sent. Waiting for applicant to submit video interview.
                 </Badge>}
 
+
                 <Button
+                onClick={()=> onOpenRejection()}
                 size='sm'
                 variant='outline'
                 colorScheme='red'
@@ -260,6 +264,32 @@ function ReviewApplication({chosenApplicantAllJobApplicationDetails, setChosenAp
                 >
                     Send Rejection Email
                 </Button>
+
+                <Modal isOpen={isOpenRejection} onClose={onCloseRejection}>
+                        <ModalOverlay />
+                        <ModalContent
+                        borderRadius='0'
+                        maxW='500px'
+                        >
+                        <ModalHeader>Confirm Rejection Email</ModalHeader>
+                        <ModalCloseButton />
+                        <ModalBody>
+                            Are you sure you want to reject this applicant?
+                        </ModalBody>
+
+                        <ModalFooter>
+                            <Button colorScheme='red' mr={3} onClick={onCloseRejection} borderRadius='0' size='sm' variant='outline'>
+                            Cancel
+                            </Button>
+                            <Button  size='sm' borderRadius='0' colorScheme="red" onClick={() => {
+                                onCloseRejection()
+                                axios.post(`${process.env.REACT_APP_SYS_URL}/api/admin/applicant-screening/send-rejection-email`, chosenApplicantAllJobApplicationDetails)
+                                    .then(response => window.location.reload())
+                            }}>Send Rejection</Button>
+                        </ModalFooter>
+                        </ModalContent>
+                    </Modal>
+
                 
                 {isSending ? 
                 <Button

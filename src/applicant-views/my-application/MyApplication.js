@@ -186,13 +186,20 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                         fontWeight='500'
                         padding='5px'
                         >CONGRATULATIONS! <br /> YOU ARE HIRED</Badge>}
+
+                        {i[0].currentStepM === 'rejectedApplicant' &&
+                        <Badge
+                        colorScheme='red'
+                        fontWeight='500'
+                        padding='5px'
+                        >REJECTED</Badge>}
                         </Skeleton>
                     </Td>
                     <Td>
                         <Flex direction='column' gap='2'>
                             <Button size='xs' borderRadius='0px' colorScheme='blue' onClick={onOpenViewApplication}
-                            display={i[0].currentStepM === 'finishedHiringApplicant' ? 'none': ''}
-                            >View Application </Button>
+                            display={i[0].currentStepM === 'finishedHiringApplicant' || 'rejectedApplicant'? 'none': ''}
+                            >View Application</Button>
                             <Modal isOpen={isOpenViewApplication} onClose={onCloseViewApplication}>
                                 <ModalOverlay />
                                 <ModalContent borderRadius='0px' maxW='800px'>
@@ -236,7 +243,7 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
 
 
                             <Button size='xs' colorScheme='red' variant='outline' borderRadius='0px'onClick={onOpen}
-                            display={i[0].currentStepM === 'submittedOnboardingRequirements' || i[0].currentStepM === 'finishedHiringApplicant' ? 'none': ''}
+                            display={i[0].currentStepM === 'submittedOnboardingRequirements' || i[0].currentStepM === 'finishedHiringApplicant' || i[0].currentStepM === 'rejectedApplicant' ? 'none': ''}
                             >Withdraw Application</Button>
                             <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
                                 <ModalOverlay />

@@ -158,4 +158,36 @@ async function sendOnboardingRequirementsChecklist(emailAddressInput, position, 
       `
     })
 }
-module.exports = {generateVerificationToken, generateInterviewToken, sendEmail, sendInterviewInvite, generateNewPasswordToken, sendNewPasswordVerification, generateNewEmailToken, sendNewEmailVerification, generateForgotPasswordToken, sendForgotPasswordVerification, sendDemoInvite, sendOnboardingRequirementsChecklist};
+
+
+async function sendRejectionEmail(emailAddressInput, applicantName) {
+  await transporter.sendMail({
+      from: process.env.USER_EMAIL,
+      to: emailAddressInput,
+      subject: "The Coding School Application Update",
+      html: `
+      <p style='font-size: 14px'>Dear ${applicantName}</p><br />
+      <p>Thank you for your interest in The Coding School and for submitting your application. We appreciate the time and effort
+      you have dedicated to the application process.</p>
+      
+      <p>After thorough review, we regret to inform you that we are unable to offer you a position in our program at this time.
+      While we were impressed by your qualifications and achievements, we have selected candidates whose skills and experience
+      better align with the needs of our workforce.</p>
+      
+      <p>We understand that this news may be disappointing, but please know that our decision was made after careful
+      consideration of all applicants. We encourage you to continue pursuing your passion for coding and exploring other
+      opportunities in the field.</p>
+      
+      <p>We sincerely appreciate your interest in The Coding School and wish you the best in your future endeavors. Should you
+      have any questions or require feedback on your application, please do not hesitate to reach out to us.</p>
+      
+      <p>Thank you again for considering The Coding School. We wish you success in your future endeavors.</p>
+    
+      <p>Warm regards,</p><br />
+      <p>The Coding School Recruitment Team</p>
+      `
+    })
+}
+
+// Email Settings for Rejection Email
+module.exports = {generateVerificationToken, generateInterviewToken, sendEmail, sendInterviewInvite, generateNewPasswordToken, sendNewPasswordVerification, generateNewEmailToken, sendNewEmailVerification, generateForgotPasswordToken, sendForgotPasswordVerification, sendDemoInvite, sendOnboardingRequirementsChecklist, sendRejectionEmail};

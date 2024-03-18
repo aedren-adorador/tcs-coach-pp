@@ -1,7 +1,7 @@
 const express = require('express');
 const JobApplication = require('../../models/jobApplications');
 const router = express.Router();
-const {generateInterviewToken, sendInterviewInvite, sendDemoInvite, sendOnboardingRequirementsChecklist} = require('../../configs/email-config');
+const {generateInterviewToken, sendInterviewInvite, sendDemoInvite, sendOnboardingRequirementsChecklist, sendRejectionEmail} = require('../../configs/email-config');
 const Applicant = require('../../models/applicants');
 const fs = require('fs');
 const Criteria = require('../../models/criteria');
@@ -164,6 +164,18 @@ router.post('/send-onboarding-invite', (req, res, next) => {
 router.post('/finish-hiring', (req, res, next) => {
   JobApplication.updateOne({_id: req.body._id}, {currentStepM: 'finishedHiringApplicant'})
     .then(result => res.send(result))
+})
+
+router.post('/send-rejection-email', (req, res, next) => {
+  // sendRejectionEmail(emailAddressInput, applicantName)
+  Applicant.find({_id: req.body.applicantIDForeignKeyM})
+    .then(applicant => {
+      sendRejectionEmail(applicant[0].emailM, applicant[0].firstNameM)
+        .then(() => {
+          JobApplication.updateOne({_id: req.body._id}, {currentStepM: 'rejectedApplicant'})
+            .then(result => res.send(result))
+        })
+    })
 })
 
 module.exports = router;
