@@ -56,7 +56,7 @@ function TeachingDemoFeedback(chosenApplicantAllJobApplicationDetails, setChosen
         >
             <GridItem border='solid 0.2px lightgray'>
                 <Flex justify='center' align='center' height='100%'>
-                    <Link href='https://www.youtube.com' target='_blank'>
+                    <Link href={chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.teachingDemoM} target='_blank'>
                         <Button fontSize='30px' bg='tcs.main' color='white' _hover={{backgroundColor: 'darkblue'}}padding='20px'>Review Teaching Demo Link Here &nbsp; <LinkOutlined></LinkOutlined></Button>
                     </Link>
                 </Flex>
@@ -141,7 +141,7 @@ function TeachingDemoFeedback(chosenApplicantAllJobApplicationDetails, setChosen
                         
                     })
             }}
-            >Save Interview Review</Button>
+            >Save Review</Button>
 
             <Modal isOpen={isMovingOn}>
             <ModalOverlay/>
@@ -177,39 +177,31 @@ function TeachingDemoFeedback(chosenApplicantAllJobApplicationDetails, setChosen
                 width='100%'
                 align='center'
                 >
-                   {!isOnboardingRequirementsEmailSent &&
+                   
                     <Button
+                    display={chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.currentStepM === 'submittedTeachingDemo' ? '' : 'none'}
                     size='sm'
                     variant='outline'
                     colorScheme='red'
                     borderRadius='0px'
                     >
                         Send Rejection Email 
-                    </Button>}
+                    </Button>
                     
                    
-                    {isOnboardingRequirementsEmailSent &&
+                    
                     <Badge
+                    display={chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.currentStepM === 'waitingForOnboardingRequirementsSubmission' ? '' : 'none'}
                     bg='tcs.creamy'
                     padding='5px'
                     fontWeight='500'
                     >Onboarding Requirements Checklist Sent to Applicant.
-                    </Badge>}
+                    </Badge>
                      
-                   {!isSendingOnboardingRequirementsChecklist &&
-                    <Button
-                    display={isOnboardingRequirementsEmailSent ? 'none' : ''}
-                    size='sm'
-                    bg='tcs.mongo'
-                    color='white'
-                    colorScheme='green'
-                    borderRadius='0px'
-                    onClick={onOpen}
-                    >
-                       Accept Applicant and Send Onboarding Requirements
-                    </Button>}
+                  
+            
 
-                    {isSendingOnboardingRequirementsChecklist &&
+                    {isSendingOnboardingRequirementsChecklist ?
                     <Button
                     isLoading
                     loadingText='Sending Onboarding Requirements Checklist'
@@ -220,7 +212,19 @@ function TeachingDemoFeedback(chosenApplicantAllJobApplicationDetails, setChosen
                     borderRadius='0px'
                     onClick={onOpen}
                     >
-                    </Button>}
+                    </Button>:
+                    <Button
+                    display={chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.currentStepM === 'submittedTeachingDemo' ? '' : 'none'}
+                    size='sm'
+                    bg='tcs.mongo'
+                    color='white'
+                    colorScheme='green'
+                    borderRadius='0px'
+                    onClick={onOpen}
+                    >
+                       Accept Applicant and Send Onboarding Requirements
+                    </Button>
+                    }
 
                      <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
                         <ModalOverlay />

@@ -156,7 +156,6 @@ router.post('/withdraw-application', (req, res, next) => {
     .then(applicant => {
       const copy = [...applicant[0].jobApplicationsM]
       const newArrayOfJobApplications = copy.filter((jobApp, index) => (jobApp.toString() !== req.body.jobApplicationID.toString()))
-      console.log('NEW ARRAY ', newArrayOfJobApplications)
       Applicant.updateOne({_id: req.body.applicantID}, {jobApplicationsM: newArrayOfJobApplications})
         .then(result => console.log(result))
     })
@@ -181,6 +180,11 @@ router.post('/create-account-admin', (req, res, next) => {
     newAdmin.save()
   })
   res.json({success: 'succeeded!'})
+})
+
+router.get('/get-job-apps-summary', (req, res, next) => {
+  JobApplication.find()
+    .then(result => res.send(result))
 })
 
 module.exports = router;

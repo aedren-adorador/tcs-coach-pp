@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { Box, Button, Grid, GridItem } from "@chakra-ui/react";
+import { Box, Button, Flex, Grid, GridItem, Menu, MenuButton, MenuItem, MenuList, Text, Avatar } from "@chakra-ui/react";
 import { jwtDecode } from "jwt-decode";
 import NavApplicant from "../nav/applicant/NavApplicant";
 import JobPortal from "./job-portal/JobPortal";
 import MyApplication from "./my-application/MyApplication";
 import Account from "./account/Account";
+import { ChevronDownIcon } from "@chakra-ui/icons";
 
 function MainApplicantView() {
     const navigate = useNavigate();
@@ -53,10 +54,6 @@ function MainApplicantView() {
     useEffect(() => {
     }, [applicantData])
 
-    // useEffect(() => {
-        
-    // }, [obtainedActiveNavButton])
-
     return(
         <>
        <Grid
@@ -75,16 +72,19 @@ function MainApplicantView() {
             position='fixed'
             zIndex='1'
             >
-                <Box>
-                    <Button
-                    bg='red'
-                    size='xs'
-                    colorScheme='red'
-                    margin='10px'
-                    float='right'
-                    onClick={logOut}
-                    >Logout</Button>
-                </Box>
+                <Flex justify='flex-end' align='center' margin='10px'>
+                    <Menu>
+                    <MenuButton as={Button} rightIcon={<ChevronDownIcon />} maxW='100%' variant='ghost'>
+                        <Flex align='center'>
+                            <Avatar size='xs'/>
+                            <Text ml='5px' fontSize='14px'>{applicantData.firstNameM} {applicantData.lastNameM} {applicantData.admin?.toString() === 'true' && '(admin)'}</Text>
+                        </Flex>
+                    </MenuButton>
+                    <MenuList>
+                        <MenuItem onClick={logOut} size='sm'>Logout</MenuItem>
+                    </MenuList>
+                    </Menu>
+                </Flex>
             </GridItem>
 
             <GridItem
@@ -102,6 +102,7 @@ function MainApplicantView() {
             </GridItem>
 
             <GridItem
+            mt='15px'
             bg={obtainedActiveNavButton === 'My Application' ? 'white' : '#F2F2F2'}
             area={'main'}
             padding='0px'

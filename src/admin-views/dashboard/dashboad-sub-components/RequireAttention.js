@@ -3,8 +3,7 @@ import { TableContainer, Table, TableCaption, Thead, Tr, Th, Tbody, Td, Tfoot, T
 import suitcaseIcon from '../../admin-view-imgs/suitcase.png'
 function RequireAttention() {
     const requireAttentionHeaders = [
-        'Position', 'Positions Left', 'Applications', 'Interviewed', 'Rejected', 'Withdrawn', 'Pending Feedback', 'Offered'
-    ]
+        'Position', 'Applications', 'Interviewed', 'Rejected', 'Withdrawn',  'Offered']
     return(
         <>
         <TableContainer
@@ -59,8 +58,6 @@ function RequireAttention() {
                     <Td textAlign='center'>40</Td>
                     <Td textAlign='center'>33</Td>
                     <Td textAlign='center'>7</Td>
-                    <Td textAlign='center'>40</Td>
-                    <Td textAlign='center'>2</Td>
                 </Tr>
                 <Tr
                 _hover={{backgroundColor: 'tcs.bluey'}}
@@ -84,8 +81,6 @@ function RequireAttention() {
                     <Td textAlign='center'>40</Td>
                     <Td textAlign='center'>33</Td>
                     <Td textAlign='center'>7</Td>
-                    <Td textAlign='center'>40</Td>
-                    <Td textAlign='center'>2</Td>
                 </Tr>
                 <Tr
                 _hover={{backgroundColor: 'tcs.bluey'}}
@@ -109,8 +104,6 @@ function RequireAttention() {
                     <Td textAlign='center'>40</Td>
                     <Td textAlign='center'>33</Td>
                     <Td textAlign='center'>7</Td>
-                    <Td textAlign='center'>40</Td>
-                    <Td textAlign='center'>2</Td>
                 </Tr>
                 <Tr 
                 _hover={{backgroundColor: 'tcs.bluey'}}
@@ -134,8 +127,6 @@ function RequireAttention() {
                     <Td textAlign='center'>40</Td>
                     <Td textAlign='center'>33</Td>
                     <Td textAlign='center'>7</Td>
-                    <Td textAlign='center'>40</Td>
-                    <Td textAlign='center'>2</Td>
                 </Tr>
                 </Tbody>
             </Table>

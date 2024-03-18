@@ -1,4 +1,4 @@
-import { Box, Button, Grid, GridItem, Text } from "@chakra-ui/react";
+import { Avatar, Box, Button, Flex, Grid, GridItem, Menu, MenuButton, MenuItem, MenuList, Text, Wrap, WrapItem } from "@chakra-ui/react";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import React, { useEffect, useState } from "react";
@@ -9,6 +9,7 @@ import Applicants from "./applicants/Applicants";
 import JobPortal from "../applicant-views/job-portal/JobPortal";
 import Account from "../applicant-views/account/Account";
 import AdminAccount from "./account/AdminAccount";
+import { ChevronDownIcon } from "@chakra-ui/icons";
 function MainAdminView() {
     const navigate = useNavigate();
     const [adminData, setAdminData] = useState({});
@@ -76,16 +77,19 @@ function MainAdminView() {
             position='fixed'
             zIndex='1'
             >
-                <Box>
-                    <Button
-                    size='xs'
-                    colorScheme='red'
-                    margin='10px'
-                    float='right'
-                    onClick={logOut}
-                    borderRadius='0'
-                    >Logout</Button>
-                </Box>
+                <Flex justify='flex-end' align='center' margin='10px'>
+                    <Menu>
+                    <MenuButton as={Button} rightIcon={<ChevronDownIcon />} maxW='100%' variant='ghost'>
+                        <Flex align='center'>
+                            <Avatar size='xs'/>
+                            <Text ml='5px' fontSize='14px'>{adminData.firstNameM} {adminData.lastNameM} {adminData.admin?.toString() === 'true' && '(admin)'}</Text>
+                        </Flex>
+                    </MenuButton>
+                    <MenuList>
+                        <MenuItem onClick={logOut} size='sm'>Logout</MenuItem>
+                    </MenuList>
+                    </Menu>
+                </Flex>
             </GridItem>
 
             <GridItem
@@ -103,6 +107,7 @@ function MainAdminView() {
             </GridItem>
 
             <GridItem
+            mt='20px'
             bg='#white'
             area={'main'}
             padding='10px'

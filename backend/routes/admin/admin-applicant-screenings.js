@@ -1,7 +1,7 @@
 const express = require('express');
 const JobApplication = require('../../models/jobApplications');
 const router = express.Router();
-const {generateInterviewToken, sendInterviewInvite, sendDemoInvite} = require('../../configs/email-config');
+const {generateInterviewToken, sendInterviewInvite, sendDemoInvite, sendOnboardingRequirementsChecklist} = require('../../configs/email-config');
 const Applicant = require('../../models/applicants');
 const fs = require('fs');
 const Criteria = require('../../models/criteria');
@@ -82,7 +82,8 @@ router.get('/get-interview-responses/:details', (req, res, next) => {
 router.get('/get-applicant-criteria-scores/:id', async (req, res, next) => {
   const details = JSON.parse(req.params.id, 'ha')
   const jobApplication = await JobApplication.find({_id: details.applicantID})
-  if (!Object.keys(jobApplication[0].interviewCriteriaScoresM)) {
+  if (Object.keys(jobApplication[0].interviewCriteriaScoresM).length === 0) {
+    console.log('dahell')
     const freshCriteria = {}
     const criteria = await Criteria.find()
 
@@ -92,6 +93,7 @@ router.get('/get-applicant-criteria-scores/:id', async (req, res, next) => {
     res.send(freshCriteria)
 
   } else {
+    console.log('fush you')
     res.send(jobApplication[0].interviewCriteriaScoresM)
   }
   
@@ -121,20 +123,19 @@ router.post('/send-demo-invite', (req, res, next) => {
 })
 
 router.post('/send-onboarding-invite', (req, res, next) => {
-  console.log('woah')
-  console.log(req.body)
-  JobApplication.updateOne({_id: req.body._id}, {currentStepM: 'waitingForOnboardingRequirementsSubmission'})
+  Applicant.find({_id: req.body.applicantIDForeignKeyM})
+    .then(applicant => {
+      sendOnboardingRequirementsChecklist(applicant[0].emailM, req.body.positionAppliedToM, applicant[0].firstNameM)
+        .then(() => {
+          JobApplication.updateOne({_id: req.body._id}, {currentStepM: 'waitingForOnboardingRequirementsSubmission'})
+            .then(result => res.send(result))
+        })
+    })
+})
+
+router.post('/finish-hiring', (req, res, next) => {
+  JobApplication.updateOne({_id: req.body._id}, {currentStepM: 'finishedHiringApplicant'})
     .then(result => res.send(result))
-  // sendDemoInvite(req.body.applicantJoinedDetails[0].emailM, req.body.positionAppliedToM, req.body.applicantJoinedDetails[0].firstNameM)
-  //   .then(() => {
-  //     JobApplication.updateOne({_id: req.body._id}, {currentStepM: 'waitingForTeachingDemoSubmission'})
-  //       .then(result => {
-  //         JobApplication.find({_id: req.body._id})
-  //           .then(result => {
-  //             res.send(result)
-  //           })
-  //       })
-  //   })
 })
 
 module.exports = router;

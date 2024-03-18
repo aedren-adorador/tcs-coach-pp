@@ -4,6 +4,7 @@ import ReviewApplication from "./ReviewApplication";
 import InterviewFeedback from "./InterviewFeedback";
 import TeachingDemoFeedback from "./TeachingDemoFeedback";
 import OnboardingRequirements from "./OnboardingRequirements";
+import FinishHiring from "./FinishHiring";
 
 function ReviewSubmissionsStepper({clickedButton, chosenApplicantAllJobApplicationDetails, setChosenApplicantAllJobApplicationDetails}) {   
     const steps = [
@@ -22,9 +23,6 @@ function ReviewSubmissionsStepper({clickedButton, chosenApplicantAllJobApplicati
     useEffect(()=> {
        setActiveStep(steps.findIndex(step => step.description === clickedButton))
     },[clickedButton])
-
-    // useEffect(() => {
-    // }, [chosenApplicantAllJobApplicationDetails])
 
     return(
         <>
@@ -66,7 +64,9 @@ function ReviewSubmissionsStepper({clickedButton, chosenApplicantAllJobApplicati
 
         {clickedButton === 'Interview Feedback' && <InterviewFeedback chosenApplicantAllJobApplicationDetails={chosenApplicantAllJobApplicationDetails}/>}
         {clickedButton === 'Teaching Demo Feedback' && <TeachingDemoFeedback chosenApplicantAllJobApplicationDetails={chosenApplicantAllJobApplicationDetails}/>}
-        {clickedButton === 'Onboarding Requirements' && <OnboardingRequirements/>}
+        {clickedButton === 'Onboarding Requirements' && <OnboardingRequirements chosenApplicantAllJobApplicationDetails={chosenApplicantAllJobApplicationDetails}/>}
+
+        {clickedButton === 'Finish Hiring' && <FinishHiring chosenApplicantAllJobApplicationDetails={chosenApplicantAllJobApplicationDetails}/>}
         </>
     )
 }

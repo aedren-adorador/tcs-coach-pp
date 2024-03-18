@@ -40,8 +40,10 @@ function Applicants() {
         } else if (jobApp.currentStepM === 'waitingForOnboardingRequirementsSubmission') {
             setClickedButton('Teaching Demo Feedback')
         } else if (jobApp.currentStepM === 'submittedOnboardingRequirements') {
-            setClickedButton('Teaching Demo Feedback')
-        }
+            setClickedButton('Onboarding Requirements')
+        } else if (jobApp.currentStepM === 'finishedHiringApplicant') {
+            setClickedButton('Review Application')
+        } 
     }
 
     useEffect(() => {
@@ -71,6 +73,10 @@ function Applicants() {
             setApplicantButtons(['All Applicants', 'Review Application', 'Interview Feedback', 'Teaching Demo Feedback'])
         } else if (chosenApplicantAllJobApplicationDetails.currentStepM === 'waitingForOnboardingRequirementsSubmission') {
             setApplicantButtons(['All Applicants', 'Review Application', 'Interview Feedback', 'Teaching Demo Feedback'])
+        } else if (chosenApplicantAllJobApplicationDetails.currentStepM === 'submittedOnboardingRequirements') {
+            setApplicantButtons(['All Applicants', 'Review Application', 'Interview Feedback', 'Teaching Demo Feedback', 'Onboarding Requirements', 'Finish Hiring'])
+        } else if (chosenApplicantAllJobApplicationDetails.currentStepM === 'finishedHiringApplicant') {
+            setApplicantButtons(['All Applicants', 'Review Application', 'Interview Feedback', 'Teaching Demo Feedback', 'Onboarding Requirements'])
         }
     }, [chosenApplicantAllJobApplicationDetails])
    

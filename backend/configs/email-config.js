@@ -91,7 +91,7 @@ async function sendForgotPasswordVerification(emailAddressInput, token) {
     })
 }
 
-
+// Email settings for sending demo invite email
 async function sendDemoInvite(emailAddressInput, position, applicantName) {
   await transporter.sendMail({
       from: process.env.USER_EMAIL,
@@ -114,4 +114,48 @@ async function sendDemoInvite(emailAddressInput, position, applicantName) {
       `
     })
 }
-module.exports = {generateVerificationToken, generateInterviewToken, sendEmail, sendInterviewInvite, generateNewPasswordToken, sendNewPasswordVerification, generateNewEmailToken, sendNewEmailVerification, generateForgotPasswordToken, sendForgotPasswordVerification, sendDemoInvite};
+
+// Email settings for sending onboarding requirements
+async function sendOnboardingRequirementsChecklist(emailAddressInput, position, applicantName) {
+  await transporter.sendMail({
+      from: process.env.USER_EMAIL,
+      to: emailAddressInput,
+      subject: "Congratulations — You Have Successfully Passed The Coding School's Application Process",
+      html: `
+      <p style='font-size: 14px'>Dear ${applicantName}</p><br />
+      <p>We are thrilled to inform you that you have successfully passed The Coding School's application process for the
+      ${position} position! Congratulations on this significant achievement!</p>
+      
+      <p>Your dedication, skills, and passion have truly stood out during the entire selection process. We are confident that you will make a valuable addition to our team and contribute positively to The Coding School's mission.</p>
+      
+      <p>Our operations team will be in touch with you regarding your offer letter.</p>
+      <p>We are excited to have you on board and look forward to seeing your contributions to our organization. Below are the specific steps and requirements that you need to submit should you decide to sign the offer letter.</p>
+      <ol>
+          <li>Create a Google Drive Folder with the format: FirstName-LastName-Position (Ex. Cheryl-Siy-SoftwareEngineer)</li>
+          <li>Make the folder access: "Viewer" and "Anyone with the link"</li>
+          <li>Kindly upload the following digital files in the folder:
+              <ul>
+                  <li>Birth Certificate</li>
+                  <li>BIR Income Tax Return (if applicable)</li>
+                  <li>2 Valid IDs</li>
+                  <li>NBI Clearance (valid for the current year period)</li>
+              </ul>
+          </li>
+          <li>Plot your week availability in this When2Meet Link for the Shadow Teaching</li>
+          <li>Enroll in this Google Classroom: * insert link here *. Screenshot and upload the proof to the Google Drive Folder.</li>
+      </ol>
+
+      <p>
+          Once again, congratulations on this accomplishment! We are thrilled to welcome you to The Coding School community and
+          are confident that you will excel in your new role.
+          
+          If you have any questions or need further assistance, please do not hesitate to contact us at [provide contact
+          information].
+      </p>
+
+      <p>Warm regards,</p><br/>
+      <p>The Coding School Recruitment Team</p>
+      `
+    })
+}
+module.exports = {generateVerificationToken, generateInterviewToken, sendEmail, sendInterviewInvite, generateNewPasswordToken, sendNewPasswordVerification, generateNewEmailToken, sendNewEmailVerification, generateForgotPasswordToken, sendForgotPasswordVerification, sendDemoInvite, sendOnboardingRequirementsChecklist};

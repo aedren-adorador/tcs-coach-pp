@@ -1,117 +1,75 @@
-import { Text, Grid, GridItem, Flex, Card, CardBody, Button, HStack, FormControl, FormLabel, Switch, Box } from "@chakra-ui/react";
-import React from "react";
+import { Badge, Box, Button, Card, CardBody, Checkbox, Flex, Grid, GridItem, Input, InputGroup, Link, List, ListItem, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Skeleton, Spinner, Stack, Table, TableCaption, TableContainer, Tbody, Td, Text, Textarea, Tfoot, Th, Thead, Tr, VStack, useDisclosure } from "@chakra-ui/react";
+import React, { useEffect, useRef, useState } from "react";
+import axios from "axios";
+import { EditIcon } from "@chakra-ui/icons";
+import { LinkOutlined, UserOutlined } from "@ant-design/icons";
 
-function OnboardingRequirements() {
-    const onboardingRequirements = [
-        'Google Classroom Enrollment', 
-        'In-service Training',
-        'Signed Contract',
-        'Shadow Teaching'
-    ]
+function OnboardingRequirements(chosenApplicantAllJobApplicationDetails) {
+    const { isOpen, onOpen, onClose } = useDisclosure()
+    const [isSendingOnboardingRequirementsChecklist, setIsSendingOnboardingRequirementsChecklist] = useState(false);
+    const [isOnboardingRequirementsEmailSent, setIsOnboardingRequirementsEmailSent] = useState(false);
+    const finalRef = useRef(null)
+    const [onboardingChecklist, setOnboardingChecklist] = useState(['Google Classroom Enrollment', 'Signed Contract', 'Shadow Training', 'Birth Certificate', 'NBI Clearance', '2 Valid IDs'])
+
+
+    useEffect(() => {
+        
+    }, [])
+
+    useEffect(() => {
+    }, [isOnboardingRequirementsEmailSent, chosenApplicantAllJobApplicationDetails])
+
+
+
     return(
-        <> 
-        <Text
-        mt='40px'
+        <>
+        <Text fontSize='30px' color='black' fontWeight='500' mb='10px'>
+        <UserOutlined/>&nbsp;
+        {chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0].firstNameM}&nbsp;
+        {chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0].lastNameM}
+        </Text>
+        <Grid
         mb='20px'
-        fontWeight='1000'
-        color='black'
-        >Onboarding Requirements</Text>
-        <Grid
-        templateColumns='repeat(2, 1fr)'
-        gap={5}
+        minW='1000px'
+        minH='200px'
+        height='150px'
+        templateColumns='repeat(1, 1fr)'
+        gap='5'
         >
-            <GridItem
-            >
-                <Flex
-                justify='center'
-                align='center'
-                height='100%'
-                >
-                    <Card
-                    width='200px'
-                    >
-                        <CardBody>
-                            Progress Here
-                        </CardBody>
-                    </Card>
+            <GridItem border='solid 0.2px lightgray'>
+                <Flex justify='center' align='center' height='100%'>
+                    <Link href={chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.onboardingRequirementsM} target='_blank'>
+                        <Button fontSize='30px' bg='tcs.main' color='white' _hover={{backgroundColor: 'darkblue'}}padding='20px'>Review Onboarding Requirements Here &nbsp; <LinkOutlined></LinkOutlined></Button>
+                    </Link>
                 </Flex>
-            </GridItem>
-            <GridItem
-            >
-                <Flex
-                direction='column'
-                gap={3}
-                width='100%'
-                align='center'
-                >
-                    <Button
-                    borderRadius='30px'
-                    fontSize='12px'
-                    width='270px'
-                    height='60px'
-                    backgroundColor='#DBF6E5'
-                    fontWeight='300'
-                    color='black'
-                    _hover={{color: 'white', bg:'green'}}
-                    >Send Incomplete Step 4 Reminder</Button>
-
-                    <Button
-                    borderRadius='30px'
-                    fontSize='12px'
-                    width='270px'
-                    height='60px'
-                    backgroundColor='#F7E1E1'
-                    fontWeight='300'
-                    color='black'
-                    _hover={{color: 'white', bg:'darkred'}}
-                    >Finish Step 4</Button>
-                </Flex>
+                
             </GridItem>
         </Grid>
 
-        <Grid
-        margin='20px 100px 0px 170px'
-        templateColumns='repeat(2, 1fr)'>
-            <GridItem
-            >
-                 {onboardingRequirements.map((requirement, index) => {
-                    return <Text>{requirement}</Text>
-            })}
+        <Text
+        mb='20px'
+        fontWeight='600'
+        color='black'
+        >Onboarding Requirements Checklist</Text>
+        <Box mb='50px'>
+            {onboardingChecklist.map((item, i) => (
+                <Box>
+                   <Stack spacing={5} direction='row'>
+                    <List>
+                        <ListItem>{i+1}. {item}</ListItem>
+                    </List>
+                    </Stack>
+                
+                </Box>
+            ))}
+        </Box>
+        
 
-            </GridItem>
-            <GridItem
-            > 
-    
-                 {onboardingRequirements.map((requirement, index) => {
-                    return <FormControl display='flex' alignItems='center'>
-                            <FormLabel htmlFor='email-alerts' mb='0'>
-                                No
-                            </FormLabel>
-                            <Switch id='email-alerts' />
-                             <FormLabel htmlFor='email-alerts' mb='0'>
-                                Yes
-                            </FormLabel>
-                        </FormControl>
-            })}
-            </GridItem>
-
-        </Grid>
-       
+        
+        
         </>
     )
 }
-
-<Box border='solid green' display='inline-block'>
-                        <FormControl display='flex' alignItems='center'>
-                            <FormLabel htmlFor='email-alerts' mb='0'>
-                                No
-                            </FormLabel>
-                            <Switch id='email-alerts' />
-                             <FormLabel htmlFor='email-alerts' mb='0'>
-                                Yes
-                            </FormLabel>
-                        </FormControl>
-                    </Box>
 
 
 export default OnboardingRequirements;

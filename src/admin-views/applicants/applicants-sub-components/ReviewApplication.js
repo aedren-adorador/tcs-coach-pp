@@ -244,7 +244,7 @@ function ReviewApplication({chosenApplicantAllJobApplicationDetails, setChosenAp
             gap='5'
             mb='20px'
             >
-                {chosenApplicantAllJobApplicationDetails.currentStepM === 'submittedInitialApplication' &&
+                {chosenApplicantAllJobApplicationDetails.currentStepM === 'waitingForInterviewSubmission' &&
                 <Badge
                 bg='tcs.creamy'
                 padding='5px'
@@ -257,7 +257,7 @@ function ReviewApplication({chosenApplicantAllJobApplicationDetails, setChosenAp
                 variant='outline'
                 colorScheme='red'
                 borderRadius='0px'
-                display={chosenApplicantAllJobApplicationDetails.currentStepM === 'submittedInitialApplication' || chosenApplicantAllJobApplicationDetails.currentStepM ==='submittedVideoInterview' || chosenApplicantAllJobApplicationDetails.currentStepM ==='waitingForTeachingDemoSubmission' || chosenApplicantAllJobApplicationDetails.currentStepM ==='submittedTeachingDemo' ? 'none' : ''}
+                display={chosenApplicantAllJobApplicationDetails.currentStepM ==='submittedInitialApplication' ? '' : 'none'}
                 >
                     Send Rejection Email
                 </Button>
@@ -274,8 +274,9 @@ function ReviewApplication({chosenApplicantAllJobApplicationDetails, setChosenAp
                 >
                 </Button>
                 :
+                <>
                  <Button
-                display={chosenApplicantAllJobApplicationDetails.currentStepM === 'waitingForInterviewSubmission' || chosenApplicantAllJobApplicationDetails.currentStepM ==='submittedVideoInterview' || chosenApplicantAllJobApplicationDetails.currentStepM ==='waitingForTeachingDemoSubmission' || chosenApplicantAllJobApplicationDetails.currentStepM ==='submittedTeachingDemo' ? 'none' : ''}
+                display={chosenApplicantAllJobApplicationDetails.currentStepM ==='submittedInitialApplication' ? '' : 'none'}
                 size='sm'
                 bg='tcs.mongo'
                 color='white'
@@ -285,6 +286,7 @@ function ReviewApplication({chosenApplicantAllJobApplicationDetails, setChosenAp
                 >
                     Send Interview Invite
                 </Button>
+                </>
                 }
                
             </Flex>

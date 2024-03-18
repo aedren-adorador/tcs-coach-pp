@@ -1,9 +1,10 @@
 import { HStack, Card, CardBody, Box, Image, Text } from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import reviewApplication from '../../admin-view-imgs/review-application.png'
 import interviewFeedback from '../../admin-view-imgs/interview-feedback.png'
 import teachingDemoFeedback from '../../admin-view-imgs/teaching-demo-feedback.png'
 import preEmploymentRequirements from '../../admin-view-imgs/pre-employment-requirements.png'
+import axios from "axios";
 
 function Overview() {
   const boxesOverview = [
@@ -13,6 +14,15 @@ function Overview() {
     reviewApplication, interviewFeedback, teachingDemoFeedback, preEmploymentRequirements
   ]
 
+  const [jobApplications, setJobApplications] = useState([]);
+
+  useEffect(() => {
+    axios.get(`${process.env.REACT_APP_SYS_URL}/api/general-request/get-job-apps-summary`)
+      .then(response => setJobApplications(response.data))
+  }, [])
+
+  useEffect(() => {
+  }, [jobApplications])
   return (
     <>
       <Text
@@ -37,8 +47,6 @@ function Overview() {
           position="relative"
           shadow='none'
           backgroundColor='#F3F8FF'
-
-          _hover={{color: 'teal', border:'solid'}}
           >
             <Box
             backgroundColor='#F3F8FF'
@@ -53,7 +61,6 @@ function Overview() {
             alignItems="center"
             borderRadius='15px'
             borderColor='lightgray'
-            _hover={{color: 'teal', border:'solid'}}
             >
               10
             </Box>

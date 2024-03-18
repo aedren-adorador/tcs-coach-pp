@@ -119,6 +119,25 @@ function AllApplicants({applicants, updateChosenApplicantToReview, handleButtonC
                             fontSize='8px'
                             fontWeight='500'
                             >Waiting for Onboarding Requirements Submission</Badge>}
+
+                            {jobApp.currentStepM === 'submittedOnboardingRequirements' &&
+                            <Badge
+                            border='solid 0.2px lightgray'
+                            bg='tcs.limey'
+                            padding='5px'
+                            fontSize='8px'
+                            fontWeight='500'
+                            >Onboarding Requirements Sent</Badge>}
+
+                            {jobApp.currentStepM === 'finishedHiringApplicant' &&
+                            <Badge
+                            border='solid 0.2px lightgray'
+                            bg='tcs.limey'
+                            padding='5px'
+                            fontSize='8px'
+                            fontWeight='500'
+                            >HIRED APPLICANT</Badge>}
+
                         </Td>
                         <Td textAlign='center'>
                             {jobApp.currentStepM === 'submittedInitialApplication' && 'NA'}
@@ -126,7 +145,9 @@ function AllApplicants({applicants, updateChosenApplicantToReview, handleButtonC
                             {jobApp.currentStepM === 'submittedVideoInterview' && 'NA'}
                             {jobApp.currentStepM === 'waitingForTeachingDemoSubmission' && 'NA'}
                             {jobApp.currentStepM === 'submittedTeachingDemo' && 'NA'}
-                            {jobApp.currentStepM === 'waitingForOnboardingRequirementsSubmission' && 'NA'}
+                            {jobApp.currentStepM === 'waitingForOnboardingRequirementsSubmission' && 'Offer Sent'}
+                            {jobApp.currentStepM === 'submittedOnboardingRequirements' && 'Offer Accepted'}
+                            {jobApp.currentStepM === 'finishedHiringApplicant' && 'Offer Accepted'}
                         </Td>
                     </Tr>
                     }

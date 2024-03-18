@@ -35,6 +35,7 @@ const jobApplication = mongoose.Schema({
     dateSubmittedOnboardingRequirementsM: {type: Date, required: false, default: ''},
     deadlineDateOnboardingRequirementsM: {type: Date, required: false, default: ''},
     onboardingRequirementsTokenM: {type: String, required: false, default: ''},
+    onboardingRequirementsM: {type: String, required: false, default: ''},
  
     finalVerdictM: {type: String, required: false, default: ''}
 })

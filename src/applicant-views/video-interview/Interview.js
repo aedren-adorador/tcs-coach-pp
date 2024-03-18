@@ -220,7 +220,7 @@ function Interview() {
                                 colorScheme='tcs'
                                 />
                             </Card>
-                            <Button
+                            {/* <Button
                             width='50%'
                             fontSize='12px'
                             borderRadius='0px'
@@ -239,6 +239,21 @@ function Interview() {
                              }}
                             >
                                 <RedoOutlined/>
+                                &nbsp;Retry
+                            </Button> */}
+                            <Button
+                                width='50%'
+                                fontSize='12px'
+                                borderRadius='0px'
+                                display={recording.status === 'STOPPED' ? '' : 'none'}
+                                onClick={() => {
+                                    startRecording(recording.id);
+                                    setAnswerTime(180);
+                                    setAnswerTimer('00:00');
+                                    setAnswerTimerProgress(0);
+                                }}
+                            >
+                                <RedoOutlined />
                                 &nbsp;Retry
                             </Button>
                             <Button

@@ -233,7 +233,7 @@ function InterviewFeedback(chosenApplicantAllJobApplicationDetails, setChosenApp
                 >
                    
                     <Button
-                    display={chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.currentStepM !== 'waitingForTeachingDemoSubmission' ? '' : 'none'}
+                    display={chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.currentStepM === 'submittedVideoInterview' ? '' : 'none'}
                     size='sm'
                     variant='outline'
                     colorScheme='red'
@@ -253,19 +253,8 @@ function InterviewFeedback(chosenApplicantAllJobApplicationDetails, setChosenApp
                     </Badge>
                      
                   
-                    <Button
-                    size='sm'
-                    display={chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.currentStepM !== 'waitingForTeachingDemoSubmission' && !isSendingDemoInvite ? '' : 'none'}
-                    bg='tcs.mongo'
-                    color='white'
-                    colorScheme='green'
-                    borderRadius='0px'
-                    onClick={onOpen}
-                    width='270px'
-                    >
-                        Send Teaching Demo Invite
-                    </Button> 
-                    {isSendingDemoInvite &&
+                    
+                    {isSendingDemoInvite ?
                     <Button
                     isLoading
                     loadingText='Sending Teaching Demo Invite'
@@ -277,7 +266,20 @@ function InterviewFeedback(chosenApplicantAllJobApplicationDetails, setChosenApp
                     onClick={onOpen}
                     width='270px'
                     >
-                    </Button>}
+                    </Button>:
+                    <Button
+                    size='sm'
+                    display={chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.currentStepM === 'submittedVideoInterview' ? '' : 'none'}
+                    bg='tcs.mongo'
+                    color='white'
+                    colorScheme='green'
+                    borderRadius='0px'
+                    onClick={onOpen}
+                    width='270px'
+                    >
+                        Send Teaching Demo Invite
+                    </Button> 
+                    }
                      <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
                         <ModalOverlay />
                         <ModalContent

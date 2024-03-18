@@ -9,7 +9,8 @@ import { Form } from "formik";
 function MyApplication({applicantData, setObtainedActiveNavButton}) {
     const navigate = useNavigate();
     const [isSendingDemoLink, setIsSendingDemoLink] = useState(false)
-    const [demoLink, setDemoLink] = useState('')
+    const [demoLink, setDemoLink] = useState('');
+    const [onboardingLink, setOnboardingLink] = useState('');
     const [submittedJobApplicationDetails, setSubmittedJobApplicatioDetails] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -167,11 +168,29 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                         fontWeight='500'
                         padding='5px'
                         >Active: Waiting for Onboarding <br></br> Requirements Submission</Badge>}
+
+                         {i[0].currentStepM === 'submittedOnboardingRequirements' &&
+                        <Badge
+                        bg='tcs.limey'
+                        color='black'
+                        fontWeight='500'
+                        padding='5px'
+                        >Accepted Offer and Submitted <br></br>Onboarding Requirements</Badge>}
+
+                        {i[0].currentStepM === 'finishedHiringApplicant' &&
+                        <Badge
+                        bg='tcs.limey'
+                        color='black'
+                        fontWeight='500'
+                        padding='5px'
+                        >CONGRATULATIONS! <br /> YOU ARE HIRED</Badge>}
                         </Skeleton>
                     </Td>
                     <Td>
                         <Flex direction='column' gap='2'>
-                            <Button size='xs' borderRadius='0px' colorScheme='blue' onClick={onOpenViewApplication}>View Application </Button>
+                            <Button size='xs' borderRadius='0px' colorScheme='blue' onClick={onOpenViewApplication}
+                            display={i[0].currentStepM === 'finishedHiringApplicant' ? 'none': ''}
+                            >View Application </Button>
                             <Modal isOpen={isOpenViewApplication} onClose={onCloseViewApplication}>
                                 <ModalOverlay />
                                 <ModalContent borderRadius='0px' maxW='800px'>
@@ -214,7 +233,9 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                             </Modal>
 
 
-                            <Button size='xs' colorScheme='red' variant='outline' borderRadius='0px'onClick={onOpen}>Withdraw Application</Button>
+                            <Button size='xs' colorScheme='red' variant='outline' borderRadius='0px'onClick={onOpen}
+                            display={i[0].currentStepM === 'submittedOnboardingRequirements' || i[0].currentStepM === 'finishedHiringApplicant' ? 'none': ''}
+                            >Withdraw Application</Button>
                             <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
                                 <ModalOverlay />
                                 <ModalContent borderRadius='0px'>
@@ -231,7 +252,7 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                                     </Button>
                                     <Button variant='ghost' colorScheme='red' borderRadius='0px' onClick={() => {
                                         onClose()
-                                        handleWithdrawApplication(applicantData.jobApplicationsM[0], applicantData._id)
+                                        handleWithdrawApplication(i[0]._id, applicantData._id)
                                     }}>Withdraw</Button>
                                 </ModalFooter>
                                 </ModalContent>
@@ -290,6 +311,7 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                 <Thead>
                 <Tr>
                     <Th width='150px'></Th>
+                    <Th>Position Applied To</Th>
                     <Th>Task Name</Th>
                     <Th>Deadline</Th>
                     <Th>Action</Th>
@@ -303,14 +325,16 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                     <Td textAlign='center'>
                         <WarningIcon style={{ fontSize: '45px', color: 'red' }} />
                     </Td>
+                    <Td>{i[0].positionAppliedToM}</Td>
                     <Td>
                         {i[0].currentStepM === '' && '—'}
-                        {i[0].currentStepM === 'submittedInitialApplication' && `No tasks yet for ${submittedJobApplicationDetails[0][0].positionAppliedToM}`}
+                        {i[0].currentStepM === 'submittedInitialApplication' && <Text>No tasks yet</Text>}
                         {i[0].currentStepM === 'waitingForInterviewSubmission' && 'Take Asynchronous Video Interview'}
-                        {i[0].currentStepM === 'submittedVideoInterview' && 'No tasks yet'}
+                        {i[0].currentStepM === 'submittedVideoInterview' && <Text>No tasks yet</Text>}
                         {i[0].currentStepM === 'waitingForTeachingDemoSubmission' && 'Submit Teaching Demo Link'}
-                        {i[0].currentStepM === 'submittedTeachingDemo' && `No tasks yet`}
+                        {i[0].currentStepM === 'submittedTeachingDemo' && <Text>No tasks yet</Text>}
                         {i[0].currentStepM === 'waitingForOnboardingRequirementsSubmission' && `Submit Onboarding Requirements`}
+                        {i[0].currentStepM === 'submittedOnboardingRequirements' && <Text>No tasks yet for <br /> {submittedJobApplicationDetails[0][0].positionAppliedToM} position</Text>}
                     </Td>
                     <Td>
                         {i[0].currentStepM === '' && '—'}
@@ -328,6 +352,7 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                         <Text fontSize='12px'>Please submit as soon as you can so we<br></br> can process your employe details faster <br></br></Text>
                         </>
                         }
+                        {i[0].currentStepM === 'submittedOnboardingRequirements' && '—'}
 
                     </Td>
                     <Td>
@@ -383,29 +408,44 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                             <Input
                             placeholder="Paste link here..."
                             required
-                            onChange={(e) => setDemoLink(e.target.value)}
-                            value={demoLink}
+                            onChange={(e) => setOnboardingLink(e.target.value)}
+                            value={onboardingLink}
                             border='0.2px solid'
                             >
                             </Input>
                             </FormControl>
                             <Flex justify='flex-end'>
                             {!isSendingDemoLink ?
+                            <>
+                            <Button variant='outline' colorScheme='red' size='sm' borderRadius='0px' mr='2' display={onboardingLink.trim() ? '' : 'none'}>Reject Job Offer</Button>
                             <Button colorScheme='green' size='sm' borderRadius='0px' type='submit'
-                            display={demoLink.trim() ? '' : 'none'}
+                            display={onboardingLink.trim() ? '' : 'none'}
                             onClick={() => {
-                                // axios.post(`${process.env.REACT_APP_SYS_URL}/api/applicant/demo-request/submit-demo-link`, {demoLink: demoLink, submittedJobApplicationDetails})
-                                //     .then(response => window.location.reload())
+                                axios.post(`${process.env.REACT_APP_SYS_URL}/api/applicant/onboarding-request/submit-onboarding-link`, {onboardingLink: onboardingLink, submittedJobApplicationDetails})
+                                    .then(response => window.location.reload())
                             }}
-                            >Submit</Button>:
-                            <Button isLoading loadingText='Submitting Demo' size='sm' colorScheme="green"  borderRadius='0px'></Button>}
+                            >Submit</Button></>:
+                            <Button isLoading loadingText='Submitting Onboarding Reqs' size='sm' colorScheme="green"  borderRadius='0px'></Button>
+                            }
+
+                           
                             </Flex>
                             </>
                         )}
+                         {i[0].currentStepM === 'submittedOnboardingRequirements' && '—'}
                     </Td>
                     </Tr>
                 ))
-                ) : null}
+                ) : 
+                    <>
+                    <Tr>
+                        <Td></Td>
+                        <Td>No Tasks Yet</Td>
+                        <Td>—</Td>
+                        <Td>—</Td>
+                    </Tr>
+                    </>
+                    }
 
                 </Tbody>
                 <Modal isOpen={isOpenInterview} onClose={onCloseInterview}>
