@@ -16,6 +16,8 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const { isOpen: isOpenInterview, onOpen:onOpenInterview, onClose: onCloseInterview } = useDisclosure()
     const { isOpen: isOpenViewApplication, onOpen:onOpenViewApplication, onClose: onCloseViewApplication } = useDisclosure()
+    const { isOpen: isOpenTeachingDemo, onOpen:onOpenTeachingDemo, onClose: onCloseTeachingDemo } = useDisclosure()
+    const { isOpen: isOpenOnboardingReqs, onOpen:onOpenOnboardingReqs, onClose: onCloseOnboardingReqs } = useDisclosure()
     const finalRef = useRef(null)
 
     const redirectToVideoInterview = () => {
@@ -334,7 +336,7 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                         {i[0].currentStepM === 'waitingForTeachingDemoSubmission' && 'Submit Teaching Demo Link'}
                         {i[0].currentStepM === 'submittedTeachingDemo' && <Text>No tasks yet</Text>}
                         {i[0].currentStepM === 'waitingForOnboardingRequirementsSubmission' && `Submit Onboarding Requirements`}
-                        {i[0].currentStepM === 'submittedOnboardingRequirements' && <Text>No tasks yet for <br /> {submittedJobApplicationDetails[0][0].positionAppliedToM} position</Text>}
+                        {i[0].currentStepM === 'submittedOnboardingRequirements' && <Text>No tasks yet</Text>}
                     </Td>
                     <Td>
                         {i[0].currentStepM === '' && '—'}
@@ -375,7 +377,6 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                             <>
                             <FormControl mb='2'>
                             <FormHelperText>Submit Teaching Demo Link Here</FormHelperText>
-                            
                             <Input
                             placeholder="Paste link here..."
                             required
@@ -384,14 +385,43 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                             border='0.2px solid'
                             >
                             </Input>
+
+                             <Modal isOpen={isOpenTeachingDemo} onClose={onCloseTeachingDemo}>
+                                <ModalOverlay />
+                                <ModalContent>
+                                <ModalHeader fontWeight='700'>Teaching Demo Submission</ModalHeader>
+                                <ModalCloseButton />
+                                <ModalBody fontWeight='300' fontSize='14px'>
+                                    Are you sure you want to submit this teaching demo link?
+                                </ModalBody>
+
+                                <ModalFooter>
+                                    <Button
+                                    colorScheme='red'
+                                    mr={3} onClick={onCloseTeachingDemo}
+                                    borderRadius='0px'
+                                    >
+                                    Cancel
+                                    </Button>
+                                    <Button
+                                    onClick={() => {
+                                        axios.post(`${process.env.REACT_APP_SYS_URL}/api/applicant/demo-request/submit-demo-link`, {demoLink: demoLink, submittedJobApplicationDetails})
+                                            .then(response => window.location.reload())
+                                    }}
+                                    fontWeight='300'
+                                    variant='ghost'
+                                    borderRadius='0px'                    
+                                    >Confirm</Button>
+                                </ModalFooter>
+                                </ModalContent>
+                            </Modal>
                             </FormControl>
                             <Flex justify='flex-end'>
                             {!isSendingDemoLink ?
                             <Button colorScheme='green' size='sm' borderRadius='0px' type='submit'
                             display={demoLink.trim() ? '' : 'none'}
                             onClick={() => {
-                                axios.post(`${process.env.REACT_APP_SYS_URL}/api/applicant/demo-request/submit-demo-link`, {demoLink: demoLink, submittedJobApplicationDetails})
-                                    .then(response => window.location.reload())
+                                onOpenTeachingDemo()
                             }}
                             >Submit</Button>:
                             <Button isLoading loadingText='Submitting Demo' size='sm' colorScheme="green"  borderRadius='0px'></Button>}
@@ -413,6 +443,36 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                             border='0.2px solid'
                             >
                             </Input>
+
+                            <Modal isOpen={isOpenOnboardingReqs} onClose={onCloseOnboardingReqs}>
+                                <ModalOverlay />
+                                <ModalContent>
+                                <ModalHeader fontWeight='700'>Teaching Demo Submission</ModalHeader>
+                                <ModalCloseButton />
+                                <ModalBody fontWeight='300' fontSize='14px'>
+                                    Are you sure you want to submit this onboarding requirements link?
+                                </ModalBody>
+
+                                <ModalFooter>
+                                    <Button
+                                    colorScheme='red'
+                                    mr={3} onClick={onCloseOnboardingReqs}
+                                    borderRadius='0px'
+                                    >
+                                    Cancel
+                                    </Button>
+                                    <Button
+                                    onClick={() => {
+                                        axios.post(`${process.env.REACT_APP_SYS_URL}/api/applicant/onboarding-request/submit-onboarding-link`, {onboardingLink: onboardingLink, submittedJobApplicationDetails})
+                                            .then(response => window.location.reload())
+                                    }}
+                                    fontWeight='300'
+                                    variant='ghost'
+                                    borderRadius='0px'                    
+                                    >Confirm</Button>
+                                </ModalFooter>
+                                </ModalContent>
+                            </Modal>
                             </FormControl>
                             <Flex justify='flex-end'>
                             {!isSendingDemoLink ?
@@ -420,10 +480,7 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                             <Button variant='outline' colorScheme='red' size='sm' borderRadius='0px' mr='2' display={onboardingLink.trim() ? '' : 'none'}>Reject Job Offer</Button>
                             <Button colorScheme='green' size='sm' borderRadius='0px' type='submit'
                             display={onboardingLink.trim() ? '' : 'none'}
-                            onClick={() => {
-                                axios.post(`${process.env.REACT_APP_SYS_URL}/api/applicant/onboarding-request/submit-onboarding-link`, {onboardingLink: onboardingLink, submittedJobApplicationDetails})
-                                    .then(response => window.location.reload())
-                            }}
+                            onClick={() => {onOpenOnboardingReqs()}}
                             >Submit</Button></>:
                             <Button isLoading loadingText='Submitting Onboarding Reqs' size='sm' colorScheme="green"  borderRadius='0px'></Button>
                             }

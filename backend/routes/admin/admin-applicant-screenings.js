@@ -53,15 +53,27 @@ router.post('/send-interview-invite', async (req, res, next) => {
   const filteredUpdate = update.filter(jobApp => jobApp._id.toString() === req.body.jobApplicationID)
   const filteredUpdateLevel2 = [{...filteredUpdate[0], currentStepM: 'waitingForInterviewSubmission'}]
   const token = generateInterviewToken(req.body.applicantID, req.body.jobApplicationID)
+
   JobApplication.updateOne({_id: req.body.jobApplicationID}, {currentStepM: 'waitingForInterviewSubmission', interviewTokenM: token, interviewQuestionsM: details.jobQuestions})
     .then(
-      sendInterviewInvite(details.emailAddress, details.position, stringifiedDeadline, details.firstName)
-        .then(result => {
-          JobApplication.updateOne({_id: req.body.jobApplicationID}, {deadlineDateInterviewM: new Date(details.oneWeekDeadline)})
-            .then(
-              res.json({success: 'Interview Invite Sent via Email!', joinedApplicantAndJobApplicationDetails: filteredUpdateLevel2})
-            )  
+      Applicant.find({_id: req.body.applicantID})
+        .then(applicant => {
+          if (applicant[0].isNotifsOnM) {
+            sendInterviewInvite(details.emailAddress, details.position, stringifiedDeadline, details.firstName)
+              .then(result => {
+                JobApplication.updateOne({_id: req.body.jobApplicationID}, {deadlineDateInterviewM: new Date(details.oneWeekDeadline)})
+                  .then(
+                    res.json({success: 'Interview Invite Sent via Email!', joinedApplicantAndJobApplicationDetails: filteredUpdateLevel2})
+                  )  
+              })
+          } else {
+            JobApplication.updateOne({_id: req.body.jobApplicationID}, {deadlineDateInterviewM: new Date(details.oneWeekDeadline)})
+                  .then(
+                    res.json({success: 'Interview Invite Sent via Email!', joinedApplicantAndJobApplicationDetails: filteredUpdateLevel2})
+                  )
+          }
         })
+      
     )
 })
 
@@ -110,7 +122,8 @@ router.post('/save-interview-feedback', (req, res, next) => {
 })
 
 router.post('/send-demo-invite', (req, res, next) => {
-  sendDemoInvite(req.body.applicantJoinedDetails[0].emailM, req.body.positionAppliedToM, req.body.applicantJoinedDetails[0].firstNameM)
+  if (req.body.applicantJoinedDetails[0].isNotifsOnM) {
+    sendDemoInvite(req.body.applicantJoinedDetails[0].emailM, req.body.positionAppliedToM, req.body.applicantJoinedDetails[0].firstNameM)
     .then(() => {
       JobApplication.updateOne({_id: req.body._id}, {currentStepM: 'waitingForTeachingDemoSubmission'})
         .then(result => {
@@ -120,16 +133,31 @@ router.post('/send-demo-invite', (req, res, next) => {
             })
         })
     })
+  } else {
+    JobApplication.updateOne({_id: req.body._id}, {currentStepM: 'waitingForTeachingDemoSubmission'})
+        .then(result => {
+          JobApplication.find({_id: req.body._id})
+            .then(result => {
+              res.send(result)
+            })
+        })
+  }
+  
 })
 
 router.post('/send-onboarding-invite', (req, res, next) => {
   Applicant.find({_id: req.body.applicantIDForeignKeyM})
     .then(applicant => {
-      sendOnboardingRequirementsChecklist(applicant[0].emailM, req.body.positionAppliedToM, applicant[0].firstNameM)
+      if (applicant[0].isNotifsOnM) {
+        sendOnboardingRequirementsChecklist(applicant[0].emailM, req.body.positionAppliedToM, applicant[0].firstNameM)
         .then(() => {
           JobApplication.updateOne({_id: req.body._id}, {currentStepM: 'waitingForOnboardingRequirementsSubmission'})
             .then(result => res.send(result))
         })
+      } else {
+         JobApplication.updateOne({_id: req.body._id}, {currentStepM: 'waitingForOnboardingRequirementsSubmission'})
+            .then(result => res.send(result))
+      }
     })
 })
 

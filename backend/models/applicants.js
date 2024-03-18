@@ -7,6 +7,7 @@ const applicantSchema = mongoose.Schema({
     passwordM: {type: String, required: true},
     admin: {type: String, required: true, default: 'false'},
     jobApplicationsM: {type: Array, required: true, default: []},
+    isNotifsOnM: {type: Boolean, required: true, default: true}
 })
 
 const Applicant = mongoose.model('Applicant', applicantSchema);

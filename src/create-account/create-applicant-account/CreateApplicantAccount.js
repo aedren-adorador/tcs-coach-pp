@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { FormControl, Input, Button, Card, CardBody, Alert, AlertIcon, AlertDescription, FormHelperText, Text, Flex, Box} from "@chakra-ui/react";
+import { FormControl, Input, Button, Card, CardBody, Alert, AlertIcon, AlertDescription, FormHelperText, Text, Flex, Box, Checkbox} from "@chakra-ui/react";
 import { Formik, Form } from "formik";
 import { useNavigate } from "react-router-dom";
 import AuthHeader from "../../auth/AuthHeader";
@@ -9,6 +9,7 @@ import AuthFooter from "../../auth/AuthFooter";
 import { CheckIcon, CloseIcon } from "@chakra-ui/icons";
 
 function CreateApplicantAccount() {
+    const [isNotifsOn, setIsNotifsOn] = useState(true);
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [password, setPassword] = useState('');
@@ -22,7 +23,7 @@ function CreateApplicantAccount() {
     
     const handleSubmit = (initialDetails) => {
         setIsCreatingAccount(true)
-        axios.post(`${process.env.REACT_APP_SYS_URL}/api/auth/create-account`, initialDetails)
+        axios.post(`${process.env.REACT_APP_SYS_URL}/api/auth/create-account`, {...initialDetails, notifs: isNotifsOn})
             .then(
                 setTimeout(() => {
                     setIsAccountCreated(true)
@@ -41,8 +42,7 @@ function CreateApplicantAccount() {
     }, []);
 
     useEffect(() => {
-        
-    }, [password, confirmPassword, firstName, lastName])
+    }, [password, confirmPassword, firstName, lastName, isNotifsOn])
 
     return (
         <>
@@ -171,6 +171,7 @@ function CreateApplicantAccount() {
                             :
                             <Text fontSize='10px' color='red' id='5'> <CloseIcon h='2'/>&nbsp;passwords do not match</Text>
                             }
+                            
 
                             {
                                 isCreatingAccount ?
@@ -229,7 +230,11 @@ function CreateApplicantAccount() {
                             padding='2'
                             >
                                 By creating an account, you agree to our <span style={{color:'darkblue', textDecoration: 'underline'}}>Terms</span> and have read and acknowledge the <span style={{color:'darkblue', textDecoration: 'underline'}}>Global Privacy Statement</span>.
+                                <Flex  mt='10px'>
+                                <Checkbox defaultChecked={isNotifsOn} onChange={() => setIsNotifsOn(prev => !prev)} isRequired={false}/><Text ml='5px' fontSize='10px'>I agree to receive email notifications on my application progress.</Text>
+                            </Flex>
                             </Box>
+                            
                             
                             </FormControl>
                             }

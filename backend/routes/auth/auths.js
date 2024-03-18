@@ -71,12 +71,14 @@ router.post('/login', (req, res, next) => {
 })
 
 router.post('/create-account', (req, res, next) => {
+  console.log(req.body)
   bcrypt.hash(req.body.confirmPassword, 10).then(hash => {
     const newApplicant = new Applicant({
     emailM: req.body.email,
     firstNameM: req.body.firstName,
     lastNameM: req.body.lastName,
-    passwordM: hash
+    passwordM: hash,
+    isNotifsOnM: req.body.notifs
   })
   newApplicant.save()
   })

@@ -1,5 +1,5 @@
 import { CheckIcon, CloseIcon, DragHandleIcon, EditIcon } from "@chakra-ui/icons";
-import { Box, Button, Card, CardBody, CardHeader, Flex, Grid, GridItem, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useDisclosure, useToast } from "@chakra-ui/react";
+import { Box, Button, Card, CardBody, CardHeader, Flex, FormControl, FormLabel, Grid, GridItem, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Switch, Text, useDisclosure, useToast } from "@chakra-ui/react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 function Account({applicantData}) {
     const navigate = useNavigate();
     const toast = useToast();
+    const [isNotifsOn, setIsNotifsOn] = useState(true);
     const [firstName, setFirstName] = useState(applicantData.firstNameM);
     const [lastName, setLastName] = useState(applicantData.lastNameM);
     const [email, setEmail] = useState('');
@@ -104,8 +105,10 @@ function Account({applicantData}) {
     }
 
     useEffect(() => {
-        console.log(email)
+        // console.log(applicantData)
     }, [firstName, lastName, applicantData, email])
+
+    
 
     return(
         <>
@@ -274,6 +277,15 @@ function Account({applicantData}) {
                         </>
                         }
                     </GridItem>
+
+                    {/* <FormControl display='flex' alignItems='center' mt='15px'>
+                        <Text htmlFor='email-alerts' mb='0'>
+                            Enable email alerts?
+                        </Text>
+                        <Switch id='email-alerts' ml='10px' defaultChecked={applicantData.isNotifsOnM} onChange={() => {
+                            console.log('yahoo')
+                        }}/>
+                    </FormControl> */}
                     
                     {isChangePasswordClicked ? 
                     <>
