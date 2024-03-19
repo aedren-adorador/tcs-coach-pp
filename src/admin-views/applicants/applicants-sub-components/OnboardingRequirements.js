@@ -19,8 +19,6 @@ function OnboardingRequirements(chosenApplicantAllJobApplicationDetails) {
     useEffect(() => {
     }, [isOnboardingRequirementsEmailSent, chosenApplicantAllJobApplicationDetails])
 
-
-
     return(
         <>
         <Text fontSize='30px' color='black' fontWeight='500' mb='10px'>

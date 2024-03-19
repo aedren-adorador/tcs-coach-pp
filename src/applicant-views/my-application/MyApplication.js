@@ -8,6 +8,7 @@ import { Form } from "formik";
 
 function MyApplication({applicantData, setObtainedActiveNavButton}) {
     const navigate = useNavigate();
+    const [withdrawValue, setWithdrawValue] = useState('');
     const [isSendingDemoLink, setIsSendingDemoLink] = useState(false)
     const [demoLink, setDemoLink] = useState('');
     const [onboardingLink, setOnboardingLink] = useState('');
@@ -20,14 +21,15 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
     const { isOpen: isOpenOnboardingReqs, onOpen:onOpenOnboardingReqs, onClose: onCloseOnboardingReqs } = useDisclosure()
     const finalRef = useRef(null)
 
-    const redirectToVideoInterview = () => {
-        if (applicantData.jobApplicationsM.length === 1) {
-            const details = {jobApplicationID: applicantData.jobApplicationsM[0]}
-            axios.post(`${process.env.REACT_APP_SYS_URL}/api/applicant/video-interview-request/verify-interview-token`, details)
-                .then(response => {
-                    navigate(`/video-interview/introduction`, {state: {applicantData: applicantData, token: response.data.token, submittedJobApplicationDetails: submittedJobApplicationDetails}})
-                })
-        }
+    const redirectToVideoInterview = (jobApplicationID) => {
+        console.log('haha', jobApplicationID[0])
+        // if (applicantData.jobApplicationsM.length === 1) {
+        //     const details = {jobApplicationID: applicantData.jobApplicationsM[0]}
+        //     axios.post(`${process.env.REACT_APP_SYS_URL}/api/applicant/video-interview-request/verify-interview-token`, details)
+        //         .then(response => {
+        //             navigate(`/video-interview/introduction`, {state: {applicantData: applicantData, token: response.data.token, submittedJobApplicationDetails: submittedJobApplicationDetails}})
+        //         })
+        // }
     }
 
     const handleWithdrawApplication = (jobApplicationID, applicantID) => {
@@ -53,7 +55,7 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
     }, [applicantData])
 
     useEffect(() => {
-    }, [submittedJobApplicationDetails, demoLink])
+    }, [submittedJobApplicationDetails, demoLink, withdrawValue])
     return (
         <> 
             <TableContainer
@@ -96,7 +98,7 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                         align='center'
                         >
                             <Image
-                            src={suitcase}
+                            src={suitcase} 
                             width='60px'
                             
                             ></Image>
@@ -186,6 +188,7 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                         fontWeight='500'
                         padding='5px'
                         >CONGRATULATIONS! <br /> YOU ARE HIRED</Badge>}
+                        
 
                         {i[0].currentStepM === 'rejectedApplicant' &&
                         <Badge
@@ -193,12 +196,19 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                         fontWeight='500'
                         padding='5px'
                         >REJECTED</Badge>}
+
+                        {i[0].currentStepM === 'withdrawnApplication' &&
+                        <Badge
+                        colorScheme='red'
+                        fontWeight='500'
+                        padding='5px'
+                        >Application Withdrawn</Badge>}
                         </Skeleton>
                     </Td>
                     <Td>
                         <Flex direction='column' gap='2'>
                             <Button size='xs' borderRadius='0px' colorScheme='blue' onClick={onOpenViewApplication}
-                            display={i[0].currentStepM === 'finishedHiringApplicant' || i[0].currentStepM ===  'rejectedApplicant'? 'none': ''}
+                            display={i[0].currentStepM === 'finishedHiringApplicant' || i[0].currentStepM ===  'rejectedApplicant' || i[0].currentStepM === 'withdrawnApplication'? 'none': ''}
                             >View Application</Button>
                             <Modal isOpen={isOpenViewApplication} onClose={onCloseViewApplication}>
                                 <ModalOverlay />
@@ -242,8 +252,11 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                             </Modal>
 
 
-                            <Button size='xs' colorScheme='red' variant='outline' borderRadius='0px'onClick={onOpen}
-                            display={i[0].currentStepM === 'submittedOnboardingRequirements' || i[0].currentStepM === 'finishedHiringApplicant' || i[0].currentStepM === 'rejectedApplicant' ? 'none': ''}
+                            <Button size='xs' colorScheme='red' variant='outline' borderRadius='0px'onClick={() => {
+                                onOpen()
+                                setWithdrawValue(i[0]._id)
+                            }}
+                            display={i[0].currentStepM === 'submittedOnboardingRequirements' || i[0].currentStepM === 'finishedHiringApplicant' || i[0].currentStepM === 'rejectedApplicant' || i[0].currentStepM === 'withdrawnApplication' ? 'none': ''}
                             >Withdraw Application</Button>
                             <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
                                 <ModalOverlay />
@@ -251,7 +264,7 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                                 <ModalHeader>Withdraw Application Confirmation</ModalHeader>
                                 <ModalCloseButton />
                                 <ModalBody borderRadius='0'>
-                                    Are you sure you are withdrawing your application? This action cannot be undone.
+                                    Are you sure you are withdrawing your application? This action cannot be undone. 
                                 </ModalBody>
                                 <ModalFooter>
                                     <Button borderRadius='0px' colorScheme='blue' mr={3} onClick={() => {
@@ -261,7 +274,7 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                                     </Button>
                                     <Button variant='ghost' colorScheme='red' borderRadius='0px' onClick={() => {
                                         onClose()
-                                        handleWithdrawApplication(i[0]._id, applicantData._id)
+                                        handleWithdrawApplication(withdrawValue)
                                     }}>Withdraw</Button>
                                 </ModalFooter>
                                 </ModalContent>
@@ -497,22 +510,7 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                             </>
                         )}
                          {i[0].currentStepM === 'submittedOnboardingRequirements' && '—'}
-                    </Td>
-                    </Tr>
-                ))
-                ) : 
-                    <>
-                    <Tr>
-                        <Td></Td>
-                        <Td>No Tasks Yet</Td>
-                        <Td>—</Td>
-                        <Td>—</Td>
-                    </Tr>
-                    </>
-                    }
-
-                </Tbody>
-                <Modal isOpen={isOpenInterview} onClose={onCloseInterview}>
+                         <Modal isOpen={isOpenInterview} onClose={onCloseInterview}>
                             <ModalOverlay />
                             <ModalContent>
                             <ModalHeader fontWeight='700'>Video Interview Confirmation</ModalHeader>
@@ -530,7 +528,7 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                                 Cancel
                                 </Button>
                                 <Button
-                                onClick={redirectToVideoInterview}
+                                onClick={redirectToVideoInterview(i)}
                                 fontWeight='300'
                                 variant='ghost'
                                 borderRadius='0px'                    
@@ -538,6 +536,21 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                             </ModalFooter>
                             </ModalContent>
                         </Modal>
+                    </Td>
+                    </Tr>
+                ))
+                ) : 
+                    <>
+                    <Tr>
+                        <Td></Td>
+                        <Td>No Tasks Yet</Td>
+                        <Td>—</Td>
+                        <Td>—</Td>
+                    </Tr>
+                    </>
+                    }
+
+                </Tbody>
             </Table>
             </TableContainer>
         </>

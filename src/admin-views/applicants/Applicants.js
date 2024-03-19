@@ -45,6 +45,8 @@ function Applicants() {
             setClickedButton('Review Application')
         } else if (jobApp.currentStepM === 'rejectedApplicant') {
             setClickedButton('Review Application')
+        } else if (jobApp.currentStepM === 'withdrawnApplication') {
+            setClickedButton('Review Application')
         }
     }
 
@@ -80,6 +82,8 @@ function Applicants() {
         } else if (chosenApplicantAllJobApplicationDetails.currentStepM === 'finishedHiringApplicant') {
             setApplicantButtons(['All Applicants', 'Review Application', 'Interview Feedback', 'Teaching Demo Feedback', 'Onboarding Requirements'])
         } else if (chosenApplicantAllJobApplicationDetails.currentStepM === 'rejectedApplicant') {
+            setApplicantButtons(['All Applicants', 'Review Application', 'Interview Feedback', 'Teaching Demo Feedback', 'Onboarding Requirements'])
+        } else if (chosenApplicantAllJobApplicationDetails.currentStepM === 'withdrawnApplication') {
             setApplicantButtons(['All Applicants', 'Review Application', 'Interview Feedback', 'Teaching Demo Feedback', 'Onboarding Requirements'])
         }
     }, [chosenApplicantAllJobApplicationDetails])

@@ -151,18 +151,21 @@ router.post('/delete-account', (req, res, next) => {
 
 
 router.post('/withdraw-application', (req, res, next) => {
-  console.log(req.body)
-  Applicant.find({_id: req.body.applicantID})
-    .then(applicant => {
-      const copy = [...applicant[0].jobApplicationsM]
-      const newArrayOfJobApplications = copy.filter((jobApp, index) => (jobApp.toString() !== req.body.jobApplicationID.toString()))
-      Applicant.updateOne({_id: req.body.applicantID}, {jobApplicationsM: newArrayOfJobApplications})
-        .then(result => console.log(result))
-    })
-  JobApplication.updateOne({_id: req.body.jobApplicationID}, {currentStepM: 'withdrawnApplication'})
-    .then(result => console.log(result))
+  
+  // Applicant.find({_id: req.body.applicantID})
+  //   .then(applicant => {
+  //     const copy = [...applicant[0].jobApplicationsM]
+  //     const newArrayOfJobApplications = copy.filter((jobApp, index) => (jobApp.toString() !== req.body.jobApplicationID.toString()))
+  //     Applicant.updateOne({_id: req.body.applicantID}, {jobApplicationsM: newArrayOfJobApplications})
+  //       .then(result => console.log(result))
+  //   })
 
-  res.json({success: 'Withdrawn Application'})
+  // console.log(req.body)
+  
+  JobApplication.updateOne({_id: req.body.jobApplicationID}, {currentStepM: 'withdrawnApplication'})
+    .then(result => res.json({success: 'Withdrawn Application'}))
+
+  
 })
 
 router.post('/create-account-admin', (req, res, next) => {
