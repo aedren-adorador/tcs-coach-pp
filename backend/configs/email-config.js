@@ -14,7 +14,7 @@ const transporter = nodemailer.createTransport({
 
 // Email settings for account creation
 function generateVerificationToken(email) {
-  const expirationTime = Math.floor(Date.now() / 1000) + 45 * 60;
+  const expirationTime = Math.floor(Date.now() / 1000) + (24 * 60 * 60);
   return jwt.sign({ email, exp: expirationTime }, process.env.JWT_SECRET);
 }
 

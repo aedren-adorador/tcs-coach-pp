@@ -198,7 +198,7 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                     <Td>
                         <Flex direction='column' gap='2'>
                             <Button size='xs' borderRadius='0px' colorScheme='blue' onClick={onOpenViewApplication}
-                            display={i[0].currentStepM === 'finishedHiringApplicant' || 'rejectedApplicant'? 'none': ''}
+                            display={i[0].currentStepM === 'finishedHiringApplicant' || i[0].currentStepM ===  'rejectedApplicant'? 'none': ''}
                             >View Application</Button>
                             <Modal isOpen={isOpenViewApplication} onClose={onCloseViewApplication}>
                                 <ModalOverlay />

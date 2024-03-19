@@ -21,7 +21,7 @@ function NavAdmin({persistentButton, getActiveNavButton}) {
 
     useEffect(()=> {
         getActiveNavButton(clickedNavButton)
-    },[clickedNavButton])
+    },[clickedNavButton, getActiveNavButton])
     
     return(
         <>

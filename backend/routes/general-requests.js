@@ -159,10 +159,7 @@ router.post('/withdraw-application', (req, res, next) => {
       Applicant.updateOne({_id: req.body.applicantID}, {jobApplicationsM: newArrayOfJobApplications})
         .then(result => console.log(result))
     })
-  JobApplication.deleteOne({_id: req.body.jobApplicationID})
-    .then(result => console.log(result))
-
-  Resume.deleteOne({applicantIDForeignKeyM: req.body.applicantID })
+  JobApplication.updateOne({_id: req.body.jobApplicationID}, {currentStepM: 'withdrawnApplication'})
     .then(result => console.log(result))
 
   res.json({success: 'Withdrawn Application'})
@@ -187,4 +184,15 @@ router.get('/get-job-apps-summary', (req, res, next) => {
     .then(result => res.send(result))
 })
 
+
+router.get('/get-job-stats', (req, res, next) => {
+  JobApplication.find()
+    .then(jobApplications => {
+      Job.find()
+        .then(jobs => {
+          console.log(jobs, jobApplications)
+          res.json({jobs: jobs, jobApplications: jobApplications})
+        })
+    })
+})
 module.exports = router;

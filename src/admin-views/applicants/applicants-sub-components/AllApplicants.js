@@ -147,6 +147,15 @@ function AllApplicants({applicants, updateChosenApplicantToReview, handleButtonC
                             fontWeight='500'
                             >REJECTED APPLICANT</Badge>}
 
+                            {jobApp.currentStepM === 'withdrawnApplication' &&
+                            <Badge
+                            border='solid 0.2px red'
+                            colorScheme='red'
+                            padding='5px'
+                            fontSize='8px'
+                            fontWeight='500'
+                            >APPLICANT WITHDREW</Badge>}
+
                         </Td>
                         <Td textAlign='center'>
                             {jobApp.currentStepM === 'submittedInitialApplication' && 'NA'}
@@ -158,6 +167,7 @@ function AllApplicants({applicants, updateChosenApplicantToReview, handleButtonC
                             {jobApp.currentStepM === 'submittedOnboardingRequirements' && 'Offer Accepted'}
                             {jobApp.currentStepM === 'finishedHiringApplicant' && 'Offer Accepted'}
                             {jobApp.currentStepM === 'rejectedApplicant' && 'No Offer'}
+                            {jobApp.currentStepM === 'withdrawnApplication' && 'NA'}
                         </Td>
                     </Tr>
                     }
