@@ -63,7 +63,7 @@ function Instructions() {
                 <Text
                 fontWeight='300'
                 fontSize='14px'
-                >Questions: <strong>8</strong></Text>
+                >Questions: <strong>{submittedJobApplicationDetails[0][0].interviewQuestionsM.length}&nbsp;</strong></Text>
                 </Box>
             </Flex>
 
@@ -75,7 +75,7 @@ function Instructions() {
                >Instructions</Text>
 
                <Text>
-                In this section are 8 questions for you to answer and you will record your responses using video. These questions are similar to ones you will likely encounter when interviewing for an actual role with a company. You will have <strong>30 seconds to read the question and 3 minutes to give your answer.</strong> You can re-record your response<strong>&nbsp;unlimited times before moving to the next question</strong>.
+                In this section are {submittedJobApplicationDetails[0][0].interviewQuestionsM.length}&nbsp;questions for you to answer and you will record your responses using video. These questions are similar to ones you will likely encounter when interviewing for an actual role with a company. You will have <strong>30 seconds to read the question and 3 minutes to give your answer.</strong> You can re-record your response<strong>&nbsp;unlimited times before moving to the next question</strong>.
                </Text>
             </CardBody>
             <CardFooter

@@ -21,15 +21,12 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
     const { isOpen: isOpenOnboardingReqs, onOpen:onOpenOnboardingReqs, onClose: onCloseOnboardingReqs } = useDisclosure()
     const finalRef = useRef(null)
 
-    const redirectToVideoInterview = (jobApplicationID) => {
-        console.log('haha', jobApplicationID[0])
-        // if (applicantData.jobApplicationsM.length === 1) {
-        //     const details = {jobApplicationID: applicantData.jobApplicationsM[0]}
-        //     axios.post(`${process.env.REACT_APP_SYS_URL}/api/applicant/video-interview-request/verify-interview-token`, details)
-        //         .then(response => {
-        //             navigate(`/video-interview/introduction`, {state: {applicantData: applicantData, token: response.data.token, submittedJobApplicationDetails: submittedJobApplicationDetails}})
-        //         })
-        // }
+    const redirectToVideoInterview = (jobApplicationID) => {       
+        const details = {jobApplicationID: jobApplicationID[0]._id}
+        axios.post(`${process.env.REACT_APP_SYS_URL}/api/applicant/video-interview-request/verify-interview-token`, details)
+            .then(response => {
+                navigate(`/video-interview/introduction`, {state: {applicantData: applicantData, token: response.data.token, submittedJobApplicationDetails: submittedJobApplicationDetails}})
+            })
     }
 
     const handleWithdrawApplication = (jobApplicationID, applicantID) => {
@@ -48,8 +45,7 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                     if (response.data[0]) {
                         setSubmittedJobApplicatioDetails(response.data)
                         setIsLoading(false);
-                    }
-                    
+                    } 
                 })
         } 
     }, [applicantData])
@@ -342,7 +338,7 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                 <Tbody>
                 {applicantData.jobApplicationsM && applicantData.jobApplicationsM.length !== 0 && submittedJobApplicationDetails ? (
                 submittedJobApplicationDetails.map((i, index) => (
-                    
+                    i[0].currentStepM !== 'withdrawnApplication' && (
                     <Tr key={index}>
                     <Td textAlign='center'>
                         <WarningIcon style={{ fontSize: '45px', color: 'red' }} />
@@ -528,7 +524,7 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                                 Cancel
                                 </Button>
                                 <Button
-                                onClick={redirectToVideoInterview(i)}
+                                onClick={()=>redirectToVideoInterview(i)}
                                 fontWeight='300'
                                 variant='ghost'
                                 borderRadius='0px'                    
@@ -538,6 +534,7 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                         </Modal>
                     </Td>
                     </Tr>
+                    )
                 ))
                 ) : 
                     <>

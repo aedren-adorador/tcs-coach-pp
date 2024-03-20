@@ -74,7 +74,11 @@ function RequireAttention() {
                 borderRadius='15px'
                 borderColor='lightgray'
                 >
-                10
+                {/* {jobApps} */}
+                {box === 'Review Application' && jobApps.filter((application, index) => application.currentStepM === 'submittedInitialApplication').length}
+                {box === 'Interview Feedback' && jobApps.filter((application, index) => application.currentStepM === 'submittedVideoInterview').length}
+                {box === 'Teaching Demo Feedback' && jobApps.filter((application, index) => application.currentStepM === 'submittedTeachingDemo').length}
+                {box === 'Pre-employment Requirements' && jobApps.filter((application, index) => application.currentStepM === 'submittedOnboardingRequirements').length}
                 </Box>
                 <CardBody>
                     <Image

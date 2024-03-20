@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import { TableContainer, Table, Thead, Tr, Th, Td, Flex, Tbody, Input, InputLeftElement, InputGroup, Text, HStack, Menu, MenuButton, Button, MenuList, MenuItem, Badge} from "@chakra-ui/react";
 import { Search2Icon, ChevronDownIcon } from "@chakra-ui/icons";
 import axios from "axios";
+import Search from "antd/es/transfer/search";
 
 
 function AllApplicants({applicants, updateChosenApplicantToReview, handleButtonClick}) {
     const allApplicantsTableHeaders = ['Applicant ID', 'Date Submitted', 'Applicant Name', 'Position Applied', 'Application Status', 'Offer Status']
     const [allJobApplications, setAllJobApplications] = useState([]);
+    const [searchApplicantList, setSearchApplicantList] = useState('');
 
     const goToApplicantProgress = (jobApp) => {
       updateChosenApplicantToReview(jobApp);
@@ -21,13 +23,47 @@ function AllApplicants({applicants, updateChosenApplicantToReview, handleButtonC
 
     useEffect(() => {
     }, [allJobApplications])
+
+    useEffect(() => {
+        if (searchApplicantList === '') {
+            axios.get(`${process.env.REACT_APP_SYS_URL}/api/admin/applicant-screening/get-job-applications-joined-with-applicants`)
+            .then(result => {
+                setAllJobApplications(result.data.joinedApplicantAndJobApplicationDetails)
+            })
+        }
+        setAllJobApplications(prev => {
+            return prev.filter((jobApp, index) => 
+            jobApp._id.toString().includes(searchApplicantList.toLowerCase()) ||
+            jobApp.dateSubmittedApplicationM.toString().slice(0, 10).includes(searchApplicantList.toLowerCase()) ||
+            jobApp.dateSubmittedApplicationM.toString().slice(0, 10).includes(searchApplicantList.toLowerCase()) ||
+            jobApp.applicantJoinedDetails[0].firstNameM.toLowerCase().includes(searchApplicantList.toLowerCase()) ||
+            jobApp.applicantJoinedDetails[0].lastNameM.toLowerCase().includes(searchApplicantList.toLowerCase()) ||
+            jobApp.positionAppliedToM.toLowerCase().includes(searchApplicantList.toLowerCase()) ||
+            (jobApp.currentStepM === 'submittedInitialApplication' && 'Submitted Resume Application (to review)'.toLowerCase().includes(searchApplicantList.toLowerCase())) ||
+            (jobApp.currentStepM === 'waitingForVideoInterviewSubmission' && 'Waiting for Interview Submission'.toLowerCase().includes(searchApplicantList.toLowerCase())) ||
+            (jobApp.currentStepM === 'submittedVideoInterview' && 'Submitted Video Interview (to review)'.toLowerCase().includes(searchApplicantList.toLowerCase())) ||
+            (jobApp.currentStepM === 'waitingForTeachingDemoSubmission' && 'Waiting for Teaching Demo Submission'.toLowerCase().includes(searchApplicantList.toLowerCase())) ||
+            (jobApp.currentStepM === 'submittedTeachingDemo' && 'Submitted Teaching Demo (to review)'.toLowerCase().includes(searchApplicantList.toLowerCase())) ||
+            (jobApp.currentStepM === 'waitingForOnboardingRequirementsSubmission' && 'Waiting for Onboarding Requirements Submission'.toLowerCase().includes(searchApplicantList.toLowerCase())) ||
+            (jobApp.currentStepM === 'submittedOnboardingRequirements' && 'Onboarding Requirements Sent'.toLowerCase().includes(searchApplicantList.toLowerCase())) ||
+            (jobApp.currentStepM === 'finishedHiringApplicant' && 'HIRED APPLICANT'.toLowerCase().includes(searchApplicantList.toLowerCase())) ||
+            (jobApp.currentStepM === 'rejectedApplicant' && 'REJECTED APPLICANT'.toLowerCase().includes(searchApplicantList.toLowerCase())) ||
+            (jobApp.currentStepM === 'withdrawnApplication' && 'APPLICANT WITHDREW'.toLowerCase().includes(searchApplicantList.toLowerCase())) ||
+            'NA'.toLowerCase().includes(searchApplicantList.toLowerCase())
+        )
+        })
+        
+    }, [searchApplicantList])
     return(
         <>
+        <Flex maxW='500px'>
+            <Search value={searchApplicantList} onChange={(e) => setSearchApplicantList(e.target.value)}/>
+        </Flex>
         <TableContainer
         border='solid 0.5px lightgray'
         borderRadius='20px'
         padding='30px 10px'
-        mt='50px'   
+        mt='20px'   
         >
             <Table
             variant='simple'

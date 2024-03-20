@@ -64,7 +64,7 @@ function WhatToExpect() {
                     
                     <Flex fontSize='15px' align='center'>
                       <VideoCameraFilled style={{fontSize: '30px'}}/>
-                      &nbsp;&nbsp;8 Video Questions
+                      &nbsp;&nbsp;{submittedJobApplicationDetails[0][0].interviewQuestionsM.length}&nbsp;Video Questions
                     </Flex>
 
                   </Box>

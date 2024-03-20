@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { FormControl, Input, Button, Card, CardBody, Alert, AlertIcon, AlertDescription, FormHelperText, Text, Flex, Box, Checkbox} from "@chakra-ui/react";
+import { FormControl, Input, Button, Card, CardBody, Alert, AlertIcon, AlertDescription, FormHelperText, Text, Flex, Box, Checkbox, InputGroup, InputRightElement} from "@chakra-ui/react";
 import { Formik, Form } from "formik";
 import { useNavigate } from "react-router-dom";
 import AuthHeader from "../../auth/AuthHeader";
@@ -9,6 +9,10 @@ import AuthFooter from "../../auth/AuthFooter";
 import { CheckIcon, CloseIcon } from "@chakra-ui/icons";
 
 function CreateApplicantAccount() {
+    const [showPassword, setShowPassword] = React.useState(false)
+    const [showConfirmPassword, setShowConfirmPassword] = React.useState(false)
+    const handleClickPassword = () => setShowPassword(!showPassword)
+    const handleClickConfirmPassword = () => setShowConfirmPassword(!showConfirmPassword)
     const [isNotifsOn, setIsNotifsOn] = useState(true);
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -114,27 +118,44 @@ function CreateApplicantAccount() {
                             <Text
                             fontSize='12px'
                             >Password</Text>
-                            <Input
-                            onKeyUp={(e) => setPassword(e.target.value)}
-                            border='solid 0.2px black'
-                            variant='outline'
-                            size='sm'
-                            type='password'
-                            mb='2'
-                            {...formikProps.getFieldProps('setPassword')}
-                            />
+
+                             <InputGroup size='md'>
+                                 <Input
+                                type={showPassword ? 'text' : 'password'}
+                                onKeyUp={(e) => setPassword(e.target.value)}
+                                border='solid 0.2px black'
+                                variant='outline'
+                                size='sm'
+                                mb='2'
+                                {...formikProps.getFieldProps('setPassword')}
+                                />
+                                <InputRightElement width='4.5rem' height='32px'>
+                                    <Button h='1rem' size='xs' onClick={handleClickPassword}>
+                                    {showPassword ? 'Hide' : 'Show'}
+                                    </Button>
+                                </InputRightElement>
+                            </InputGroup>
+
                             <Text
                             fontSize='12px'
                             >Confirm password</Text>
-                            <Input
-                            onKeyUp={(e) => setConfirmPassword(e.target.value)}
-                            border='solid 0.2px black'
-                            variant='outline'
-                            size='sm'
-                            type='password'
-                            mb='2'
-                            {...formikProps.getFieldProps('confirmPassword')}
-                            />
+
+                            <InputGroup size='md'>
+                                 <Input
+                                onKeyUp={(e) => setConfirmPassword(e.target.value)}
+                                border='solid 0.2px black'
+                                variant='outline'
+                                size='sm'
+                                type={showConfirmPassword ? 'text' : 'password'}
+                                mb='2'
+                                {...formikProps.getFieldProps('confirmPassword')}
+                                />
+                                <InputRightElement width='4.5rem' height='32px'>
+                                    <Button h='1rem' size='xs' onClick={handleClickConfirmPassword}>
+                                    {showConfirmPassword ? 'Hide' : 'Show'}
+                                    </Button>
+                                </InputRightElement>
+                            </InputGroup>
 
                             {firstName && lastName ? 
                             <Text fontSize='10px' color='green' id='5'> <CheckIcon h='2'/>&nbsp;valid name</Text>
