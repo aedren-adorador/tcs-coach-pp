@@ -78,15 +78,8 @@ function Login({onLoginSuccess}) {
                     id='auth-email-and-password-container'
                     border='solid 0.5px'
                     borderRadius='5px'
-                    padding='20px 50px 50px 50px'
+                    padding='50px 50px 50px 50px'
                     >
-                        <Flex justify='flex-end'>
-                             
-                        <Link to='/'>
-                        <Button  bg='white' size='xs' variant='ghost' colorScheme='green'>Explore Job Portal &nbsp;<ExternalLinkIcon/></Button>
-                        </Link>
-                        </Flex>
-                       
                         <FormControl isInvalid={isInvalidCredentials}>
                         {isInvalidCredentials && 
                         <FormErrorMessage
@@ -97,6 +90,7 @@ function Login({onLoginSuccess}) {
                         fontSize='12px'
                         >Email Address</Text>
                         <Input
+                        zIndex='1'
                         variant='outline'
                         mb='2'
                         size='md'

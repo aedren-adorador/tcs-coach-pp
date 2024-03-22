@@ -61,7 +61,6 @@ function AllApplicants({applicants, updateChosenApplicantToReview, handleButtonC
         </Flex>
         <TableContainer
         border='solid 0.5px lightgray'
-        borderRadius='20px'
         padding='30px 10px'
         mt='20px'   
         >

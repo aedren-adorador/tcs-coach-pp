@@ -19,14 +19,12 @@ import SubmissionComplete from './applicant-views/video-interview/SubmissionComp
 import Finish from './applicant-views/video-interview/Finish';
 import ForgotPassword from './forgot password/ForgotPassword';
 import SetNewPassword from './forgot password/SetNewPassword';
-import JobPortal from './applicant-views/job-portal/JobPortal';
 import PublicJobPortal from './applicant-views/job-portal/PublicJobPortal';
 import PersonalInformationV2 from './applicant-views/my-application/applicant-steps/PersonallInformationV2';
 import EducationV2 from './applicant-views/my-application/applicant-steps/EducationV2';
 import WorkExperienceV2 from './applicant-views/my-application/applicant-steps/WorkExperienceV2';
 import QuestionsV2 from './applicant-views/my-application/applicant-steps/QuestionsV2';
 import SummaryV2 from './applicant-views/my-application/applicant-steps/SummaryV2';
-
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
@@ -39,22 +37,23 @@ function App() {
   useEffect(() => {
   }, [isAuthenticated])
 
-  const theme = extendTheme({
-  colors: {
-    tcs: {
-      // main: "#0C3C55",
-      main: "#02367e",
-      // main: "#0461e3",
-      dirtywhite: '#F2F2F2',
-      linky: '#0073DC',
-      mongo: '#09A334',
-      bluey: '#E5ECF9',
-      creamy: '#FFFDD0',
-      limey: '#cdffcd',
-      500: '#0C3C55'
-    },
-  },
-})
+  const config = {
+    colors: {
+      tcs: {
+        main: "#0095ff",
+        dirtywhite: '#F2F2F2',
+        linky: '#0073DC',
+        mongo: '#09A334',
+        bluey: '#E5ECF9',
+        creamy: '#FFFDD0',
+        limey: '#cdffcd',
+        500: '#0C3C55'
+        },
+    }
+  }
+
+  const theme = extendTheme(config)
+
   return (
     <ChakraProvider theme={theme}>
       <BrowserRouter>
@@ -63,7 +62,7 @@ function App() {
           <Route path="/" element={<PublicJobPortal onLoginSuccess={handleLoginSuccess}/>}/>
           <Route path="/register-email" element={<RegisterApplicantEmail/>}/>
           <Route path="/create-applicant-account" element={<CreateApplicantAccount/>}/>
-          <Route path="/create-admin-account" element={<CreateAdminAccount/>}/>
+          {/* <Route path="/create-admin-account" element={<CreateAdminAccount/>}/> */}
           <Route path="/forgot-password" element={<ForgotPassword/>}/>
           <Route path="/set-new-password" element={<SetNewPassword/>}/>
           <Route

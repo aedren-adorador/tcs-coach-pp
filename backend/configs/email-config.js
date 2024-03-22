@@ -8,7 +8,7 @@ const transporter = nodemailer.createTransport({
     secure: true,
     auth: {
         user: process.env.USER_EMAIL,
-        pass: 'lzak mkcu qfft unlu',
+        pass: 'biqn arad lkyl akfk',
     }
 });
 
@@ -24,7 +24,7 @@ async function sendEmail(emailAddressInput, token) {
       from: process.env.USER_EMAIL, // sender address
       to: emailAddressInput, // list of receivers
       subject: "[Action Required] The Coding School Application - Verify your account",
-      html: `<p style='font-size: 14px'>Dear Applicant</p><br/><p>Thank you for your interest in applying to The Coding School! To proceed with your account creation, kindly verify your email by clicking on this link: <a href=${verificationLink}><p>Confirm Here</p><a/></p>`
+      html: `<p>Dear Applicant</p><p>Thank you for your interest in applying to The Coding School! To proceed with your account creation, kindly verify your email by clicking on this link: <a href=${verificationLink}><p>Confirm Here</p><a/></p>`
     })
 }
 

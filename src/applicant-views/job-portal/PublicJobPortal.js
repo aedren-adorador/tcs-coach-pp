@@ -80,25 +80,19 @@ function PublicJobPortal({applicantData, onLoginSuccess}) {
     return(
         <>
          <Flex
-         zIndex='99'
-         top='0'
+        zIndex='99'
+        top='0'
         position='fixed'
         width='100%'
         height='80px'
-        backgroundColor='tcs.main'
         align='center'
-        // justify='space-between'
+        justify='space-between'
+        bgGradient="linear(to-r, tcs.main, tcs.main, #fea115)"
         padding='20px'
         >
-              <Image
-            src={tcsLogo}
-            ml='0.5%'
-            height='70px'
-            ></Image>
-            <InputGroup
-            maxW='650px'
-            margin='10px 0px 12px 20px'
-            >  
+              <Image src={tcsLogo} ml='0.5%' height='70px'></Image>
+
+            <InputGroup maxW='650px'margin='10px 0px 12px 20px'>  
                 <Input
                 bg='white'
                 zIndex='0'
@@ -110,7 +104,6 @@ function PublicJobPortal({applicantData, onLoginSuccess}) {
                 />
             
                     <InputRightAddon
-
                     backgroundColor='tcs.main'
                     height='40px'
                     width='60px'
@@ -124,7 +117,9 @@ function PublicJobPortal({applicantData, onLoginSuccess}) {
                         />
                     </InputRightAddon>
             </InputGroup>
-          
+            <Link to='/login'>
+                <Button colorScheme='blue' ml='5px' minW='150px' size='sm'>Login or Signup</Button>
+            </Link>
         </Flex>
         <Box
         border='solid red'
@@ -378,7 +373,7 @@ function PublicJobPortal({applicantData, onLoginSuccess}) {
         position='fixed'
         width='100%'
         height='80px'
-        backgroundColor='tcs.main'
+        bgGradient="linear(to-r, tcs.main, tcs.main, #fea115, pink.500)"
         color='white'
         fontSize='10px'
         align='center'
@@ -387,16 +382,13 @@ function PublicJobPortal({applicantData, onLoginSuccess}) {
         >
            <Text xs='xs'>© 2024 The Coding School</Text>
            <Text xs='xs'>|</Text>
-           <Text xs='xs'>Site Map</Text>
-            <Text xs='xs'>|</Text>
-           <Text xs='xs'>Careers</Text>
-           <Link href='https://www.facebook.com/codingschoolph' target='_blank'>
+           <Link to='https://www.facebook.com/codingschoolph' target='_blank'>
            <FacebookFilled
            style={{fontSize:'35px', marginLeft: '20px'}}
            />
            </Link>
 
-           <Link href='https://www.linkedin.com/company/thecodingschool/' target='_blank'>
+           <Link to='https://www.linkedin.com/company/thecodingschool/' target='_blank'>
             <LinkedinFilled
             style={{fontSize:'35px', marginLeft: '20px'}}
             />

@@ -35,7 +35,6 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
             .then(response => {
                  window.location.reload()
             })
-       
     }
 
     useEffect(() => {

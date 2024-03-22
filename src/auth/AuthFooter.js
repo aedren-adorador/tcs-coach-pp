@@ -10,7 +10,7 @@ function AuthFooter() {
         position='fixed'
         width='100%'
         height='80px'
-        backgroundColor='tcs.main'
+        bgGradient="linear(to-r, tcs.main, tcs.main, #fea115, pink.500)"
         color='white'
         fontSize='10px'
         align='center'
@@ -19,9 +19,6 @@ function AuthFooter() {
         >
            <Text xs='xs'>© 2024 The Coding School</Text>
            <Text xs='xs'>|</Text>
-           <Text xs='xs'>Site Map</Text>
-            <Text xs='xs'>|</Text>
-           <Text xs='xs'>Careers</Text>
            <Link href='https://www.facebook.com/codingschoolph' target='_blank'>
            <FacebookFilled
            style={{fontSize:'35px', marginLeft: '20px'}}

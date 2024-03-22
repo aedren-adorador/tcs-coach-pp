@@ -22,7 +22,10 @@ router.get('/fetch-jobs-list-applicant/:id', async (req, res, next) => {
     }
     Job.find({jobEnlistedM: true, _id: {$nin: toFilterJobs}})
     .then(result => {
-      res.json({jobs:result})
+      JobApplication.find()
+        .then(jobApps => {
+          res.json({jobs:result, jobApplications: jobApps})
+        })
     })
 });
 
@@ -151,17 +154,6 @@ router.post('/delete-account', (req, res, next) => {
 
 
 router.post('/withdraw-application', (req, res, next) => {
-  
-  // Applicant.find({_id: req.body.applicantID})
-  //   .then(applicant => {
-  //     const copy = [...applicant[0].jobApplicationsM]
-  //     const newArrayOfJobApplications = copy.filter((jobApp, index) => (jobApp.toString() !== req.body.jobApplicationID.toString()))
-  //     Applicant.updateOne({_id: req.body.applicantID}, {jobApplicationsM: newArrayOfJobApplications})
-  //       .then(result => console.log(result))
-  //   })
-
-  // console.log(req.body)
-  
   JobApplication.updateOne({_id: req.body.jobApplicationID}, {currentStepM: 'withdrawnApplication'})
     .then(result => res.json({success: 'Withdrawn Application'}))
 

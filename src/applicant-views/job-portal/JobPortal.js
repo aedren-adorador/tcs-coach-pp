@@ -11,11 +11,14 @@ import { Link } from "react-router-dom";
 function JobPortal({isAdmin, applicantData}) {
     const jobFilters = ['Categories', 'Posting Dates', 'Work Setup'];
     const [jobsList, setJobsList] = useState([]);
+    const [jobApplications, setJobApplications] = useState([]);
     const [clickedJob, setClickedJob] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const { isOpen, onOpen, onClose } = useDisclosure()
+    const { isOpen: isOpenApply, onOpen: onOpenApply, onClose:onCloseApply } = useDisclosure()
+
     const [filters, setFilters] = useState({category: '', postingDate: '', workSetup: ''});
-  const finalRef = React.useRef(null)
+    const finalRef = React.useRef(null)
 
 
     const clickJob = (index) => {
@@ -44,6 +47,7 @@ function JobPortal({isAdmin, applicantData}) {
             axios.get(`${process.env.REACT_APP_SYS_URL}/api/general-request/fetch-jobs-list-applicant/${applicantData._id}`)
                 .then(response => {
                     setJobsList(response.data.jobs);
+                    setJobApplications(response.data.jobApplications)
                     setIsLoading(false);
                 })
         } else {
@@ -83,7 +87,7 @@ function JobPortal({isAdmin, applicantData}) {
     }, [fetchJobsList])
 
     useEffect(() => {
-    }, [jobsList, clickedJob, applicantData])
+    }, [jobsList, clickedJob, applicantData, jobApplications])
 
     return(
         <>
@@ -138,7 +142,7 @@ function JobPortal({isAdmin, applicantData}) {
                         fontSize='12px'
                         fontWeight='600'
                         size='sm'
-                        border='solid 0.2px black'
+                        border='solid 0.2px lightgray'
                         defaultValue='categories'
                         onChange={(e) => handleFilters(e.target.value, 'category')}
                     >
@@ -158,11 +162,11 @@ function JobPortal({isAdmin, applicantData}) {
                         fontSize='12px'
                         fontWeight='600'
                         size='sm'
-                        border='solid 0.2px black'
+                        border='solid 0.2px lightgray'
                         defaultValue='postingdate'
                         onChange={(e) => handleFilters(e.target.value, 'postingDate')}
                     >
-                        <option value='postingdate'>Posting Date</option>      
+                        <option value='postingdate' disabled>Posting Date</option>      
                         <option value='All'>All Posting Dates</option>      
                         <option value='1week'>Last 1 week</option>
                         <option value='3'>Last 3 months</option>
@@ -176,7 +180,7 @@ function JobPortal({isAdmin, applicantData}) {
                         fontSize='12px'
                         fontWeight='600'
                         size='sm'
-                        border='solid 0.2px black'
+                        border='solid 0.2px lightgray'
                         defaultValue='worksetup'
                         onChange={(e) => handleFilters(e.target.value, 'workSetup')}
                     >
@@ -384,22 +388,56 @@ function JobPortal({isAdmin, applicantData}) {
                     >Delist</Button>
                     </>
                     :
-                    <Link
-                     to={{ pathname: `/application-progress/${applicantData._id}/${jobsList[clickedJob-1].jobTitleM}/personal-info`}}
-                     state={{applicantData: applicantData, jobData: jobsList[clickedJob-1]}}
-                    >
+                        <>
+                        {jobApplications.filter((jobApp, index) => jobApp.applicantIDForeignKeyM === applicantData._id && jobsList[clickedJob-1]._id === jobApp.jobIDForeignKeyM).length === 1 ?
+                        <Link
+                        to={{ pathname: `/application-progress/${applicantData._id}/${jobsList[clickedJob-1].jobTitleM}/personal-info`}}
+                        state={{applicantData: applicantData, jobData: jobsList[clickedJob-1]}}
+                        >
                         <Button
+                        colorScheme='green'
                         zIndex='0'
                         mt='10px'
-                        size='sm'
-                        borderRadius='0px'
-                        fontWeight='600'
-                        width='100px'
-                        boxShadow='5px 5px 5px lightgray'
+                        size='md'
+                        boxShadow='5px 5px 5px lightgreen'
+                        >
+                        Continue Application
+                        </Button> </Link>:
+                        <Button
+                        colorScheme='blue'
+                        zIndex='0'
+                        mt='10px'
+                        size='md'
+                        boxShadow='5px 5px 5px lightblue'
+                        onClick={onOpenApply}
                         >
                         Apply
                         </Button>
-                    </Link>
+                        }
+                        
+                        <Modal isOpen={isOpenApply} onClose={onCloseApply}>
+                            <ModalOverlay />
+                            <ModalContent>
+                            <ModalHeader>Application Confirmation</ModalHeader>
+                            <ModalCloseButton />
+                            <ModalBody>
+                                To confirm your application for the {jobsList[clickedJob-1].jobTitleM} position, click Apply.
+                            </ModalBody>
+
+                            <ModalFooter>
+                                <Button colorScheme='blue' mr={3} onClick={onCloseApply}>
+                                Cancel
+                                </Button>
+                                <Link
+                                to={{ pathname: `/application-progress/${applicantData._id}/${jobsList[clickedJob-1].jobTitleM}/personal-info`}}
+                                state={{applicantData: applicantData, jobData: jobsList[clickedJob-1]}}
+                                >
+                                <Button variant='ghost' colorScheme='green'>Apply</Button>
+                                </Link>
+                            </ModalFooter>
+                            </ModalContent>
+                        </Modal>
+                        </>
                     }
             </Box>
 
