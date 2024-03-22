@@ -5,16 +5,19 @@ const fs = require('fs');
 const path = require('path');
 
 // Multer configuration for saving resumes
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, process.env.MULTER__URL_RESUME)
-  },
-  filename: function (req, file, cb) {
-    cb(null, 'TCS-Resume-'+Math.round(Math.random() * 1E9)+'-'+file.originalname)
-  }
-})
+// const storage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     cb(null, process.env.MULTER__URL_RESUME)
+//   },
+//   filename: function (req, file, cb) {
+//     cb(null, 'TCS-Resume-'+Math.round(Math.random() * 1E9)+'-'+file.originalname)
+//   }
+// })
 
-const upload = multer({ storage: storage })
+// const upload = multer({ storage: storage })
+
+const storage = multer.memoryStorage()
+const upload = multer({storage: storage})
 
 // Multer configuration for saving video interview recordings
 const interviewStorage = multer.diskStorage({

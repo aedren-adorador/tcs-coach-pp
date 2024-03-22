@@ -2,6 +2,20 @@ const express = require('express');
 const JobApplication = require('../../../models/jobApplications');
 const Applicant = require('../../../models/applicants');
 const router = express.Router();
+const { S3Client, PutObjectCommand, GetObjectCommand } = require("@aws-sdk/client-s3");
+const {getSignedUrl} = require('@aws-sdk/s3-request-presigner')
+const bucket_name = process.env.BUCKET_NAME
+const bucket_region = process.env.BUCKET_REGION
+const access_key = process.env.AWS_ACCESS_KEY_ID
+const secret_access_key = process.env.AWS_SECRET_ACCESS_KEY
+
+const s3 = new S3Client({
+  credentials: {
+    accessKeyId: access_key, 
+    secretAccessKey: secret_access_key
+  }, 
+    region: bucket_region
+})
 
 router.post('/save-job-application-progress', (req, res, next) => {
   JobApplication.findOne({applicantIDForeignKeyM:req.body.applicantIDForeignKey, jobIDForeignKeyM: req.body.jobIDForeignKey})
@@ -128,10 +142,22 @@ router.post('/save-job-application-id-to-applicant', (req, res, next) => {
     )
 })
 
-router.get('/get-updated-details/:id', (req, res, next) => {
+router.get('/get-updated-details/:id', async (req, res, next) => {
   const details = JSON.parse(req.params.id)
   JobApplication.find({applicantIDForeignKeyM: details.applicantIDForeignKeyM, jobIDForeignKeyM: details.jobIDForeignKeyM})
     .then(result => res.send(result))
+})
+
+router.get('/get-updated-details-work-part/:id',  async (req, res, next) => {
+  const details = JSON.parse(req.params.id)
+  const result = await JobApplication.find({applicantIDForeignKeyM: details.applicantIDForeignKeyM, jobIDForeignKeyM: details.jobIDForeignKeyM})
+  const getObjectParams = {
+    Bucket: bucket_name,
+    Key: result[0].resumeM
+  }
+  const command = new GetObjectCommand(getObjectParams)
+  const url = await getSignedUrl(s3, command, {expiresIn: '86400'})
+  res.send({result, url})
 })
 
 

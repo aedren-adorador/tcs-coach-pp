@@ -36,8 +36,8 @@ function WorkExperienceV2() {
         resumeField.append('applicantID', applicantData.applicantIDForeignKeyM)
         resumeField.append('jobID', applicantData.jobIDForeignKeyM)
         axios.post(`${process.env.REACT_APP_SYS_URL}/api/applicant/work-experience-request/upload-resume`, resumeField)
-            .then(result => {
-                setResumeLink(`${process.env.REACT_APP_RESUME_STATIC}/${result.data.resumeM}`)
+            .then(response => {
+                setResumeLink(response.data.url)
                 setIsFileAttached(true)
             })
     }
@@ -63,16 +63,14 @@ function WorkExperienceV2() {
                 }, 1500)
             })
     }
-
-
    
     useEffect(() => {
-        axios.get(`${process.env.REACT_APP_SYS_URL}/api/applicant/application-stepper-request/get-updated-details/${encodeURIComponent(JSON.stringify(applicantData))}`)
+        axios.get(`${process.env.REACT_APP_SYS_URL}/api/applicant/application-stepper-request/get-updated-details-work-part/${encodeURIComponent(JSON.stringify(applicantData))}`)
             .then(response => {
-                if (response.data[0]){
-                    setLinkedInLink(response.data[0].linkedInM)
-                    if (response.data[0].resumeM) {
-                        setResumeLink(`${process.env.REACT_APP_RESUME_STATIC}/${response.data[0].resumeM}`)
+                if (response.data.result[0]){
+                    setLinkedInLink(response.data.result[0].linkedInM)
+                    if (response.data.result[0].resumeM) {
+                        setResumeLink(response.data.url)
                     }
                 }
             })
@@ -161,7 +159,7 @@ function WorkExperienceV2() {
                         >
                             <Text
                             fontSize='14px'
-                            >Choose a different files</Text>
+                            >Choose a different file</Text>
                             <Input
                             margin='auto'
                             align='center'
@@ -220,8 +218,7 @@ function WorkExperienceV2() {
                 {/* //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/}
                 
                 <Flex
-                mb='20px'
-                bottom={0}
+                mb='50px'
                 minW='1000px'
                 justify='center'
                 >
@@ -235,7 +232,6 @@ function WorkExperienceV2() {
                     onClick={() => navigate(-1)}
                     mr='10'>Back</Button>
                     }
-                
                     
                     <Button
                     display={activeStep === 4 ? 'none' : ''}
