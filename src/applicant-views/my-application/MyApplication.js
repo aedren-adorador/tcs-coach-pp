@@ -1,5 +1,5 @@
 import { WarningIcon } from "@chakra-ui/icons";
-import { Td, Table, TableContainer, Tr, Th, Tbody, Thead, Button, Badge, Text, Image, Flex, Skeleton, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, VStack, Input, FormLabel, FormHelperText, FormControl, List, ListItem} from "@chakra-ui/react";
+import { Td, Table, TableContainer, Tr, Th, Tbody, Thead, Button, Badge, Text, Image, Flex, Skeleton, useDisclosure, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, VStack, Input, FormLabel, FormHelperText, FormControl, List, ListItem, FormErrorMessage} from "@chakra-ui/react";
 import suitcase from '../../admin-views/admin-view-imgs/suitcase.png'
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
@@ -9,11 +9,12 @@ import { Form } from "formik";
 function MyApplication({applicantData, setObtainedActiveNavButton}) {
     const navigate = useNavigate();
     const [withdrawValue, setWithdrawValue] = useState('');
-    const [isSendingDemoLink, setIsSendingDemoLink] = useState(false)
-    const [demoLink, setDemoLink] = useState('');
+    const [isSendingDemoLink, setIsSendingDemoLink] = useState(false) 
     const [onboardingLink, setOnboardingLink] = useState('');
     const [submittedJobApplicationDetails, setSubmittedJobApplicatioDetails] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [isFileTooLarge, setIsFileTooLarge] = useState(false);
+    const [demoZip, setDemoZip] = useState(null)
     const { isOpen, onOpen, onClose } = useDisclosure()
     const { isOpen: isOpenInterview, onOpen:onOpenInterview, onClose: onCloseInterview } = useDisclosure()
     const { isOpen: isOpenViewApplication, onOpen:onOpenViewApplication, onClose: onCloseViewApplication } = useDisclosure()
@@ -37,6 +38,20 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
             })
     }
 
+    const handleFileChange = (e) => {
+        const maxFileSize = 150 * 1024 * 1024; // 150 MB in bytes
+        const file = e.target.files[0];
+   
+        if (file.size > maxFileSize) {
+            e.target.value = ''; // Clear the input
+            setIsFileTooLarge(true);
+        } else {
+            setDemoZip(e.target.files[0])
+            setIsFileTooLarge(false);
+           
+        }
+    }
+
     useEffect(() => {
         if (applicantData.jobApplicationsM && applicantData.jobApplicationsM.length !== 0) {
             axios.get(`${process.env.REACT_APP_SYS_URL}/api/applicant/general-request/get-job-application/${applicantData._id}`)
@@ -50,7 +65,7 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
     }, [applicantData])
 
     useEffect(() => {
-    }, [submittedJobApplicationDetails, demoLink, withdrawValue])
+    }, [submittedJobApplicationDetails, withdrawValue, demoZip])
     return (
         <> 
             <TableContainer
@@ -389,15 +404,18 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                         {i[0].currentStepM === 'waitingForTeachingDemoSubmission' && (
                             <>
                             <FormControl mb='2'>
-                            <FormHelperText>Submit Teaching Demo Link Here</FormHelperText>
+                            <FormHelperText size='sm'>Attach Teaching Demo Zip File</FormHelperText>
                             <Input
-                            placeholder="Paste link here..."
-                            required
-                            onChange={(e) => setDemoLink(e.target.value)}
-                            value={demoLink}
-                            border='0.2px solid'
+                            accept='.zip'
+                            mt='10px'
+                            border='none'
+                            size='xs'
+                            type='file'
+                            onChange={(e) => handleFileChange(e)}
                             >
                             </Input>
+                            {isFileTooLarge && <Text color='red' ml='10px' mt='5px' fontSize='12px'>File too large. (max 150mb)</Text>}
+                            
 
                              <Modal isOpen={isOpenTeachingDemo} onClose={onCloseTeachingDemo}>
                                 <ModalOverlay />
@@ -405,7 +423,7 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                                 <ModalHeader fontWeight='700'>Teaching Demo Submission</ModalHeader>
                                 <ModalCloseButton />
                                 <ModalBody fontWeight='300' fontSize='14px'>
-                                    Are you sure you want to submit this teaching demo link?
+                                    Are you sure you want to submit this teaching demo file?
                                 </ModalBody>
 
                                 <ModalFooter>
@@ -416,9 +434,23 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                                     Cancel
                                     </Button>
                                     <Button
+                                    
                                     onClick={() => {
-                                        axios.post(`${process.env.REACT_APP_SYS_URL}/api/applicant/demo-request/submit-demo-link`, {demoLink: demoLink, submittedJobApplicationDetails})
-                                            .then(response => window.location.reload())
+                                        onCloseTeachingDemo()
+                                        setIsSendingDemoLink(true)
+                                        const demoForm = new FormData();
+                                        demoForm.append('demoZip', demoZip);
+                                        demoForm.append('applicantID', i[0].applicantIDForeignKeyM)
+                                        demoForm.append('jobID', i[0].jobIDForeignKeyM)
+                                       axios.post(`${process.env.REACT_APP_SYS_URL}/api/applicant/demo-request/submit-demo-link`, demoForm, {
+                                            headers: {
+                                                'Content-Type': 'multipart/form-data' // Adjust content type if needed
+                                            }
+                                        })
+                                        .then(response => {
+                                            setIsSendingDemoLink(false)
+                                            window.location.reload()
+                                        })
                                     }}
                                     fontWeight='300'
                                     variant='ghost'
@@ -428,14 +460,11 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                             </Modal>
                             </FormControl>
                             <Flex justify='flex-end'>
-                            {!isSendingDemoLink ?
-                            <Button colorScheme='green' size='sm' type='submit'
-                            display={demoLink.trim() ? '' : 'none'}
-                            onClick={() => {
-                                onOpenTeachingDemo()
-                            }}
-                            >Submit</Button>:
-                            <Button isLoading loadingText='Submitting Demo' size='sm' colorScheme="green" ></Button>}
+                            {!isSendingDemoLink && !isFileTooLarge && demoZip && <Button colorScheme='green' size='sm'
+                            onClick={() => onOpenTeachingDemo()}
+                            >Submit</Button>}
+                            {isSendingDemoLink &&  <Button isLoading loadingText='Submitting Demo' size='sm' colorScheme="green"></Button>}
+                           
                             </Flex>
                             </>
                         )}

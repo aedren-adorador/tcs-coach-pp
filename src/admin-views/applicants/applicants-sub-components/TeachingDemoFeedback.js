@@ -1,7 +1,7 @@
 import { Badge, Box, Button, Card, CardBody, Flex, Grid, GridItem, Input, InputGroup, Link, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Skeleton, Spinner, Table, TableCaption, TableContainer, Tbody, Td, Text, Textarea, Tfoot, Th, Thead, Tr, VStack, useDisclosure } from "@chakra-ui/react";
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import { EditIcon } from "@chakra-ui/icons";
+import { DownloadIcon, EditIcon } from "@chakra-ui/icons";
 import { LinkOutlined, UserOutlined } from "@ant-design/icons";
 
 function TeachingDemoFeedback(chosenApplicantAllJobApplicationDetails, setChosenApplicantAllJobApplicationDetails) {
@@ -23,12 +23,10 @@ function TeachingDemoFeedback(chosenApplicantAllJobApplicationDetails, setChosen
                 setInterviewCriteriaScores(response.data)
             })
         if (chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.currentStepM === 'waitingForOnboardingRequirementsSubmission') {
-            
             setIsOnboardingRequirementsEmailSent(true);
         } else {
             setIsOnboardingRequirementsEmailSent(false)
         }
-    
     }, [])
 
     useEffect(() => {
@@ -57,7 +55,9 @@ function TeachingDemoFeedback(chosenApplicantAllJobApplicationDetails, setChosen
             <GridItem border='solid 0.2px lightgray'>
                 <Flex justify='center' align='center' height='100%'>
                     <Link href={chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.teachingDemoM} target='_blank'>
-                        <Button fontSize='30px' bg='tcs.main' color='white' _hover={{backgroundColor: 'darkblue'}}padding='20px'>Review Teaching Demo Link Here &nbsp; <LinkOutlined></LinkOutlined></Button>
+                        <Button fontSize='30px' bg='tcs.main' color='white' _hover={{backgroundColor: 'darkblue'}}padding='20px'>
+                            
+                            Review Teaching Demo Here &nbsp; <DownloadIcon/></Button>
                     </Link>
                 </Flex>
                 

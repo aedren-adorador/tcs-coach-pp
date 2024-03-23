@@ -50,6 +50,16 @@ for (let jobApp of result) {
     const command = new GetObjectCommand(getObjectParams)
     const url = await getSignedUrl(s3, command, {expiresIn: '300'})
     jobApp.resumeM = url
+
+    if (jobApp.teachingDemoM !== '') {
+      const getObjectParams2 = {
+      Bucket: 'tcs-coach-pp-demo-zips',
+      Key: jobApp.teachingDemoM
+      }
+      const command2 = new GetObjectCommand(getObjectParams2)
+      const url2 = await getSignedUrl(s3, command2, {expiresIn: '7200'})
+      jobApp.teachingDemoM = url2
+    }
     updated.push(jobApp)
   }
 }

@@ -30,7 +30,6 @@ router.post('/submit-interview', uploadInterview.single('interview'), async (req
     Body: req.file.buffer,
     ContentType: 'video/webm'
   }
-  console.log(params)
   const command = new PutObjectCommand(params)
   await s3.send(command)
   res.json({success: 'Video response uploaded successfully!'})

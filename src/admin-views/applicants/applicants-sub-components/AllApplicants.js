@@ -17,6 +17,7 @@ function AllApplicants({applicants, updateChosenApplicantToReview, handleButtonC
     useEffect(() => {
         axios.get(`${process.env.REACT_APP_SYS_URL}/api/admin/applicant-screening/get-job-applications-joined-with-applicants`)
             .then(result => {
+                console.log(result.data.joinedApplicantAndJobApplicationDetails)
                 setAllJobApplications(result.data.joinedApplicantAndJobApplicationDetails)
             })
     }, [])
@@ -32,27 +33,29 @@ function AllApplicants({applicants, updateChosenApplicantToReview, handleButtonC
             })
         }
         setAllJobApplications(prev => {
-            return prev.filter((jobApp, index) => 
-            jobApp._id.toString().includes(searchApplicantList.toLowerCase()) ||
-            jobApp.dateSubmittedApplicationM.toString().slice(0, 10).includes(searchApplicantList.toLowerCase()) ||
-            jobApp.dateSubmittedApplicationM.toString().slice(0, 10).includes(searchApplicantList.toLowerCase()) ||
-            jobApp.applicantJoinedDetails[0].firstNameM.toLowerCase().includes(searchApplicantList.toLowerCase()) ||
-            jobApp.applicantJoinedDetails[0].lastNameM.toLowerCase().includes(searchApplicantList.toLowerCase()) ||
-            jobApp.positionAppliedToM.toLowerCase().includes(searchApplicantList.toLowerCase()) ||
-            (jobApp.currentStepM === 'submittedInitialApplication' && 'Submitted Resume Application (to review)'.toLowerCase().includes(searchApplicantList.toLowerCase())) ||
-            (jobApp.currentStepM === 'waitingForVideoInterviewSubmission' && 'Waiting for Interview Submission'.toLowerCase().includes(searchApplicantList.toLowerCase())) ||
-            (jobApp.currentStepM === 'submittedVideoInterview' && 'Submitted Video Interview (to review)'.toLowerCase().includes(searchApplicantList.toLowerCase())) ||
-            (jobApp.currentStepM === 'waitingForTeachingDemoSubmission' && 'Waiting for Teaching Demo Submission'.toLowerCase().includes(searchApplicantList.toLowerCase())) ||
-            (jobApp.currentStepM === 'submittedTeachingDemo' && 'Submitted Teaching Demo (to review)'.toLowerCase().includes(searchApplicantList.toLowerCase())) ||
-            (jobApp.currentStepM === 'waitingForOnboardingRequirementsSubmission' && 'Waiting for Onboarding Requirements Submission'.toLowerCase().includes(searchApplicantList.toLowerCase())) ||
-            (jobApp.currentStepM === 'submittedOnboardingRequirements' && 'Onboarding Requirements Sent'.toLowerCase().includes(searchApplicantList.toLowerCase())) ||
-            (jobApp.currentStepM === 'finishedHiringApplicant' && 'HIRED APPLICANT'.toLowerCase().includes(searchApplicantList.toLowerCase())) ||
-            (jobApp.currentStepM === 'rejectedApplicant' && 'REJECTED APPLICANT'.toLowerCase().includes(searchApplicantList.toLowerCase())) ||
-            (jobApp.currentStepM === 'withdrawnApplication' && 'APPLICANT WITHDREW'.toLowerCase().includes(searchApplicantList.toLowerCase())) ||
-            'NA'.toLowerCase().includes(searchApplicantList.toLowerCase())
-        )
-        })
-        
+        return prev.filter((jobApp, index) => {
+            const applicant = jobApp.applicantJoinedDetails[0];
+            return (
+                (jobApp._id && jobApp._id.toString().includes(searchApplicantList.toLowerCase())) ||
+                (jobApp.dateSubmittedApplicationM && jobApp.dateSubmittedApplicationM.toString().slice(0, 10).includes(searchApplicantList.toLowerCase())) ||
+                (applicant && applicant.firstNameM && applicant.firstNameM.toLowerCase().includes(searchApplicantList.toLowerCase())) ||
+                (applicant && applicant.lastNameM && applicant.lastNameM.toLowerCase().includes(searchApplicantList.toLowerCase())) ||
+                jobApp.positionAppliedToM.toLowerCase().includes(searchApplicantList.toLowerCase()) ||
+                (jobApp.currentStepM === 'submittedInitialApplication' && 'Submitted Resume Application (to review)'.toLowerCase().includes(searchApplicantList.toLowerCase())) ||
+                (jobApp.currentStepM === 'waitingForVideoInterviewSubmission' && 'Waiting for Interview Submission'.toLowerCase().includes(searchApplicantList.toLowerCase())) ||
+                (jobApp.currentStepM === 'submittedVideoInterview' && 'Submitted Video Interview (to review)'.toLowerCase().includes(searchApplicantList.toLowerCase())) ||
+                (jobApp.currentStepM === 'waitingForTeachingDemoSubmission' && 'Waiting for Teaching Demo Submission'.toLowerCase().includes(searchApplicantList.toLowerCase())) ||
+                (jobApp.currentStepM === 'submittedTeachingDemo' && 'Submitted Teaching Demo (to review)'.toLowerCase().includes(searchApplicantList.toLowerCase())) ||
+                (jobApp.currentStepM === 'waitingForOnboardingRequirementsSubmission' && 'Waiting for Onboarding Requirements Submission'.toLowerCase().includes(searchApplicantList.toLowerCase())) ||
+                (jobApp.currentStepM === 'submittedOnboardingRequirements' && 'Onboarding Requirements Sent'.toLowerCase().includes(searchApplicantList.toLowerCase())) ||
+                (jobApp.currentStepM === 'finishedHiringApplicant' && 'HIRED APPLICANT'.toLowerCase().includes(searchApplicantList.toLowerCase())) ||
+                (jobApp.currentStepM === 'rejectedApplicant' && 'REJECTED APPLICANT'.toLowerCase().includes(searchApplicantList.toLowerCase())) ||
+                (jobApp.currentStepM === 'withdrawnApplication' && 'APPLICANT WITHDREW'.toLowerCase().includes(searchApplicantList.toLowerCase())) ||
+                'NA'.toLowerCase().includes(searchApplicantList.toLowerCase())
+            );
+        });
+    });
+
     }, [searchApplicantList])
     return(
         <>
