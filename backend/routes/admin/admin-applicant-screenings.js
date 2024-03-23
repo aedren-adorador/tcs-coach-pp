@@ -5,7 +5,20 @@ const {generateInterviewToken, sendInterviewInvite, sendDemoInvite, sendOnboardi
 const Applicant = require('../../models/applicants');
 const fs = require('fs');
 const Criteria = require('../../models/criteria');
+const { S3Client, PutObjectCommand, GetObjectCommand } = require("@aws-sdk/client-s3");
+const {getSignedUrl} = require('@aws-sdk/s3-request-presigner')
+const bucket_name = process.env.BUCKET_NAME
+const bucket_region = process.env.BUCKET_REGION
+const access_key = process.env.AWS_ACCESS_KEY_ID
+const secret_access_key = process.env.AWS_SECRET_ACCESS_KEY
 
+const s3 = new S3Client({
+  credentials: {
+    accessKeyId: access_key, 
+    secretAccessKey: secret_access_key
+  }, 
+    region: bucket_region
+})
 
 router.get('/get-job-applications-joined-with-applicants', async (req, res, next) => {
   const result = await JobApplication.aggregate([
@@ -26,7 +39,21 @@ router.get('/get-job-applications-joined-with-applicants', async (req, res, next
     }
   },
 ]).exec();
-res.json({joinedApplicantAndJobApplicationDetails: result})
+
+const updated = []
+for (let jobApp of result) {
+  if (jobApp.resumeM !== '') {
+    const getObjectParams = {
+    Bucket: bucket_name,
+    Key: jobApp.resumeM
+    }
+    const command = new GetObjectCommand(getObjectParams)
+    const url = await getSignedUrl(s3, command, {expiresIn: '300'})
+    jobApp.resumeM = url
+    updated.push(jobApp)
+  }
+}
+res.json({joinedApplicantAndJobApplicationDetails: updated})
 });
 
 router.post('/send-interview-invite', async (req, res, next) => {
@@ -84,18 +111,27 @@ router.get('/get-applicants', (req, res, next) => {
     })
 })
 
-router.get('/get-interview-responses/:details', (req, res, next) => {
+router.get('/get-interview-responses/:details', async (req, res, next) => {
+    // Key: `${req.body.applicantID}-${req.body.jobID}-Question${req.body.questionNumber}`,
   const details = JSON.parse(req.params.details)
-  fs.readdir(`${process.env.INTERVIEW_STATIC}/${details.applicantFirstName}-${details.applicantLastName}-${details.applicantID}`, (err, files) => {
-    res.send(files);
-  })
+
+  const obtainedVideoInterviews = []
+  for (let i = 1; i < parseInt(details.questions.length)+1; i++) {
+    const getObjectParams = {
+    Bucket: process.env.BUCKET_NAME_INTERVIEWS,
+    Key: `${details.applicantID}-${details.jobID}-Question${i}`
+    }
+    const command = new GetObjectCommand(getObjectParams)
+    const url = await getSignedUrl(s3, command, {expiresIn: '7200'})
+    await obtainedVideoInterviews.push(url)
+  }
+  res.send(obtainedVideoInterviews)
 })
 
 router.get('/get-applicant-criteria-scores/:id', async (req, res, next) => {
   const details = JSON.parse(req.params.id, 'ha')
   const jobApplication = await JobApplication.find({_id: details.applicantID})
   if (Object.keys(jobApplication[0].interviewCriteriaScoresM).length === 0) {
-    console.log('dahell')
     const freshCriteria = {}
     const criteria = await Criteria.find()
 
@@ -105,7 +141,6 @@ router.get('/get-applicant-criteria-scores/:id', async (req, res, next) => {
     res.send(freshCriteria)
 
   } else {
-    console.log('fush you')
     res.send(jobApplication[0].interviewCriteriaScoresM)
   }
   

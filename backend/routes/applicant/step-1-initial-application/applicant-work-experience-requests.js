@@ -42,8 +42,7 @@ router.post('/upload-resume', upload.single('resume'), async (req, res, next)  =
   const command2 = new GetObjectCommand(getObjectParams)
   const url = await getSignedUrl(s3, command2, {expiresIn: '86400'})
   res.send({updatedApplication, url})
-  })
-    
+  }) 
 
 
 router.get('/get-job-application-resume/:details', (req, res, next) => {

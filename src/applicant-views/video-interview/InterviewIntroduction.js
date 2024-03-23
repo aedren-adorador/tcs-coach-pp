@@ -31,7 +31,6 @@ function InterviewIntroduction() {
           maxW='560px'
           minH='500px'
           mt='100px'
-          borderRadius='0px'
           height='100%'
           maxH='500px'
           pt='50px'
@@ -64,7 +63,6 @@ function InterviewIntroduction() {
                 size='md'
                 width='170px'
                 bg='tcs.main'
-                borderRadius='0px'
                 color='white'
                 colorScheme='facebook'
                 onClick={() => {

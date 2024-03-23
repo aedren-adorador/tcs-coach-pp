@@ -8,7 +8,7 @@ const transporter = nodemailer.createTransport({
     secure: true,
     auth: {
         user: process.env.USER_EMAIL,
-        pass: 'biqn arad lkyl akfk',
+        pass: process.env.USER_PASS,
     }
 });
 
@@ -39,7 +39,12 @@ async function sendInterviewInvite(emailAddressInput, position, deadline, applic
       from: process.env.USER_EMAIL,
       to: emailAddressInput,
       subject: "Congratulations! The Coding School Application - Interview Invitation",
-      html: `<p style='font-size: 14px'>Dear ${applicantName}</p><br/><p>We are pleased to inform you that you have passed the initial screening for the ${position} position! The next step of the application process would be an asynchronous video interview which will further make us get to know you more in terms of experience, values, and qualities for the role. Do not worry as we have provided a quick tutorial before you take the interview. Please note that you have until ${deadline} to take the interview, and <strong>it can be accessed by logging-in to your TCS Coach++ account.</strong> Goodluck!`
+      html: `<p>Dear ${applicantName}</p>
+      <p>We are pleased to inform you that you have passed the initial screening for the ${position} position!</p>
+      
+      <p>The next step of the application process would be an asynchronous video interview which will further make us get to know you more in terms of experience, values, and qualities for the role.</p>
+      
+     <p>Please note that you have until ${deadline} to take the interview, and <strong>it can be accessed by logging-in to your TCS Coach++ account.</strong></p> <p>Goodluck!</p>`
     })
 }
 

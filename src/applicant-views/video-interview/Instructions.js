@@ -33,7 +33,6 @@ function Instructions() {
           maxW='560px'
           minH='500px'
           mt='100px'
-          borderRadius='0px'
           height='100%'
           maxH='500px'
 
@@ -48,8 +47,7 @@ function Instructions() {
                 <Button
                 bg='tcs.main'
                 color='white'
-                colorScheme="facebook"
-                borderRadius='0px'
+                colorScheme="blue"
                 fontWeight='300'
                 width='150px'
                 fontSize='14px'
@@ -78,21 +76,6 @@ function Instructions() {
                 In this section are {submittedJobApplicationDetails[0][0].interviewQuestionsM.length}&nbsp;questions for you to answer and you will record your responses using video. These questions are similar to ones you will likely encounter when interviewing for an actual role with a company. You will have <strong>30 seconds to read the question and 3 minutes to give your answer.</strong> You can re-record your response<strong>&nbsp;unlimited times before moving to the next question</strong>.
                </Text>
             </CardBody>
-            <CardFooter
-            bg='tcs.dirtywhite'
-            fontSize='12px'
-            >
-                <Flex gap='10' ml='20px'>
-                    <Text
-                    color='tcs.linky'
-                    textDecoration='underline'
-                    ><QuestionCircleOutlined/> Help</Text>
-                    <Text
-                    color='tcs.linky'
-                    textDecoration='underline'
-                    ><SettingOutlined/> Settings</Text>
-                </Flex>
-            </CardFooter>
           </Card>
         </Flex>
        </Box>

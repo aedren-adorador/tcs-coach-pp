@@ -29,7 +29,7 @@ function NavAdmin({persistentButton, getActiveNavButton}) {
         direction='column'
         maxW='80px'
         height='100%'
-        textAlign='center'
+        justify='center'
         >
             <Flex justify='center'><Image src={tcsLogo} alt="tcs-logo" maxW='70px'/></Flex>
             {navButtons.map((button, index) => {
@@ -47,7 +47,7 @@ function NavAdmin({persistentButton, getActiveNavButton}) {
                     onClick={() => handleNavButtonClick(index)}
                     color='white'
                     >
-                       <Flex direction='column'>{navButtonSVGs[index]}{button}</Flex>
+                       <Flex direction='column' align='center' justify='center'>{navButtonSVGs[index]}{button}</Flex>
                     </Button>
                 } else {
                     return <Button
@@ -59,7 +59,7 @@ function NavAdmin({persistentButton, getActiveNavButton}) {
                     height='80px'
                     fontSize='10px'
                     onClick={() => handleNavButtonClick(index)}
-                    ><Flex direction='column'>{navClickedButtonSVGs[index]} {button}</Flex>
+                    ><Flex direction='column' align='center'>{navClickedButtonSVGs[index]} {button}</Flex>
                     </Button>
                 }
             })}

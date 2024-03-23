@@ -55,14 +55,9 @@ function Applicants() {
     },[])
 
     useEffect(() => {
+    }, [chosenApplicantToReview, chosenApplicantAllJobApplicationDetails, applicantsResult, clickedButton])
 
-    }, [chosenApplicantToReview, chosenApplicantAllJobApplicationDetails])
 
-    useEffect(()=> {
-    }, [applicantsResult])
-
-    useEffect(()=> { 
-    },[clickedButton])
 
     useEffect(() => {
         if (chosenApplicantAllJobApplicationDetails.currentStepM === 'submittedInitialApplication' ||

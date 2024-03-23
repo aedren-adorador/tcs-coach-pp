@@ -24,7 +24,8 @@ function AuthHeader() {
             height='70px'
             ></Image>
             <Link to='/'>
-                <Button colorScheme='green' ml='5px' minW='150px' size='sm'>Explore Job Portal</Button>
+                {!localStorage.getItem('isAuthenticated') && 
+                <Button colorScheme='green' ml='5px' minW='150px' size='sm'>Explore Job Portal</Button>}
             </Link>
         </Flex>
         </>

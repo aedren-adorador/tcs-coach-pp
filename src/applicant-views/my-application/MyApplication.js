@@ -3,7 +3,7 @@ import { Td, Table, TableContainer, Tr, Th, Tbody, Thead, Button, Badge, Text, I
 import suitcase from '../../admin-views/admin-view-imgs/suitcase.png'
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Form } from "formik";
 
 function MyApplication({applicantData, setObtainedActiveNavButton}) {
@@ -202,7 +202,7 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                     </Td>
                     <Td>
                         <Flex direction='column' gap='2'>
-                            <Button size='xs' borderRadius='0px' colorScheme='blue' onClick={onOpenViewApplication}
+                            <Button size='xs' colorScheme='blue' onClick={onOpenViewApplication}
                             display={i[0].currentStepM === 'finishedHiringApplicant' || i[0].currentStepM ===  'rejectedApplicant' || i[0].currentStepM === 'withdrawnApplication'? 'none': ''}
                             >View Application</Button>
                             <Modal isOpen={isOpenViewApplication} onClose={onCloseViewApplication}>
@@ -231,13 +231,14 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                                     </Flex>
                                    <Flex gap='2'>
                                         <Text fontWeight='500' color='tcs.mongo'>Resume:</Text>
-                                        <a href={`${process.env.REACT_APP_RESUME_STATIC}/${i[0].resumeM}`} target="_blank" rel='noreferrer'>
-                                            <Button borderRadius='0px' variant='outline' colorScheme='blue' size='xs'>View Resume</Button>
-                                        </a>
+                                            <Link to={i[0].resumeM} target='_blank'>
+                                                <Button borderRadius='0px' variant='outline' colorScheme='blue' size='xs'
+                                            >View Resume</Button>
+                                            </Link>
                                     </Flex>
                                 </ModalBody>
                                 <ModalFooter>
-                                    <Button borderRadius='0px' colorScheme='blue' mr={3} onClick={() => {
+                                    <Button  colorScheme='blue' mr={3} onClick={() => {
                                         onCloseViewApplication()
                                     }}>
                                     Close
@@ -247,7 +248,7 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                             </Modal>
 
 
-                            <Button size='xs' colorScheme='red' variant='outline' borderRadius='0px'onClick={() => {
+                            <Button size='xs' colorScheme='red' variant='outline' onClick={() => {
                                 onOpen()
                                 setWithdrawValue(i[0]._id)
                             }}
@@ -262,12 +263,12 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                                     Are you sure you are withdrawing your application? This action cannot be undone. 
                                 </ModalBody>
                                 <ModalFooter>
-                                    <Button borderRadius='0px' colorScheme='blue' mr={3} onClick={() => {
+                                    <Button colorScheme='blue' mr={3} onClick={() => {
                                         onClose()
                                     }}>
                                     Cancel
                                     </Button>
-                                    <Button variant='ghost' colorScheme='red' borderRadius='0px' onClick={() => {
+                                    <Button variant='ghost' colorScheme='red' onClick={() => {
                                         onClose()
                                         handleWithdrawApplication(withdrawValue)
                                     }}>Withdraw</Button>
@@ -378,11 +379,8 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                         {i[0].currentStepM === 'waitingForInterviewSubmission' && (
                         <Button
                             onClick={onOpenInterview}
-                            bg='tcs.mongo'
-                            color='white'
                             colorScheme="green"
                             size='sm'
-                            borderRadius='0px'
                         >
                             Take Video Interview
                         </Button>
@@ -414,7 +412,6 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                                     <Button
                                     colorScheme='red'
                                     mr={3} onClick={onCloseTeachingDemo}
-                                    borderRadius='0px'
                                     >
                                     Cancel
                                     </Button>
@@ -425,7 +422,6 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                                     }}
                                     fontWeight='300'
                                     variant='ghost'
-                                    borderRadius='0px'                    
                                     >Confirm</Button>
                                 </ModalFooter>
                                 </ModalContent>
@@ -433,13 +429,13 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                             </FormControl>
                             <Flex justify='flex-end'>
                             {!isSendingDemoLink ?
-                            <Button colorScheme='green' size='sm' borderRadius='0px' type='submit'
+                            <Button colorScheme='green' size='sm' type='submit'
                             display={demoLink.trim() ? '' : 'none'}
                             onClick={() => {
                                 onOpenTeachingDemo()
                             }}
                             >Submit</Button>:
-                            <Button isLoading loadingText='Submitting Demo' size='sm' colorScheme="green"  borderRadius='0px'></Button>}
+                            <Button isLoading loadingText='Submitting Demo' size='sm' colorScheme="green" ></Button>}
                             </Flex>
                             </>
                         )}
@@ -518,7 +514,6 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                                 <Button
                                 colorScheme='red'
                                 mr={3} onClick={onCloseInterview}
-                                borderRadius='0px'
                                 >
                                 Cancel
                                 </Button>
@@ -526,7 +521,6 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                                 onClick={()=>redirectToVideoInterview(i)}
                                 fontWeight='300'
                                 variant='ghost'
-                                borderRadius='0px'                    
                                 >Yes, I'm ready.</Button>
                             </ModalFooter>
                             </ModalContent>

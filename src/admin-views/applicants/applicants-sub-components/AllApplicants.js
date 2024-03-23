@@ -60,7 +60,7 @@ function AllApplicants({applicants, updateChosenApplicantToReview, handleButtonC
             <Search value={searchApplicantList} onChange={(e) => setSearchApplicantList(e.target.value)}/>
         </Flex>
         <TableContainer
-        border='solid 0.5px lightgray'
+        border='solid 0.5px black'
         padding='30px 10px'
         mt='20px'   
         >
@@ -86,7 +86,7 @@ function AllApplicants({applicants, updateChosenApplicantToReview, handleButtonC
                     onClick={()=>goToApplicantProgress(jobApp)}
                     _hover={{
                         backgroundColor: "tcs.bluey",
-                        color: 'tcs.main'
+                        color: 'black'
                     }}
                     >
                         <Td>
@@ -104,7 +104,7 @@ function AllApplicants({applicants, updateChosenApplicantToReview, handleButtonC
                             {jobApp.currentStepM === 'submittedInitialApplication' &&
                             <Badge
                             border='solid 0.2px lightgray'
-                            bg='tcs.dirtywhite'
+                            colorScheme='yellow'
                             padding='5px'
                             fontSize='8px'
                             fontWeight='500'
@@ -112,7 +112,8 @@ function AllApplicants({applicants, updateChosenApplicantToReview, handleButtonC
 
                             {jobApp.currentStepM === 'waitingForInterviewSubmission' &&
                             <Badge
-                            bg='tcs.creamy'
+                            colorScheme='blue'
+                            color='black'
                             padding='5px'
                             border='solid 0.2px lightgray'
                             fontWeight='500'
@@ -121,7 +122,8 @@ function AllApplicants({applicants, updateChosenApplicantToReview, handleButtonC
 
                             {jobApp.currentStepM === 'submittedVideoInterview' &&
                             <Badge
-                            colorScheme='green'
+                            colorScheme='yellow'
+                            color='black'
                             padding='5px'
                             border='solid 0.2px lightgray'
                             fontSize='8px'
@@ -131,7 +133,8 @@ function AllApplicants({applicants, updateChosenApplicantToReview, handleButtonC
                             {jobApp.currentStepM === 'waitingForTeachingDemoSubmission' &&
                             <Badge
                             border='solid 0.2px lightgray'
-                            bg='tcs.creamy'
+                            colorScheme='blue'
+                            color='black'
                             padding='5px'
                             fontSize='8px'
                             fontWeight='500'
@@ -139,7 +142,8 @@ function AllApplicants({applicants, updateChosenApplicantToReview, handleButtonC
 
                             {jobApp.currentStepM === 'submittedTeachingDemo' &&
                             <Badge
-                            colorScheme='green'
+                            colorScheme='yellow'
+                            color='black'
                             padding='5px'
                             border='solid 0.2px lightgray'
                             fontSize='8px'
@@ -149,7 +153,8 @@ function AllApplicants({applicants, updateChosenApplicantToReview, handleButtonC
                             {jobApp.currentStepM === 'waitingForOnboardingRequirementsSubmission' &&
                             <Badge
                             border='solid 0.2px lightgray'
-                            bg='tcs.creamy'
+                            colorScheme='blue'
+                            color='black'
                             padding='5px'
                             fontSize='8px'
                             fontWeight='500'
@@ -158,7 +163,8 @@ function AllApplicants({applicants, updateChosenApplicantToReview, handleButtonC
                             {jobApp.currentStepM === 'submittedOnboardingRequirements' &&
                             <Badge
                             border='solid 0.2px lightgray'
-                            bg='tcs.limey'
+                            colorScheme='yellow'
+                            color='black'
                             padding='5px'
                             fontSize='8px'
                             fontWeight='500'

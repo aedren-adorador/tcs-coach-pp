@@ -49,7 +49,7 @@ function NavApplicant({persistentButton, getActiveNavButton}) {
                     onClick={() => handleNavButtonClick(index)}
                     color='white'
                     >
-                       <Flex direction='column'>{navButtonSVGs[index]}{button}</Flex>
+                       <Flex direction='column' align='center' justify='center'>{navButtonSVGs[index]}{button}</Flex>
                     </Button>
                 } else {
                     return <Button
@@ -61,7 +61,7 @@ function NavApplicant({persistentButton, getActiveNavButton}) {
                     height='80px'
                     fontSize='10px'
                     onClick={() => handleNavButtonClick(index)}
-                    ><Flex direction='column'>{navClickedButtonSVGs[index]} {button}</Flex>
+                    ><Flex direction='column' align='center' justify='center'>{navClickedButtonSVGs[index]} {button}</Flex>
                     </Button>
                 }
             })}

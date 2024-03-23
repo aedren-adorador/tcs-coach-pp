@@ -27,16 +27,19 @@ function InterviewFeedback(chosenApplicantAllJobApplicationDetails, setChosenApp
 
     useEffect(() => {
         if (interviewResponsesList[clickedVideo]) {
-        const videoElement = document.getElementById("interviewVideo");
-        videoElement.src = `${process.env.REACT_APP_SYS_URL}/${process.env.REACT_APP_INTERVIEW_STATIC}/${chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0].firstNameM}-${chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0].lastNameM}-${chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0]._id}/${interviewResponsesList[clickedVideo]}`
+            const videoElement = document.getElementById("interviewVideo");
+        videoElement.src = interviewResponsesList[clickedVideo]
         setIsVideoLoading(false)
-        } 
-    }, [clickedVideo, interviewResponsesList, chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.applicantJoinedDetails]); 
+        }
+        
+    }, [clickedVideo]); 
 
 
     useEffect(() => {
         const details = {
         applicantID: chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0]._id,
+        questions: chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.interviewQuestionsM,
+        jobID: chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.jobIDForeignKeyM,
         applicantFirstName: chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0].firstNameM,
         applicantLastName: chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0].lastNameM
         }
@@ -88,7 +91,6 @@ function InterviewFeedback(chosenApplicantAllJobApplicationDetails, setChosenApp
                     height='30px'
                     size='xs'
                     border={index === clickedVideo ? 'solid' : ''}
-                    // variant={index === clickedVideo ? 'outline' : 'link'}
                     width='50%'
                     _hover={{backgroundColor:'tcs.main', color: 'white'}}
                     onClick={()=>{
@@ -100,26 +102,27 @@ function InterviewFeedback(chosenApplicantAllJobApplicationDetails, setChosenApp
                                 }}
                             }
                     >Question {index+1}</Button>
-                    <Box width='50%' textAlign='center'>{question}</Box>
+                    <Box width='50%' ml='5px'>{question}</Box>
                     </Flex>
                 })}
             </GridItem>
             <Skeleton
             isLoaded={!isVideoLoading}
             >
-            <GridItem height='400px'>
-                 {interviewResponsesList[clickedVideo] &&
-                 
+            <GridItem height='420px'>
+                 {interviewResponsesList.length > 0 && interviewResponsesList[clickedVideo] &&
+                 <>
                  <video id="interviewVideo" width='500px' controls style={{borderRadius: '10px 10px 10px 10px', height: '100%', width: '100%', backgroundColor: 'black'}}>
-                    <source src={`${process.env.REACT_APP_SYS_URL}/${process.env.REACT_APP_INTERVIEW_STATIC}/${chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0].firstNameM}-${chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0].lastNameM}-${chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.applicantJoinedDetails[0]._id}/${interviewResponsesList[clickedVideo]}`} type="video/webm" />
+                    <source src={interviewResponsesList[clickedVideo]} type="video/webm" />
                 </video>
+                </>
                 }
             </GridItem>
             </Skeleton>
         </Grid>
 
         <Text
-        mt='20px'
+        mt='50px'
         mb='20px'
         fontWeight='600'
         color='black'

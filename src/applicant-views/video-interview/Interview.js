@@ -59,11 +59,11 @@ function Interview() {
             const blobData = response.data;
             const interviewResponse = new FormData();
             interviewResponse.append('applicantFirstName', applicantData.firstNameM);
+            interviewResponse.append('jobID', submittedJobApplicationDetails[0][0].jobIDForeignKeyM)
             interviewResponse.append('applicantLastName', applicantData.lastNameM);
             interviewResponse.append('applicantID', applicantData._id);
             interviewResponse.append('questionNumber', questionCounter + 1);
             interviewResponse.append('interview', blobData, { type: 'video/webm' });
-
             axios.post(`${process.env.REACT_APP_SYS_URL}/api/applicant/video-interview-request/submit-interview`, interviewResponse, {
                 headers: {
                     'Content-Type': 'multipart/form-data' // Adjust content type if needed
@@ -507,12 +507,9 @@ function Interview() {
                                 fontSize='14px'
                                 width='150px'
                                 colorScheme='facebook'
-                                onClick={()=>{
-                                     console.log('questionCounter: ', questionCounter+1)
-                                     console.log('questionsLength', questions?.length)                                  
+                                onClick={()=>{                                  
                                     if ( questionCounter+1 === questions?.length) {
                                         submitInterviewResponse(recording.previewRef.current.currentSrc)
-                                        console.log(submittedJobApplicationDetails, "AHTGAA")
                                         navigate('/video-interview/submission-complete',
                                          {state: {applicantData: applicantData, submittedJobApplicationDetails: submittedJobApplicationDetails}}
                                         )

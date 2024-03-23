@@ -77,7 +77,6 @@ function WorkExperienceV2() {
     }, [])
 
     useEffect(() => {
-        // console.log(resumeLink)
     }, [linkedInLink, resumeLink])
 
 

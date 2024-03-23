@@ -31,7 +31,6 @@ function CameraAndMicrophoneSettings() {
           maxW='560px'
           minH='500px'
           mt='100px'
-          borderRadius='0px'
           height='100%'
           pt='50px'
           maxH='500px'
@@ -77,7 +76,6 @@ function CameraAndMicrophoneSettings() {
                 size='md'
                 width='170px'
                 bg='tcs.main'
-                borderRadius='0px'
                 color='white'
                 colorScheme='facebook'
                 onClick={() => {

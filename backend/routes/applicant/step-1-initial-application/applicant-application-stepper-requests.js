@@ -151,13 +151,18 @@ router.get('/get-updated-details/:id', async (req, res, next) => {
 router.get('/get-updated-details-work-part/:id',  async (req, res, next) => {
   const details = JSON.parse(req.params.id)
   const result = await JobApplication.find({applicantIDForeignKeyM: details.applicantIDForeignKeyM, jobIDForeignKeyM: details.jobIDForeignKeyM})
-  const getObjectParams = {
-    Bucket: bucket_name,
-    Key: result[0].resumeM
+  if (result[0].resumeM !== '') {
+     const getObjectParams = {
+      Bucket: bucket_name,
+      Key: result[0].resumeM
+    }
+    const command = new GetObjectCommand(getObjectParams)
+    const url = await getSignedUrl(s3, command, {expiresIn: '86400'})
+    res.send({result, url})
+  } else {
+    res.send({result})
   }
-  const command = new GetObjectCommand(getObjectParams)
-  const url = await getSignedUrl(s3, command, {expiresIn: '86400'})
-  res.send({result, url})
+ 
 })
 
 
