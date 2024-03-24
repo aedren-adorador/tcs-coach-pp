@@ -1,7 +1,7 @@
 import { Badge, Box, Button, Card, CardBody, Checkbox, Flex, Grid, GridItem, Input, InputGroup, Link, List, ListItem, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Skeleton, Spinner, Stack, Table, TableCaption, TableContainer, Tbody, Td, Text, Textarea, Tfoot, Th, Thead, Tr, VStack, useDisclosure } from "@chakra-ui/react";
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import { EditIcon } from "@chakra-ui/icons";
+import { DownloadIcon, EditIcon } from "@chakra-ui/icons";
 import { LinkOutlined, UserOutlined } from "@ant-design/icons";
 
 function OnboardingRequirements(chosenApplicantAllJobApplicationDetails) {
@@ -37,7 +37,7 @@ function OnboardingRequirements(chosenApplicantAllJobApplicationDetails) {
             <GridItem border='solid 0.2px lightgray'>
                 <Flex justify='center' align='center' height='100%'>
                     <Link href={chosenApplicantAllJobApplicationDetails.chosenApplicantAllJobApplicationDetails.onboardingRequirementsM} target='_blank'>
-                        <Button fontSize='30px' bg='tcs.main' color='white' _hover={{backgroundColor: 'darkblue'}}padding='20px'>Review Onboarding Requirements Here &nbsp; <LinkOutlined></LinkOutlined></Button>
+                        <Button fontSize='30px' bg='tcs.main' color='white' _hover={{backgroundColor: 'darkblue'}}padding='20px'>Review Onboarding Requirements Here&nbsp; <DownloadIcon/></Button>
                     </Link>
                 </Flex>
                 

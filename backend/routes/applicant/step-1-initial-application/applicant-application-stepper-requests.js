@@ -1,6 +1,7 @@
 const express = require('express');
 const JobApplication = require('../../../models/jobApplications');
 const Applicant = require('../../../models/applicants');
+const {sendRecruiterNotif} = require('../../../configs/email-config')
 const router = express.Router();
 const { S3Client, PutObjectCommand, GetObjectCommand } = require("@aws-sdk/client-s3");
 const {getSignedUrl} = require('@aws-sdk/s3-request-presigner')
@@ -134,7 +135,10 @@ router.post('/save-job-application-id-to-applicant', (req, res, next) => {
                   jobApplicationsM: toUpdateApplicant.jobApplicationsM.includes(result._id) ? [toUpdateApplicant.jobApplicationsM]:[...toUpdateApplicant.jobApplicationsM, result._id],
                 }
                 Applicant.updateOne({_id: req.body.applicantID}, toUpdateDetails)
-                    .then(result => res.json({result: result}))
+                    .then(result => {
+                      sendRecruiterNotif()
+                      res.json({result: result})
+                    })
               }
             )
           }
@@ -164,7 +168,6 @@ router.get('/get-updated-details-work-part/:id',  async (req, res, next) => {
   }
  
 })
-
 
 router.get('/get-updated-details-summary/:id', (req, res, next) => {
   const details = JSON.parse(req.params.id)

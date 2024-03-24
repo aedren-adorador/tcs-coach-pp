@@ -1,11 +1,36 @@
 const express = require('express');
 const JobApplication = require('../../../models/jobApplications');
 const router = express.Router();
+const {uploadOnboardingZip} = require('../../../configs/multer-config')
+const { S3Client, PutObjectCommand, GetObjectCommand } = require("@aws-sdk/client-s3");
+const {getSignedUrl} = require('@aws-sdk/s3-request-presigner');
+const { sendRecruiterNotif } = require('../../../configs/email-config');
+const bucket_name = process.env.BUCKET_NAME_REQS
+const bucket_region = process.env.BUCKET_REGION
+const access_key = process.env.AWS_ACCESS_KEY_ID
+const secret_access_key = process.env.AWS_SECRET_ACCESS_KEY
 
-router.post('/submit-onboarding-link', (req, res, next) => {
-    console.log(req.body)
-    JobApplication.updateOne({_id: req.body.submittedJobApplicationDetails[0][0]._id}, {onboardingRequirementsM: req.body.onboardingLink, dateSubmittedTeachingDemoM: new Date(), currentStepM: 'submittedOnboardingRequirements'})
-        .then(result => res.send(result))
+const s3 = new S3Client({
+  credentials: {
+    accessKeyId: access_key, 
+    secretAccessKey: secret_access_key
+  }, 
+    region: 'ap-southeast-2'
+})
+
+router.post('/submit-onboarding-zip', uploadOnboardingZip.single('onboardingZip'), async (req, res, next) => {
+    const params = {
+        Bucket: bucket_name,
+        Key: `${req.body.applicantID}-${req.body.jobID}-OnboardingZip`,
+        Body: req.file.buffer,
+        ContentType: req.file.mimetype
+    }
+    const command = new PutObjectCommand(params)
+    await s3.send(command)
+
+    const result = await JobApplication.updateOne({applicantIDForeignKeyM: req.body.applicantID, jobIDForeignKeyM: req.body.jobID}, {onboardingRequirementsM: `${req.body.applicantID}-${req.body.jobID}-OnboardingZip`, dateSubmittedOnboardingRequirementsM: new Date(), currentStepM: 'submittedOnboardingRequirements'})
+    await sendRecruiterNotif()
+    res.send(result)
 })
 
 module.exports = router;

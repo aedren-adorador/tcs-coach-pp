@@ -14,4 +14,7 @@ const uploadInterview = multer({storage:interviewStorage})
 const demoZipStorage = multer.memoryStorage()
 const uploadDemoZip = multer({storage: demoZipStorage})
 
-module.exports = {upload, uploadInterview, uploadDemoZip}
+const onboardingZipStorage = multer.memoryStorage()
+const uploadOnboardingZip = multer({storage: onboardingZipStorage})
+
+module.exports = {upload, uploadInterview, uploadDemoZip, uploadOnboardingZip}

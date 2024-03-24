@@ -20,6 +20,15 @@ const s3 = new S3Client({
     region: bucket_region
 })
 
+const s3_onboarding = new S3Client({
+  credentials: {
+    accessKeyId: access_key, 
+    secretAccessKey: secret_access_key
+  }, 
+    region: 'ap-southeast-2'
+})
+
+
 router.get('/get-job-applications-joined-with-applicants', async (req, res, next) => {
   const result = await JobApplication.aggregate([
   {
@@ -48,7 +57,7 @@ for (let jobApp of result) {
     Key: jobApp.resumeM
     }
     const command = new GetObjectCommand(getObjectParams)
-    const url = await getSignedUrl(s3, command, {expiresIn: '300'})
+    const url = await getSignedUrl(s3, command, {expiresIn: '7200'})
     jobApp.resumeM = url
 
     if (jobApp.teachingDemoM !== '') {
@@ -59,6 +68,16 @@ for (let jobApp of result) {
       const command2 = new GetObjectCommand(getObjectParams2)
       const url2 = await getSignedUrl(s3, command2, {expiresIn: '7200'})
       jobApp.teachingDemoM = url2
+    }
+
+    if (jobApp.onboardingRequirementsM !== '') {
+      const getObjectParams3 = {
+      Bucket: 'tcs-coach-pp-onboarding-reqs',
+      Key: jobApp.onboardingRequirementsM
+      }
+      const command3 = new GetObjectCommand(getObjectParams3)
+      const url3 = await getSignedUrl(s3_onboarding, command3, {expiresIn: '7200'})
+      jobApp.onboardingRequirementsM = url3
     }
     updated.push(jobApp)
   }

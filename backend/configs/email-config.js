@@ -44,7 +44,8 @@ async function sendInterviewInvite(emailAddressInput, position, deadline, applic
       
       <p>The next step of the application process would be an asynchronous video interview which will further make us get to know you more in terms of experience, values, and qualities for the role.</p>
       
-     <p>Please note that you have until ${deadline} to take the interview, and <strong>it can be accessed by logging-in to your TCS Coach++ account.</strong></p> <p>Goodluck!</p>`
+     <p>Please note that you have until ${deadline} to take the interview, and <strong>it can be accessed by logging-in to your <a href=${process.env.MAIN_URL}>TCS Coach++account.</a></strong></p> <p>Goodluck!</p> <p>Warm regards,</p><br/>
+      <p>The Coding School Recruitment Team</p>`
     })
 }
 
@@ -109,8 +110,7 @@ async function sendDemoInvite(emailAddressInput, position, applicantName) {
       <ol>
           <li>Pick any topic you would like to demonstate teaching.</li>
           <li>Record yourself for 20-30 minutes with a prepared slideset.</li>
-          <li>Upload your recording via Google Drive. Set the share settings to: "anyone with the link can view".</li>
-          <li>Log-in to your <a href=${process.env.MAIN_URL}>TCS Coach++ Account</a>  and paste the link of your uploaded demo.</li>
+          <li>Log-in to your <a href=${process.env.MAIN_URL}>TCS Coach++ Account</a>  and attached a zip file (.zip) of your demo. Maximum video size is 150 MB.</li>
           <li>Submit your link and wait for our team to reach out to you in a few days.</li>
       </ol>
 
@@ -127,7 +127,7 @@ async function sendOnboardingRequirementsChecklist(emailAddressInput, position, 
       to: emailAddressInput,
       subject: "Congratulations — You Have Successfully Passed The Coding School's Application Process",
       html: `
-      <p style='font-size: 14px'>Dear ${applicantName}</p><br />
+      <p>Dear ${applicantName},</p>
       <p>We are thrilled to inform you that you have successfully passed The Coding School's application process for the
       ${position} position! Congratulations on this significant achievement!</p>
       
@@ -136,8 +136,7 @@ async function sendOnboardingRequirementsChecklist(emailAddressInput, position, 
       <p>Our operations team will be in touch with you regarding your offer letter.</p>
       <p>We are excited to have you on board and look forward to seeing your contributions to our organization. Below are the specific steps and requirements that you need to submit should you decide to sign the offer letter.</p>
       <ol>
-          <li>Create a Google Drive Folder with the format: FirstName-LastName-Position (Ex. Cheryl-Siy-SoftwareEngineer)</li>
-          <li>Make the folder access: "Viewer" and "Anyone with the link"</li>
+          <li>Make the zip file containing all indicated files below and upload the zip file in your <a href=${process.env.MAIN_URL}>TCS Coach++ Account</a>. Maximum file size is 5 MB.</li>
           <li>Kindly upload the following digital files in the folder:
               <ul>
                   <li>Birth Certificate</li>
@@ -146,16 +145,14 @@ async function sendOnboardingRequirementsChecklist(emailAddressInput, position, 
                   <li>NBI Clearance (valid for the current year period)</li>
               </ul>
           </li>
-          <li>Plot your week availability in this When2Meet Link for the Shadow Teaching</li>
-          <li>Enroll in this Google Classroom: * insert link here *. Screenshot and upload the proof to the Google Drive Folder.</li>
+          <li>Plot your week availability in this <a href='https://www.when2meet.com/?24276406-5Ykk4'>When2Meet Link</a> for the Shadow Teaching</li>
       </ol>
 
       <p>
           Once again, congratulations on this accomplishment! We are thrilled to welcome you to The Coding School community and
           are confident that you will excel in your new role.
           
-          If you have any questions or need further assistance, please do not hesitate to contact us at [provide contact
-          information].
+          If you have any questions or need further assistance, please do not hesitate to contact us at coaches@coding.ph.
       </p>
 
       <p>Warm regards,</p><br/>
@@ -194,5 +191,21 @@ async function sendRejectionEmail(emailAddressInput, applicantName) {
     })
 }
 
+
+async function sendRecruiterNotif() {
+  await transporter.sendMail({
+      from: process.env.USER_EMAIL,
+      to: process.env.USER_EMAIL,
+      subject: "[Action Required] You have a Pending TCS Coach++ Applicant Screening Task",
+      html: `
+      <p style='font-size: 14px'>Dear The Coding School Recruitment Team</p><br />
+      <p>You have a new pending task in <a href=${process.env.MAIN_URL}>TCS Coach++ Account</a></p>
+      <p>Please log-in to your admin account for more information.</p>
+      <p>Thanks and have a great day.</p><br />
+      <p>TCS Coach++</p>
+      `
+    })
+}
+
 // Email Settings for Rejection Email
-module.exports = {generateVerificationToken, generateInterviewToken, sendEmail, sendInterviewInvite, generateNewPasswordToken, sendNewPasswordVerification, generateNewEmailToken, sendNewEmailVerification, generateForgotPasswordToken, sendForgotPasswordVerification, sendDemoInvite, sendOnboardingRequirementsChecklist, sendRejectionEmail};
+module.exports = {generateVerificationToken, generateInterviewToken, sendEmail, sendInterviewInvite, generateNewPasswordToken, sendNewPasswordVerification, generateNewEmailToken, sendNewEmailVerification, generateForgotPasswordToken, sendForgotPasswordVerification, sendDemoInvite, sendOnboardingRequirementsChecklist, sendRejectionEmail, sendRecruiterNotif};

@@ -9,11 +9,13 @@ import { Form } from "formik";
 function MyApplication({applicantData, setObtainedActiveNavButton}) {
     const navigate = useNavigate();
     const [withdrawValue, setWithdrawValue] = useState('');
-    const [isSendingDemoLink, setIsSendingDemoLink] = useState(false) 
+    const [isSendingDemoLink, setIsSendingDemoLink] = useState(false);
+    const [isSendingReqsLink, setIsSendingReqsLink] = useState(false);
     const [onboardingLink, setOnboardingLink] = useState('');
     const [submittedJobApplicationDetails, setSubmittedJobApplicatioDetails] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isFileTooLarge, setIsFileTooLarge] = useState(false);
+    const [isReqsFileTooLarge, setIsReqsFileTooLarge] = useState(false)
     const [demoZip, setDemoZip] = useState(null)
     const { isOpen, onOpen, onClose } = useDisclosure()
     const { isOpen: isOpenInterview, onOpen:onOpenInterview, onClose: onCloseInterview } = useDisclosure()
@@ -51,6 +53,20 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
            
         }
     }
+
+    const handleReqsFileChange = (e) => {
+        const maxFileSize = 5 * 1024 * 1024; // 5 MB in bytes
+        const file = e.target.files[0];
+   
+        if (file.size > maxFileSize) {
+            e.target.value = ''; // Clear the input
+            setIsReqsFileTooLarge(true);
+        } else {
+            setOnboardingLink(e.target.files[0])
+            setIsReqsFileTooLarge(false);
+        }
+    }
+    
 
     useEffect(() => {
         if (applicantData.jobApplicationsM && applicantData.jobApplicationsM.length !== 0) {
@@ -353,7 +369,7 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                 <Tbody>
                 {applicantData.jobApplicationsM && applicantData.jobApplicationsM.length !== 0 && submittedJobApplicationDetails ? (
                 submittedJobApplicationDetails.map((i, index) => (
-                    i[0].currentStepM !== 'withdrawnApplication' && (
+                    (i[0].currentStepM !== 'withdrawnApplication' && i[0].currentStepM !== 'finishedHiringApplicant') && (
                     <Tr key={index}>
                     <Td textAlign='center'>
                         <WarningIcon style={{ fontSize: '45px', color: 'red' }} />
@@ -473,21 +489,23 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                         {i[0].currentStepM === 'waitingForOnboardingRequirementsSubmission' && (
                             <>
                             <FormControl mb='2'>
-                            <FormHelperText>Submit Onboarding Reqs Link Here</FormHelperText>
-                            
+                            <FormHelperText>Submit Onboarding Reqs Zip Here</FormHelperText>
+    
                             <Input
-                            placeholder="Paste link here..."
-                            required
-                            onChange={(e) => setOnboardingLink(e.target.value)}
-                            value={onboardingLink}
-                            border='0.2px solid'
+                            accept='.zip'
+                            mt='10px'
+                            border='none'
+                            size='xs'
+                            type='file'
+                            onChange={(e) => handleReqsFileChange(e)}
                             >
                             </Input>
+                            {isReqsFileTooLarge && <Text color='red' ml='10px' mt='5px' fontSize='12px'>File too large. (max 5 MB)</Text>}
 
                             <Modal isOpen={isOpenOnboardingReqs} onClose={onCloseOnboardingReqs}>
                                 <ModalOverlay />
                                 <ModalContent>
-                                <ModalHeader fontWeight='700'>Teaching Demo Submission</ModalHeader>
+                                <ModalHeader fontWeight='700'>Onboarding Reqs Submission</ModalHeader>
                                 <ModalCloseButton />
                                 <ModalBody fontWeight='300' fontSize='14px'>
                                     Are you sure you want to submit this onboarding requirements link?
@@ -497,35 +515,40 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                                     <Button
                                     colorScheme='red'
                                     mr={3} onClick={onCloseOnboardingReqs}
-                                    borderRadius='0px'
                                     >
                                     Cancel
                                     </Button>
                                     <Button
                                     onClick={() => {
-                                        axios.post(`${process.env.REACT_APP_SYS_URL}/api/applicant/onboarding-request/submit-onboarding-link`, {onboardingLink: onboardingLink, submittedJobApplicationDetails})
-                                            .then(response => window.location.reload())
+                                        onCloseOnboardingReqs()
+                                        setIsSendingReqsLink(true)
+                                        const onboardingForm = new FormData();
+                                        onboardingForm.append('onboardingZip', onboardingLink);
+                                        onboardingForm.append('applicantID', i[0].applicantIDForeignKeyM)
+                                        onboardingForm.append('jobID', i[0].jobIDForeignKeyM)
+                                        axios.post(`${process.env.REACT_APP_SYS_URL}/api/applicant/onboarding-request/submit-onboarding-zip`, onboardingForm, {
+                                                headers: {
+                                                    'Content-Type': 'multipart/form-data' // Adjust content type if needed
+                                                }
+                                            })
+                                        .then(response => {
+                                            setIsSendingDemoLink(false)
+                                            window.location.reload()
+                                        })
                                     }}
                                     fontWeight='300'
                                     variant='ghost'
-                                    borderRadius='0px'                    
                                     >Confirm</Button>
                                 </ModalFooter>
                                 </ModalContent>
                             </Modal>
                             </FormControl>
+                            
                             <Flex justify='flex-end'>
-                            {!isSendingDemoLink ?
-                            <>
-                            <Button variant='outline' colorScheme='red' size='sm' borderRadius='0px' mr='2' display={onboardingLink.trim() ? '' : 'none'}>Reject Job Offer</Button>
-                            <Button colorScheme='green' size='sm' borderRadius='0px' type='submit'
-                            display={onboardingLink.trim() ? '' : 'none'}
-                            onClick={() => {onOpenOnboardingReqs()}}
-                            >Submit</Button></>:
-                            <Button isLoading loadingText='Submitting Onboarding Reqs' size='sm' colorScheme="green"  borderRadius='0px'></Button>
-                            }
-
-                           
+                             {!isSendingReqsLink && !isReqsFileTooLarge && onboardingLink && <Button colorScheme='green' size='sm'
+                            onClick={() => onOpenOnboardingReqs()}
+                            >Submit</Button>}
+                            {isSendingReqsLink &&  <Button isLoading loadingText='Submitting Onboarding Reqs' size='sm' colorScheme="green"></Button>}
                             </Flex>
                             </>
                         )}

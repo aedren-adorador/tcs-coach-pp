@@ -3,6 +3,7 @@ const JobApplication = require('../../../models/jobApplications');
 const router = express.Router();
 const {uploadInterview} = require('../../../configs/multer-config');
 const jwt = require('jsonwebtoken');
+const {sendRecruiterNotif} = require('../../../configs/email-config')
 const { S3Client, GetObjectCommand, PutObjectCommand, ListObjectsCommand } = require("@aws-sdk/client-s3");
 const {getSignedUrl} = require('@aws-sdk/s3-request-presigner')
 const bucket_name = process.env.BUCKET_NAME_INTERVIEWS
@@ -20,7 +21,11 @@ const s3 = new S3Client({
 
 router.post('/update-interview-to-finished', (req, res, next) => {
   JobApplication.updateOne({_id: req.body[0][0]._id}, {dateSubmittedInterviewM: new Date(), currentStepM: 'submittedVideoInterview'})
-    .then(res.json({success: 'Successfully finished video interview!'}))
+    .then(() => {
+      sendRecruiterNotif();
+      res.json({success: 'Successfully finished video interview!'});
+
+    })
 })
 
 router.post('/submit-interview', uploadInterview.single('interview'), async (req, res, next) => {

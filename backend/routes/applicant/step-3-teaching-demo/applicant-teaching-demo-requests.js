@@ -2,6 +2,7 @@ const express = require('express');
 const JobApplication = require('../../../models/jobApplications');
 const {uploadDemoZip} = require('../../../configs/multer-config')
 const router = express.Router();
+const {sendRecruiterNotif} = require('../../../configs/email-config')
 const { S3Client, PutObjectCommand, GetObjectCommand } = require("@aws-sdk/client-s3");
 const {getSignedUrl} = require('@aws-sdk/s3-request-presigner')
 const bucket_name = process.env.BUCKET_NAME_DEMOS
@@ -19,9 +20,6 @@ const s3 = new S3Client({
 
 
 router.post('/submit-demo-link', uploadDemoZip.single('demoZip'), async (req, res, next) => {
-        console.log(req.file)
-        console.log(req.body)
-
     const params = {
         Bucket: bucket_name,
         Key: `${req.body.applicantID}-${req.body.jobID}-DemoZip`,
@@ -32,7 +30,7 @@ router.post('/submit-demo-link', uploadDemoZip.single('demoZip'), async (req, re
     await s3.send(command)
     
     const result = await JobApplication.updateOne({applicantIDForeignKeyM: req.body.applicantID, jobIDForeignKeyM: req.body.jobID}, {teachingDemoM: `${req.body.applicantID}-${req.body.jobID}-DemoZip`, dateSubmittedTeachingDemoM: new Date(), currentStepM: 'submittedTeachingDemo'})
-    
+    await sendRecruiterNotif()
     res.send(result)
 })
 
