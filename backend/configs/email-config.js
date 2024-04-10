@@ -42,7 +42,7 @@ async function sendInterviewInvite(emailAddressInput, position, deadline, applic
       html: `<p>Dear ${applicantName}</p>
       <p>We are pleased to inform you that you have passed the initial screening for the ${position} position!</p>
       
-      <p>The next step of the application process would be an asynchronous video interview which will further make us get to know you more in terms of experience, values, and qualities for the role.</p>
+      <p>The next step of the application process would be an asynchronous video interview which will further make us get to know you more in terms of experience, values, and qualities for the role. We highly recommend you using the latest version of Chrome in your laptop or desktop for the best experience.</p>
       
      <p>Please note that you have until ${deadline} to take the interview, and <strong>it can be accessed by logging-in to your <a href=${process.env.MAIN_URL}>TCS Coach++account.</a></strong></p> <p>Goodluck!</p> <p>Warm regards,</p><br/>
       <p>The Coding School Recruitment Team</p>`
@@ -125,38 +125,55 @@ async function sendOnboardingRequirementsChecklist(emailAddressInput, position, 
   await transporter.sendMail({
       from: process.env.USER_EMAIL,
       to: emailAddressInput,
-      subject: "Congratulations — You Have Successfully Passed The Coding School's Application Process",
+      subject: "Congratulations — You Have a Job Offer from The Coding School!",
       html: `
       <p>Dear ${applicantName},</p>
-      <p>We are thrilled to inform you that you have successfully passed The Coding School's application process for the
-      ${position} position! Congratulations on this significant achievement!</p>
-      
-      <p>Your dedication, skills, and passion have truly stood out during the entire selection process. We are confident that you will make a valuable addition to our team and contribute positively to The Coding School's mission.</p>
-      
-      <p>Our operations team will be in touch with you regarding your offer letter.</p>
-      <p>We are excited to have you on board and look forward to seeing your contributions to our organization. Below are the specific steps and requirements that you need to submit should you decide to sign the offer letter.</p>
-      <ol>
-          <li>Make the zip file containing all indicated files below and upload the zip file in your <a href=${process.env.MAIN_URL}>TCS Coach++ Account</a>. Maximum file size is 5 MB.</li>
-          <li>Kindly upload the following digital files in the folder:
-              <ul>
-                  <li>Birth Certificate</li>
-                  <li>BIR Income Tax Return (if applicable)</li>
-                  <li>2 Valid IDs</li>
-                  <li>NBI Clearance (valid for the current year period)</li>
-              </ul>
-          </li>
-          <li>Plot your week availability in this <a href='https://www.when2meet.com/?24276406-5Ykk4'>When2Meet Link</a> for the Shadow Teaching</li>
-      </ol>
+    <p>We are thrilled to inform you that you have successfully passed The Coding School's application process for the
+        ${position} position! Congratulations on this significant achievement!</p>
+    
+    <p>Your dedication, skills, and passion have truly stood out during the entire selection process. We are confident that
+        you will make a valuable addition to our team and contribute positively to The Coding School's mission.</p>
+    
+    <p><strong>We are excited to have you on board and look forward to seeing your contributions to our organization. Below are the specific steps and requirements that you need to submit should you decide to sign the offer letter. </strong></p>
 
-      <p>
-          Once again, congratulations on this accomplishment! We are thrilled to welcome you to The Coding School community and
-          are confident that you will excel in your new role.
-          
-          If you have any questions or need further assistance, please do not hesitate to contact us at coaches@coding.ph.
-      </p>
-
-      <p>Warm regards,</p><br/>
-      <p>The Coding School Recruitment Team</p>
+    <ol>
+        <li>
+            <p>Read the offer letter by <a href="https://www.jotform.com/sign/232131154934045/invite/01h6tecexc299aadaa92686b22">clicking on this link.</a></p>
+        </li>
+        <li>
+            <p>Create a new email address using the format below:</p>
+            <p>FIRSTNAME + FIRST LETTER OF LAST NAME + .tcs@gmail.com</p>
+            <p>Example:</p>
+            <p>First Name : Sofie</p>
+            <p>Last Name : Pine</p>
+            <p>New TCS email : Sofiep.tcs@gmail.com</p>
+        </li>
+        <li>
+            <p>Enroll in this Google <a href="https://classroom.google.com/c/NTMyNjE1MzkyNzc2?cjc=suh2rha">Classroom Link</a>  (please use your
+                new email address)</p>
+        </li>  
+        <li> <p>Make the zip file containing all indicated files below and upload the zip file in your <a
+                href=${process.env.MAIN_URL}>TCS Coach++ Account</a>. Maximum file size is 5 MB.</p></li>
+        <li>Kindly upload the following digital files in the folder:
+            <ul>
+                <li>2 Valid IDs</li>
+                <li>Birth Certificate</li>
+                <li>BIR Income Tax Return (if applicable)</li>
+                <li>NBI Clearance (valid for the current year period)</li>
+            </ul>
+        </li>
+    </ol>
+    
+    <p>
+        Once again, congratulations on this accomplishment! We are thrilled to welcome you to The Coding School community
+        and
+        are confident that you will excel in your new role.
+    
+        If you have any questions or need further assistance, please do not hesitate to contact us at coaches@coding.ph.
+    </p>
+    
+    <p>Warm regards,</p><br />
+    <p>The Coding School Recruitment Team</p>
       `
     })
 }

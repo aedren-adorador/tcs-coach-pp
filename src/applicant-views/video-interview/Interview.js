@@ -2,7 +2,7 @@ import { Box, Button, Card, CardBody, CardFooter, Flex, Grid, GridItem, HStack, 
 import React, { useEffect, useState } from "react";
 import AuthHeader from "../../auth/AuthHeader";
 import { useLocation, useNavigate } from "react-router-dom";
-import { RepeatClockIcon, TimeIcon } from "@chakra-ui/icons";
+import { TimeIcon } from "@chakra-ui/icons";
 import { QuestionCircleOutlined, RedoOutlined, SettingOutlined } from "@ant-design/icons";
 import { useRecordWebcam } from 'react-record-webcam';
 import axios from "axios";
@@ -73,6 +73,7 @@ function Interview() {
             .catch(error => console.error('Error submitting interview:', error));
         })
         .catch(error => console.error('Error fetching recording:', error));
+    
     }
 
     const handleSelect = async (event) => {
@@ -272,17 +273,6 @@ function Interview() {
                                 setAnswerTime(180)
                                 setAnswerTimer('00:00')
                                 setAnswerTimerProgress(0)
-                                // setQuestions(prevQs => {
-                                //     const currentQuestion = prevQs[questionCounter]
-                                //     console.log(currentQuestion)
-                                //     const updatedQuestions = [...prevQs]
-                                //     console.log(updatedQuestions, 'nice')
-                                //     console.log('hooray')
-                                //     console.log(updatedQuestions[currentQuestion], 'gago')
-                                //     updatedQuestions[currentQuestion] = Math.max(0, updatedQuestions[currentQuestion] - 1)
-                                //     console.log(updatedQuestions)
-                                //     return updatedQuestions
-                                // })
                              }}
                             >Start Recording</Button>
 

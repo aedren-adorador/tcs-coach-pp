@@ -9,6 +9,7 @@ const {jwtDecode} = require('jwt-decode');
 const JobApplication = require('../models/jobApplications');
 const Admin = require('../models/admins');
 const Resume = require('../models/resumes');
+const JobCategory = require('../models/jobCategories');
 const ObjectId = require('mongodb').ObjectID;
 
 router.get('/fetch-jobs-list-applicant/:id', async (req, res, next) => {
@@ -189,5 +190,11 @@ router.get('/get-job-stats', (req, res, next) => {
           res.json({jobs: jobs, jobApplications: jobApplications})
         })
     })
+})
+
+
+router.get('/fetch-job-categories', (req, res, next) => {
+  JobCategory.find()
+    .then(result => res.send(result))
 })
 module.exports = router;

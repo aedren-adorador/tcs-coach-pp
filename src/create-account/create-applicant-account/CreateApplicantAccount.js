@@ -250,7 +250,7 @@ function CreateApplicantAccount() {
                             border='solid red 2px'
                             padding='2'
                             >
-                                By creating an account, you agree to our <span style={{color:'darkblue', textDecoration: 'underline'}}>Terms</span> and have read and acknowledge the <span style={{color:'darkblue', textDecoration: 'underline'}}>Global Privacy Statement</span>.
+                                By creating an account, you agree to our <a style={{color:'darkblue', textDecoration: 'underline'}} href='https://drive.google.com/file/d/1XDRMsXeGN1OJ1-HDkQfcWFzSjGiH8ruF/view?usp=sharing' target='_blank' rel="noreferrer">Terms</a> and have read and acknowledge the <a style={{color:'darkblue', textDecoration: 'underline'}} href='https://drive.google.com/file/d/1XDRMsXeGN1OJ1-HDkQfcWFzSjGiH8ruF/view?usp=sharing' target='_blank' rel='noreferrer'>Privacy Policy</a>.
                                 <Flex  mt='10px'>
                                 <Checkbox defaultChecked={isNotifsOn} onChange={() => setIsNotifsOn(prev => !prev)} isRequired={false}/><Text ml='5px' fontSize='10px'>I agree to receive email notifications on my application progress.</Text>
                             </Flex>

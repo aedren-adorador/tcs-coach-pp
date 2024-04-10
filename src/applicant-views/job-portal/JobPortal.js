@@ -7,6 +7,7 @@ import CreateJobButton from "./admin/CreateJobButton";
 import axios from "axios";
 import EditDetailsButton from "./admin/EditDetailsButton";
 import { Link } from "react-router-dom";
+import EditJobCategoriesButton from "./admin/EditJobCategoriesButton";
 
 function JobPortal({isAdmin, applicantData}) {
     const jobFilters = ['Categories', 'Posting Dates', 'Work Setup'];
@@ -96,7 +97,7 @@ function JobPortal({isAdmin, applicantData}) {
         backgroundColor={isAdmin ? 'white' : '#f2f2f2'}
         >
         <InputGroup
-        maxW='650px'
+        maxW='900px'
         margin='10px 0px 0px 20px'
         >  
             <Input
@@ -123,7 +124,11 @@ function JobPortal({isAdmin, applicantData}) {
                 </Button>
 
             {isAdmin ?
-            <CreateJobButton fetchJobsList={fetchJobsList}/>:
+            <Flex>
+                <CreateJobButton fetchJobsList={fetchJobsList}/>
+                {/* <EditJobCategoriesButton fetchJobsList={fetchJobsList}/> */}
+            </Flex>
+            :
             ''}
         </InputGroup>
          
@@ -149,11 +154,16 @@ function JobPortal({isAdmin, applicantData}) {
                         <option disabled value='categories'>Categories</option>
                         <option value='All'>All Categories</option>
                         <option value='Web Development'>Web Development</option>
+                        <option value='Web3'>Web3</option>
+                        <option value='Robotics'>Robotics</option>
+                        <option value='Learning Intern'>Learning Intern</option>
+                        <option value='Learning Associate'>Learning Associate</option>
+                        <option value='Intern'>Intern</option>
+                        <option value='Game Development'>Game Development</option>
                         <option value='Mobile Development'>Mobile Development</option>
-                        <option value='SEO Marketing'>SEO Marketing</option>
+                        <option value='SEO Marketing'>Data Science</option>
                         <option value='Data Structures and Algorithms'>Data Structures and Algorithms</option>
                         <option value='Artificial Intelligence'>Artificial Intelligence</option>
-                        <option value='Data Analytics'>Data Analytics</option>
                     </Select>
                 ) : filterSetting === 'Posting Dates' ? (
                     <Select
@@ -471,7 +481,7 @@ function JobPortal({isAdmin, applicantData}) {
                     mt='20px'
                     fontWeight='700'
                     >Job Description</Text>
-                    <Text>
+                    <Text whiteSpace='pre-line'>
                         {jobsList[clickedJob-1].jobDescriptionM}
                     </Text>
 
@@ -479,7 +489,7 @@ function JobPortal({isAdmin, applicantData}) {
                     mt='20px'
                     fontWeight='700'
                     >Responsibilities</Text>
-                    <Text>
+                    <Text whiteSpace='pre-line'>
                         {jobsList[clickedJob-1].jobResponsibilitiesM}
                     </Text>
 
@@ -487,7 +497,7 @@ function JobPortal({isAdmin, applicantData}) {
                     mt='20px'
                     fontWeight='700'
                     >Qualifications</Text>
-                    <Text>
+                    <Text whiteSpace='pre-line'>
                         {jobsList[clickedJob-1].jobQualificationsM}
                     </Text>
 

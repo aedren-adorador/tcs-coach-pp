@@ -4,8 +4,10 @@ import { ArrowLeftOutlined, DeleteOutlined } from "@ant-design/icons";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Formik, Form, setIn} from "formik";
 import axios from "axios";
+import ScheduleSelector from "react-schedule-selector";
 
 function QuestionsV2() {
+    const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [isMovingOn, setIsMovingOn] = useState(false);
     const finalRef = useRef(null)
@@ -29,10 +31,14 @@ function QuestionsV2() {
 
     const [internetSpeed, setInternetSpeed] = useState();
     const [referredBy, setReferredBy] = useState();
+    const [schedule, setSchedule] = useState([]);
     
+    const handleScheduleChange = (newSchedule) => {
+        setSchedule(newSchedule.map(sched =>  (`${sched}`)))
+    }
     const handleApplicationSubmit = () => {
         setIsMovingOn(true)
-        const details = {checkedCoachingExperience: checkedCoachingExperience, checkedAreasOfExpertise: checkedAreasOfExpertise, checkedAvailabilities: checkedAvailabilities, internetSpeed: internetSpeed, referredBy: referredBy}
+        const details = {checkedCoachingExperience: checkedCoachingExperience, checkedAreasOfExpertise: checkedAreasOfExpertise, checkedAvailabilities: schedule, internetSpeed: internetSpeed, referredBy: referredBy}
         axios.post(`${process.env.REACT_APP_SYS_URL}/api/applicant/application-stepper-request/save-job-application-progress-questions-info`, {details, applicantData})
             .then(result => {
                 setTimeout(() => {
@@ -45,7 +51,8 @@ function QuestionsV2() {
     }
 
     const coachingExperience = ['I have coached/tutored professionally', 'I have coached/tutored as an intern', 'I have coached/tutored friends or co-students']
-    const areasOfExpertise = ['MERN/MEAN Stack Development','Financial Literacy (Accounting)', 'Data Science (SQL, Python, Excel)', 'Python Programming', 'Machine Learning/Artificial Intelligence', 'Calculus', 'Robotics', 'Cybersecurity']
+    const areasOfExpertise = [
+        'App/Web Development', 'Game Development', 'Data Science/ AI', 'UI/UX Design', 'Robotics/Engineering', 'General Education', 'Financial Literacy', 'Notion and Organizational Applications', 'Grade School Math & Science', 'Biology', 'Chemistry', 'Physics', 'General Science', 'Math', 'IB', 'Special Education (SPED)', 'Cybersecurity', 'Design', 'Productivity']
 
     const availability = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
@@ -74,18 +81,6 @@ function QuestionsV2() {
             }
         })
     }
-
-    const handleClickedAvailability = (e) => {
-        setCheckedAvailabilities(prevAvailabilities => {
-            if (prevAvailabilities.includes(e.target.value) === false && e.target.checked === true) {
-                return [...prevAvailabilities, e.target.value]
-            }
-            if (e.target.checked === false) {
-                return prevAvailabilities.filter(availability => availability !== e.target.value)
-            }
-        })
-    }
-
     useEffect(() => {
     },[checkedCoachingExperience, checkedAreasOfExpertise, checkedAvailabilities])
 
@@ -95,13 +90,15 @@ function QuestionsV2() {
                 if (response.data[0]) {
                     setCheckedCoachingExperience(response.data[0].coachingExperienceM)
                     setCheckedAreasOfExpertise(response.data[0].areasOfExpertiseM)
-                    setCheckedAvailabilities(response.data[0].availabilityM)
+                    setSchedule(response.data[0].availabilityM)
                     setReferredBy(response.data[0].referredByM)
                     setInternetSpeed(response.data[0].internetSpeedM)
                 }
             })
     }, [])
 
+    useEffect(() => {
+    }, [schedule])
     return (
         <> 
             <Formik
@@ -192,19 +189,15 @@ function QuestionsV2() {
 
                 <Text color='gray'>Teaching Schedule Availability (Philippine Standard Time)</Text>
                 <Stack mt='1' ml='5' spacing={1} direction='row' mb='4' gap='5'>
-                    {availability.map((availability, index) => {
-                        return (
-                            <Checkbox
-                                key={index}
-                                colorScheme='facebook'
-                                value={availability}
-                                onChange={handleClickedAvailability}
-                                isChecked={checkedAvailabilities.includes(availability)}
-                            >
-                                <Text fontSize='14px'>{availability}</Text>
-                            </Checkbox>
-                        );
-                    })}
+                     <ScheduleSelector
+                        numDays={7}
+                        minTime={9}
+                        maxTime={21}
+                        startDate={new Date('Mon Apr 01 2024 10:00:00 GMT+0800 (Philippine Standard Time)')}
+                        selection={schedule}
+                        dateFormat="ddd"
+                        onChange={handleScheduleChange}
+                    />
                 </Stack>
 
                 <Text color='gray'>Internet Speed</Text>

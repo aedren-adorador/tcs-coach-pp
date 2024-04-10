@@ -9,7 +9,7 @@ const jobSchema = mongoose.Schema({
     jobSegmentationM: {type: String, required: true},
     jobEnlistedM: {type: Boolean, required: true, default: true},
     jobCategoryM: {type: String, required: true, default: ''},
-    jobCreatedAt: {type: Date, default: Date.now()}
+    jobCreatedAt: {type: Date, default: Date.now}
 })
 
 const Job = mongoose.model('Job', jobSchema);

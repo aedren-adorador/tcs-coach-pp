@@ -14,7 +14,9 @@ router.post('/create-job', (req, res, next) => {
     jobCategoryM: req.body.jobCategory
   })
   newJob.save()
-    .then(res.json({result: newJob}))
+    .then(result => {
+      res.json({result: result})
+    })
 })
 
 

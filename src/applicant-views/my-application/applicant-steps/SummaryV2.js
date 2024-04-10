@@ -243,32 +243,6 @@ function SummaryV2() {
                         mb='4'
                         >{allDetails.areasOfExpertiseM[0]}</Text>
                         }
-
-                        <Text color='gray'>Availability</Text>
-                        {allDetails.availabilityM && allDetails.availabilityM.length > 1 ?
-                        <Accordion mb='4' allowMultiple bg='tcs.dirtywhite'>
-                            <AccordionItem>
-                                <h2>
-                                <AccordionButton>
-                                    <Box as="span" flex='1' textAlign='left' fontSize='14px'>
-                                    See Availability Summary
-                                    </Box>
-                                    <AccordionIcon />
-                                </AccordionButton>
-                                </h2>
-                                {allDetails.availabilityM.map((availability, index) => (
-                                    <AccordionPanel pb={4} key={index}>
-                                        <Text fontSize='13px'>
-                                        <CalendarOutlined/> {availability}
-                                        </Text>
-                                    </AccordionPanel>
-                                ))}
-                            </AccordionItem>
-                        </Accordion> :
-                        <Text
-                        mb='4'
-                        >{allDetails.availabilityM[0]}</Text>
-                        }
                         
                     </GridItem>
                 </Grid> }
@@ -298,7 +272,6 @@ function SummaryV2() {
                     <Button
                     size='md'
                     bg='tcs.main'
-                    borderRadius='0px'
                     variant='solid'
                     colorScheme="blue"
                     onClick={() => {
@@ -309,7 +282,6 @@ function SummaryV2() {
                     display={activeStep === 4 ? '' : 'none'}
                     colorScheme="green"
                     bg='tcs.mongo'
-                    borderRadius='0px'
                     size='md'
                     variant='solid'
                     onClick={onOpen}
@@ -317,7 +289,7 @@ function SummaryV2() {
 
                     <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
                         <ModalOverlay />
-                        <ModalContent borderRadius='0px'>
+                        <ModalContent>
                         <ModalBody 
                         fontWeight='300'
                         fontSize='15px'
@@ -330,7 +302,6 @@ function SummaryV2() {
 
                         <ModalFooter>
                             <Button
-                            borderRadius='0px'
                             bg='tcs.mongo'
                             color='white'
                             colorScheme='green'

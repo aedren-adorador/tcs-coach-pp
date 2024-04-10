@@ -3,6 +3,7 @@ import { ThunderboltOutlined, BulbOutlined, FireOutlined, CalendarOutlined} from
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { CloseIcon } from "@chakra-ui/icons";
+import ScheduleSelector from "react-schedule-selector";
 
 function ReviewApplication({chosenApplicantAllJobApplicationDetails, setChosenApplicantAllJobApplicationDetails}) {
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -48,7 +49,6 @@ function ReviewApplication({chosenApplicantAllJobApplicationDetails, setChosenAp
     }, [chosenApplicantAllJobApplicationDetails])
 
     useEffect(() => {
-        // console.log(questions)
     }, [questions])
     return(
         <>
@@ -212,30 +212,16 @@ function ReviewApplication({chosenApplicantAllJobApplicationDetails, setChosenAp
                 }
 
                 <Text color='gray'>Availability</Text>
-                {chosenApplicantAllJobApplicationDetails.availabilityM.length > 1 ?
-                <Accordion mb='4' allowMultiple bg='tcs.dirtywhite'>
-                    <AccordionItem>
-                        <h2>
-                        <AccordionButton>
-                            <Box as="span" flex='1' textAlign='left' fontSize='14px'>
-                            See Availability Summary
-                            </Box>
-                            <AccordionIcon />
-                        </AccordionButton>
-                        </h2>
-                        {chosenApplicantAllJobApplicationDetails.availabilityM.map((availability, index) => (
-                            <AccordionPanel pb={4} key={index}>
-                                <Text fontSize='13px'>
-                                <CalendarOutlined/> {availability}
-                                </Text>
-                            </AccordionPanel>
-                        ))}
-                    </AccordionItem>
-                </Accordion> :
-                <Text
-                mb='4'
-                >{chosenApplicantAllJobApplicationDetails.availabilityM && chosenApplicantAllJobApplicationDetails.availabilityM[0]}</Text>
-                }
+                 <ScheduleSelector
+                
+                        numDays={7}
+                        minTime={9}
+                        maxTime={21}
+                        startDate={new Date('Mon Apr 01 2024 10:00:00 GMT+0800 (Philippine Standard Time)')}
+                        selection={chosenApplicantAllJobApplicationDetails.availabilityM}
+                        dateFormat="ddd"
+                    />
+                <Box mb='10px'></Box>
                 
             </GridItem>
         </Grid>

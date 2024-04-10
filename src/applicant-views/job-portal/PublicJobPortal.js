@@ -313,7 +313,7 @@ function PublicJobPortal({applicantData, onLoginSuccess}) {
                     mt='20px'
                     fontWeight='700'
                     >Job Description</Text>
-                    <Text>
+                    <Text whiteSpace='pre-line'>
                         {jobsList[clickedJob-1].jobDescriptionM}
                     </Text>
 
@@ -321,7 +321,7 @@ function PublicJobPortal({applicantData, onLoginSuccess}) {
                     mt='20px'
                     fontWeight='700'
                     >Responsibilities</Text>
-                    <Text>
+                    <Text whiteSpace='pre-line'>
                         {jobsList[clickedJob-1].jobResponsibilitiesM}
                     </Text>
 
@@ -329,7 +329,7 @@ function PublicJobPortal({applicantData, onLoginSuccess}) {
                     mt='20px'
                     fontWeight='700'
                     >Qualifications</Text>
-                    <Text>
+                    <Text whiteSpace='pre-line'>
                         {jobsList[clickedJob-1].jobQualificationsM}
                     </Text>
 

@@ -5,8 +5,14 @@ import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { Form } from "formik";
+import ScheduleSelector from "react-schedule-selector";
 
 function MyApplication({applicantData, setObtainedActiveNavButton}) {
+    const [schedule, setSchedule] = useState([]);
+    
+    const handleScheduleChange = (newSchedule) => {
+        setSchedule(newSchedule.map(sched =>  (`${sched}`)))
+    }
     const navigate = useNavigate();
     const [withdrawValue, setWithdrawValue] = useState('');
     const [isSendingDemoLink, setIsSendingDemoLink] = useState(false);
@@ -248,10 +254,14 @@ function MyApplication({applicantData, setObtainedActiveNavButton}) {
                                     </Flex>
                                      <Flex gap='2' mb='3'>
                                         <Text fontWeight='500' color='tcs.mongo'>Availabilities:</Text>
-                                        {i[0].availabilityM && i[0].availabilityM?.map((z, index) => {
-                                            return <Text mr='1px'>{z}</Text>
-                                        })
-                                        }
+                                        <ScheduleSelector
+                                            numDays={7}
+                                            minTime={9}
+                                            maxTime={21}
+                                            startDate={new Date('Mon Apr 01 2024 10:00:00 GMT+0800 (Philippine Standard Time)')}
+                                            selection={i[0].availabilityM}
+                                            dateFormat="ddd"
+                                        />
                                     </Flex>
                                     <Flex gap='2' mb='3'>
                                         <Text fontWeight='500' color='tcs.mongo'>Skills:</Text>

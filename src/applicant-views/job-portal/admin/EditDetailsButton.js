@@ -140,12 +140,17 @@ function EditDetailsButton({id, fetchJobsList}) {
                 fontSize='12px'
                 {...formikProps.getFieldProps('jobCategory')}
                 >
-                  <option value="Web Development">Web Development</option>
-                  <option value="Mobile Development">Mobile Development</option>
-                  <option value="SEO Marketing">SEO Marketing</option>
-                  <option value="Data Structures and Algorithms">Data Structures and Algorithms</option>
-                  <option value="Data Structures and Algorithms">Artificial Intelligence</option>
-                  <option value="Data Analytics">Data Analytics</option>
+                  <option value='Web Development'>Web Development</option>
+                  <option value='Web3'>Web3</option>
+                  <option value='Robotics'>Robotics</option>
+                  <option value='Learning Intern'>Learning Intern</option>
+                  <option value='Learning Associate'>Learning Associate</option>
+                  <option value='Intern'>Intern</option>
+                  <option value='Game Development'>Game Development</option>
+                  <option value='Mobile Development'>Mobile Development</option>
+                  <option value='SEO Marketing'>Data Science</option>
+                  <option value='Data Structures and Algorithms'>Data Structures and Algorithms</option>
+                  <option value='Artificial Intelligence'>Artificial Intelligence</option>
                   </Select>
               </FormControl>
               <ModalFooter>
