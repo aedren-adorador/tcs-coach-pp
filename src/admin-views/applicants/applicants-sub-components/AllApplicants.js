@@ -17,12 +17,12 @@ function AllApplicants({applicants, updateChosenApplicantToReview, handleButtonC
     useEffect(() => {
         axios.get(`${process.env.REACT_APP_SYS_URL}/api/admin/applicant-screening/get-job-applications-joined-with-applicants`)
             .then(result => {
-                console.log(result.data.joinedApplicantAndJobApplicationDetails)
                 setAllJobApplications(result.data.joinedApplicantAndJobApplicationDetails)
             })
     }, [])
 
     useEffect(() => {
+        console.log(new Date(allJobApplications[0]?.dateSubmittedApplicationM.toString()).toLocaleDateString())
     }, [allJobApplications])
 
     useEffect(() => {
@@ -35,9 +35,11 @@ function AllApplicants({applicants, updateChosenApplicantToReview, handleButtonC
         setAllJobApplications(prev => {
         return prev.filter((jobApp, index) => {
             const applicant = jobApp.applicantJoinedDetails[0];
+            const dateSubmitted = new Date(jobApp.dateSubmittedApplicationM).toLocaleDateString()
+            const jobAppID = ('TCS-' + jobApp._id.toString()).toLowerCase()
             return (
-                (jobApp._id && jobApp._id.toString().includes(searchApplicantList.toLowerCase())) ||
-                (jobApp.dateSubmittedApplicationM && jobApp.dateSubmittedApplicationM.toString().slice(0, 10).includes(searchApplicantList.toLowerCase())) ||
+                (jobAppID && jobAppID.includes(searchApplicantList.toLowerCase())) ||
+                (dateSubmitted && dateSubmitted.toString().includes(searchApplicantList.toLowerCase())) ||
                 (applicant && applicant.firstNameM && applicant.firstNameM.toLowerCase().includes(searchApplicantList.toLowerCase())) ||
                 (applicant && applicant.lastNameM && applicant.lastNameM.toLowerCase().includes(searchApplicantList.toLowerCase())) ||
                 jobApp.positionAppliedToM.toLowerCase().includes(searchApplicantList.toLowerCase()) ||
@@ -51,7 +53,8 @@ function AllApplicants({applicants, updateChosenApplicantToReview, handleButtonC
                 (jobApp.currentStepM === 'finishedHiringApplicant' && 'HIRED APPLICANT'.toLowerCase().includes(searchApplicantList.toLowerCase())) ||
                 (jobApp.currentStepM === 'rejectedApplicant' && 'REJECTED APPLICANT'.toLowerCase().includes(searchApplicantList.toLowerCase())) ||
                 (jobApp.currentStepM === 'withdrawnApplication' && 'APPLICANT WITHDREW'.toLowerCase().includes(searchApplicantList.toLowerCase())) ||
-                'NA'.toLowerCase().includes(searchApplicantList.toLowerCase())
+                (jobApp.currentStepM === 'finishedHiringApplicant' && 'Offer Accepted'.toLowerCase().includes(searchApplicantList.toLowerCase())) || 
+                (jobApp.currentStepM === 'withdrawnApplication' && 'Not Offered'.toLowerCase().includes(searchApplicantList.toLowerCase()))
             );
         });
     });
@@ -211,7 +214,7 @@ function AllApplicants({applicants, updateChosenApplicantToReview, handleButtonC
                             {jobApp.currentStepM === 'submittedOnboardingRequirements' && 'Offer Accepted'}
                             {jobApp.currentStepM === 'finishedHiringApplicant' && 'Offer Accepted'}
                             {jobApp.currentStepM === 'rejectedApplicant' && 'No Offer'}
-                            {jobApp.currentStepM === 'withdrawnApplication' && 'NA'}
+                            {jobApp.currentStepM === 'withdrawnApplication' && 'Not Offered'}
                         </Td>
                     </Tr>
                     }

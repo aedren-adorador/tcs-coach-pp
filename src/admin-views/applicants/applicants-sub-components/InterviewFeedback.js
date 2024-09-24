@@ -45,6 +45,7 @@ function InterviewFeedback(chosenApplicantAllJobApplicationDetails, setChosenApp
         }
         axios.get(`${process.env.REACT_APP_SYS_URL}/api/admin/applicant-screening/get-interview-responses/${encodeURIComponent(JSON.stringify(details))}`)
             .then(response => {
+                console.log('gago', response)
                 setInterviewResponsesList(response.data)
             })
 
