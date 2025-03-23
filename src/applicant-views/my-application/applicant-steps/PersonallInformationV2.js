@@ -73,6 +73,7 @@ function PersonalInformationV2() {
     }
 
     useEffect(() => {   
+        console.log("WHO")
     }, [jobApplicationDetails])
 
     useEffect(() => {

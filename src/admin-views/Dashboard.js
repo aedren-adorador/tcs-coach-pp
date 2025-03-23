@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { TableContainer, Table, TableCaption, Thead, Tr, Th, Tbody, Td, Tfoot, Text, Image, Flex, HStack, Card, Box, CardBody} from "@chakra-ui/react";
-import suitcaseIcon from '../../admin-view-imgs/suitcase.png'
+import { TableContainer, Table, Thead, Tr, Th, Tbody, Td, Text, Image, Flex, HStack, Card, Box, CardBody} from "@chakra-ui/react";
+import suitcaseIcon from './admin-view-imgs/suitcase.png'
 import axios from "axios";
-import reviewApplication from '../../admin-view-imgs/review-application.png'
-import interviewFeedback from '../../admin-view-imgs/interview-feedback.png'
-import teachingDemoFeedback from '../../admin-view-imgs/teaching-demo-feedback.png'
-import preEmploymentRequirements from '../../admin-view-imgs/pre-employment-requirements.png'
+import reviewApplication from './admin-view-imgs/review-application.png'
+import interviewFeedback from './admin-view-imgs/interview-feedback.png'
+import teachingDemoFeedback from './admin-view-imgs/teaching-demo-feedback.png'
+import preEmploymentRequirements from './admin-view-imgs/pre-employment-requirements.png'
 
-function RequireAttention() {
+function Dashboard() {
     const [jobs, setJobs] = useState([]);
     const [jobApps, setJobApps] = useState([]);
     const boxesOverview = [
@@ -192,4 +192,4 @@ function RequireAttention() {
     )
 }
 
-export default RequireAttention;
+export default Dashboard;

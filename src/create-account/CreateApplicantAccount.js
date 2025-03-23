@@ -4,8 +4,8 @@ import { useState, useEffect } from "react";
 import { FormControl, Input, Button, Card, CardBody, Alert, AlertIcon, AlertDescription, FormHelperText, Text, Flex, Box, Checkbox, InputGroup, InputRightElement} from "@chakra-ui/react";
 import { Formik, Form } from "formik";
 import { useNavigate } from "react-router-dom";
-import AuthHeader from "../../auth/AuthHeader";
-import AuthFooter from "../../auth/AuthFooter";
+import AuthHeader from "../auth/AuthHeader";
+import AuthFooter from "../auth/AuthFooter";
 import { CheckIcon, CloseIcon } from "@chakra-ui/icons";
 
 function CreateApplicantAccount() {

@@ -1,15 +1,17 @@
-import { Avatar, Box, Button, Flex, Grid, GridItem, Menu, MenuButton, MenuItem, MenuList, Text, Wrap, WrapItem } from "@chakra-ui/react";
 import axios from "axios";
-import { jwtDecode } from "jwt-decode";
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import NavAdmin from "../nav/admin/NavAdmin";
-import Dashboard from "./dashboard/Dashboard";
+import NavAdmin from "./NavAdmin";
+import Dashboard from "./Dashboard";
 import Applicants from "./applicants/Applicants";
 import JobPortal from "../applicant-views/job-portal/JobPortal";
-import Account from "../applicant-views/account/Account";
-import AdminAccount from "./account/AdminAccount";
+import AdminAccount from "./AdminAccount";
+
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Avatar, Button, Flex, Grid, GridItem, Menu, MenuButton, MenuItem, MenuList, Text } from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
+import { jwtDecode } from "jwt-decode";
+
+
 function MainAdminView() {
     const navigate = useNavigate();
     const [adminData, setAdminData] = useState({});
@@ -66,9 +68,9 @@ function MainAdminView() {
                             "nav main"
                             "nav main"`}
             gridTemplateRows={'45px 1fr'}
-            gridTemplateColumns={'80px 1fr'}
-            h='100vh'
+            gridTemplateColumns={'100px 1fr'}
             >
+            
             <GridItem
             area={'header'}
             backgroundColor='white'

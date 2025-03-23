@@ -1,13 +1,13 @@
 import React from "react";
 import axios from "axios";
-import '../create-account.styles.css'
+import './create-account.styles.css'
 import { Input, Button, FormControl, FormErrorMessage, Alert, AlertIcon, useToast, Box, Text } from "@chakra-ui/react";
 import { Formik, Form, ErrorMessage } from "formik";
 import { ArrowBackIcon } from '@chakra-ui/icons'
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import AuthHeader from "../../auth/AuthHeader";
-import AuthFooter from "../../auth/AuthFooter";
+import AuthHeader from "../auth/AuthHeader";
+import AuthFooter from "../auth/AuthFooter";
 
 function RegisterApplicantEmail() {
     const toast = useToast()

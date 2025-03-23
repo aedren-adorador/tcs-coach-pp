@@ -44,6 +44,7 @@ function JobPortal({isAdmin, applicantData}) {
     }
 
     const fetchJobsList = useCallback(() => {
+        
         if (!isAdmin && applicantData._id) {
             axios.get(`${process.env.REACT_APP_SYS_URL}/api/general-request/fetch-jobs-list-applicant/${applicantData._id}`)
                 .then(response => {
@@ -401,7 +402,7 @@ function JobPortal({isAdmin, applicantData}) {
                         <>
                         {jobApplications.filter((jobApp, index) => jobApp.applicantIDForeignKeyM === applicantData._id && jobsList[clickedJob-1]._id === jobApp.jobIDForeignKeyM).length === 1 ?
                         <Link
-                        to={{ pathname: `/application-progress/${applicantData._id}/${jobsList[clickedJob-1].jobTitleM}/personal-info`}}
+                        to={{ pathname: `/application-progress/${applicantData._id}/${encodeURIComponent(jobsList[clickedJob-1].jobTitleM)}/personal-info`}}
                         state={{applicantData: applicantData, jobData: jobsList[clickedJob-1]}}
                         >
                         <Button
@@ -439,7 +440,7 @@ function JobPortal({isAdmin, applicantData}) {
                                 Cancel
                                 </Button>
                                 <Link
-                                to={{ pathname: `/application-progress/${applicantData._id}/${jobsList[clickedJob-1].jobTitleM}/personal-info`}}
+                                to={{ pathname: `/application-progress/${applicantData._id}/${encodeURIComponent(jobsList[clickedJob-1].jobTitleM)}/personal-info`}}
                                 state={{applicantData: applicantData, jobData: jobsList[clickedJob-1]}}
                                 >
                                 <Button variant='ghost' colorScheme='green'>Apply</Button>

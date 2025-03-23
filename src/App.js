@@ -1,14 +1,24 @@
+// Mandatory App Imports
 import './App.css';
 import Login from './auth/Login';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { ChakraProvider, extendTheme } from '@chakra-ui/react'
-import RegisterApplicantEmail from './create-account/create-applicant-account/RegisterApplicantEmail';
-import CreateApplicantAccount from './create-account/create-applicant-account/CreateApplicantAccount';
-import MainApplicantView from './applicant-views/MainApplicantView';
-import AuthPrivateRoute from './auth/auth-private-route/AuthPrivateRoute';
+import { ChakraProvider, extendTheme } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import CreateAdminAccount from './create-account/create-admin-account/CreateAdminAccount';
+
+
+// Account Creation Imports
+import RegisterApplicantEmail from './create-account/RegisterApplicantEmail';
+import CreateApplicantAccount from './create-account/CreateApplicantAccount';
+
+// Admin View Imports
 import MainAdminView from './admin-views/MainAdminView';
+
+// Applicant View Imports
+import MainApplicantView from './applicant-views/MainApplicantView';
+
+
+import AuthPrivateRoute from './auth/auth-private-route/AuthPrivateRoute';
+// import CreateAdminAccount from './create-account/create-admin-account/CreateAdminAccount';
 import InterviewIntroduction from './applicant-views/video-interview/InterviewIntroduction'
 import WhatToExpect from './applicant-views/video-interview/WhatToExpect';
 import CameraAndMicrophoneSettings from './applicant-views/video-interview/CameraAndMicrophoneSettings';

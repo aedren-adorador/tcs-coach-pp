@@ -1,11 +1,13 @@
-import { Box, Button, Divider, Flex, Image} from "@chakra-ui/react";
+import tcsLogo from '../tcs-logo.png'
+
+import { Box, Button, Flex, Image} from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { FolderFilled, FolderOutlined, HomeFilled, HomeOutlined, IdcardFilled, IdcardOutlined, LogoutOutlined, SettingFilled, SettingOutlined, UserAddOutlined, UserOutlined } from "@ant-design/icons";
-import tcsLogo from '../../tcs-logo.png'
+import { FolderFilled, FolderOutlined, HomeFilled, HomeOutlined, SettingFilled, SettingOutlined, UserAddOutlined, UserOutlined } from "@ant-design/icons";
+
 
 function NavAdmin({persistentButton, getActiveNavButton}) {
     const navButtons = ['Dashboard', 'Applicants', 'Job Portal', 'Account']
-    const iconSize = {fontSize: '20px', marginBottom:'8px'}
+    const iconSize = {fontSize: '30px', marginBottom:'8px'}
     const navButtonSVGs = [
         <HomeOutlined style={iconSize}/>,  <UserAddOutlined style={iconSize}/>, <FolderOutlined style={iconSize}/>, <SettingOutlined style={iconSize}/>
 
@@ -13,6 +15,7 @@ function NavAdmin({persistentButton, getActiveNavButton}) {
     const navClickedButtonSVGs = [
         <HomeFilled style={iconSize}/> , <UserOutlined style={iconSize}/>, <FolderFilled style={iconSize}/>, <SettingFilled style={iconSize}/>
     ]
+    
     const [clickedNavButton, setClickedNavButton] = useState(persistentButton || 'Dashboard')
     
     const handleNavButtonClick = (index) => {
@@ -28,7 +31,6 @@ function NavAdmin({persistentButton, getActiveNavButton}) {
         <Box
         direction='column'
         maxW='80px'
-        height='100%'
         justify='center'
         >
             <Flex justify='center'><Image src={tcsLogo} alt="tcs-logo" maxW='70px'/></Flex>

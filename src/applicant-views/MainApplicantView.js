@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { Box, Button, Flex, Grid, GridItem, Menu, MenuButton, MenuItem, MenuList, Text, Avatar } from "@chakra-ui/react";
+import { Button, Flex, Grid, GridItem, Menu, MenuButton, MenuItem, MenuList, Text, Avatar } from "@chakra-ui/react";
 import { jwtDecode } from "jwt-decode";
 import NavApplicant from "../nav/applicant/NavApplicant";
 import JobPortal from "./job-portal/JobPortal";
